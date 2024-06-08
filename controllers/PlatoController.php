@@ -33,6 +33,10 @@
             require_once TEMPLATE;
         }
 
+        public function getPlatoJSON(){
+            $data["contenido"] = $this->platos->getPlato();
+        }
+
         public function envioRegistrar(){
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $txtNombrePlato = $_POST["txtNombrePlato"] ?? '';

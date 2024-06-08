@@ -35,6 +35,7 @@
 
         public function getPlatoJSON(){
             $data["contenido"] = $this->platos->getPlato();
+            echo json_encode($data["contenido"]);
         }
 
         public function envioRegistrar(){

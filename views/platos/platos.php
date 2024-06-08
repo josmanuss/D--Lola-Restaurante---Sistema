@@ -192,4 +192,42 @@
             $('#deleteRecordBtn').attr('href', deleteUrl);
         });
     });
+
+    function actualizarTabla() {
+        $.ajax({
+            url: 'index.php?c=PlatoController&a=getPlatoJSON',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                $.each(data, function(index, plato) {
+                    var filaExistente = $('#tbl-Platos tbody tr[data-id="' + plato.cPlaID + '"]');
+                    if (filaExistente.length) {
+                        filaExistente.find('td:eq(1)').text(plato.cCatID);
+                        filaExistente.find('td:eq(2)').text(plato.cPlaNombre);
+                        filaExistente.find('td:eq(3)').text(plato.cPlaCantidad);
+                        filaExistente.find('td:eq(4)').text('S/.' + plato.cPlaPrecio);
+                    } else {
+                        var fila = '<tr data-id="' + plato.cPlaID + '">' +
+                            '<td>' + plato.cPlaID + '</td>' +
+                            '<td>' + plato.cCatID + '</td>' +
+                            '<td>' + plato.cPlaNombre + '</td>' +
+                            '<td>' + plato.cPlaCantidad + '</td>' +
+                            '<td>' + 'S/.' + plato.cPlaPrecio + '</td>' +
+                            '<td>' +
+                            '<a href="#" class="btn btn-xs btn-warning"><i class="fas fa-user-edit"></i></a>' +
+                            '<a href="#" class="btn btn-xs btn-danger deleteBtn" data-toggle="modal" data-target="#deleteModal" data-recordid="' + plato.cCatID + '"><i class="fas fa-trash"></i></a>' +
+                            '</td>' +
+                            '</tr>';
+
+                        $('#tbl-Platos tbody').append(fila);
+                    }
+                });
+            }
+        });
+    }
+
+    // $(document).ready(function() {
+    //     actualizarTabla();
+    //     setInterval(actualizarTabla, 2000); // Cambia este valor según la frecuencia de actualización deseada
+    // });
 </script>

@@ -1,5 +1,8 @@
 <?php
 class CajaController{
+
+    protected $movimientos;
+    
     public function __construct(){
 
     }   

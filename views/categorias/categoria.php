@@ -43,6 +43,7 @@
                                     <thead class="thead-dark">
                                         <tr>
                                             <th>ID</th>
+                                            <th></th>
                                             <th>Nombre de categoria</th>
                                             <th>Opciones</th>
                                         </tr>
@@ -51,6 +52,7 @@
                                         <?php foreach ($data["resultado"] as $i => $categorias) : ?>
                                             <tr>
                                                 <td><?php echo $categorias["cCatID"]; ?></td>                             
+                                                <td><img src="data:image/jpeg;base64,<?php echo base64_encode($categorias["cCatImagen"]); ?>" width="200px" height="100px"></td>
                                                 <td><?php echo $categorias["cCatNombre"]; ?></td>
                                                 <td>
                                                     <a href="#" class="btn btn-warning updatebtn" data-toggle="modal" data-target="#actualizar" data-indice="<?php echo $i; ?>"><i class="fas fa-user-edit"></i></a>
@@ -194,50 +196,51 @@
 
 
 <script>
-    $(document).ready(function() {
-        $('.updateBtn').on('click', function(){
-            let categorias = <?php echo json_encode($data["resultado"]); ?>;
-            var index = $(this).data('indice');
-            console.log(index);
-            $('[name="txtIDActualizar"').val(categorias[index]["cCatID"]);
-            $('txtNombres="txtNombresActualizar"').val(categorias[index]["cCatNombre"]);
-        });
+$(document).ready(function() {
+    $('.updateBtn').on('click', function(){
+        let categorias = <?php echo json_encode($data["resultado"]); ?>;
+        var index = $(this).data('indice');
+        console.log(index);
+        $('[name="txtIDActualizar"]').val(categorias[index]["cCatID"]);
+        $('[name="txtNombresActualizar"]').val(categorias[index]["cCatNombre"]);
+    });
 
-        $('.deleteBtn').on('click', function() {
-            var userId = $(this).data(' ');
-            var deleteUrl = 'index.php?c=CategoriaController&a=eliminar&id=' + userId;
-            $('#deleteRecordBtn').attr('href', deleteUrl);
-        });
-  
-        $('.viewPlatosBtn').on('click', function(){
-            var categoriaID = $(this).data("recordid");
-            $.ajax({
-                url: 'index.php?c=CategoriaController&a=platosCategoria',
-                method: 'POST',
-                data: {id: categoriaID},
-                success: function(response){
-                    var respuesta = JSON.parse(response);
-                    if (respuesta.success) {
-                        var platos = respuesta.platos;
-                        var tbody = $('#tbl-Platos-Modal tbody');
-                        tbody.empty();
-                        $.each(platos, function(index, plato) {
-                            var fila = '<tr>' +
-                                '<td>' + plato[0] + '</td>' + // ID
-                                '<td>' + plato[3] + '</td>' + // Nombre
-                                '<td>' + plato[4] + '</td>' + // Cantidad
-                                '<td>' + 'S/.' +plato[5] + '</td>' + // Precio
-                                '</tr>';
-                            tbody.append(fila);
-                        });
-                    } else {
-                        alert("Error: " + respuesta.mensaje);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    alert("Error en la solicitud AJAX: " + error);
+    $('.deleteBtn').on('click', function() {
+        var userId = $(this).data('userid'); 
+        var deleteUrl = 'index.php?c=CategoriaController&a=eliminar&id=' + userId;
+        $('#deleteRecordBtn').attr('href', deleteUrl);
+    });
+
+    $('.viewPlatosBtn').on('click', function(){
+        var categoriaID = $(this).data("recordid");
+        $.ajax({
+            url: 'index.php?c=CategoriaController&a=platosCategoria',
+            type: 'POST',
+            data: {id: categoriaID},
+            success: function(response){
+                var respuesta = JSON.parse(response);
+                if (respuesta.success) {
+                    var platos = respuesta.platos;
+                    var tbody = $('#tbl-Platos-Modal tbody');
+                    tbody.empty();
+                    $.each(platos, function(index, plato) {
+                        var fila = '<tr>' +
+                            '<td>' + plato[0] + '</td>' + // ID
+                            '<td>' + plato[3] + '</td>' + // Nombre
+                            '<td>' + plato[4] + '</td>' + // Cantidad
+                            '<td>' + 'S/.' + plato[5] + '</td>' + // Precio
+                            '</tr>';
+                        tbody.append(fila);
+                    });
+                } else {
+                    alert("Error: " + respuesta.mensaje);
                 }
-            });
+            },
+            error: function(xhr, status, error) {
+                alert("Error en la solicitud AJAX: " + error);
+            }
         });
     });
+});
+
 </script>

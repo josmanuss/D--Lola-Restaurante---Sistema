@@ -55,6 +55,18 @@ class VentaController {
         require_once TEMPLATE;
     }
 
+    public function actualizarPedido(): void{
+        if ($_SERVER["REQUEST_METHOD"]==='POST'){
+            $id_modificar = $_POST["id_pedido"];
+            $data["modalTitulo"] = "Actualizar Pedido";
+            $data["pedidoModificar"] = json_decode($_POST["pedido"]);
+            require_once "views/venta/modal_actualizar_pedido";
+        }
+        else{
+            require_once ERROR404;
+        }
+    }
+
     public function pagarPedido() : void {
         if ($_SERVER["REQUEST_METHOD"] === "POST" ){
             $record_id = $_POST["record_id"];

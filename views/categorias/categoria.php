@@ -70,7 +70,7 @@
             </div>
         </div>
     </div>
-
+    
     <div class="modal fade" id="modalRegistroCategoria" tabindex="-1" role="dialog" aria-labelledby="modalRegistroCategoriaLabel" aria-hidden="true">    
         <div class="modal-dialog modal-xl">
             <div class="modal-content">

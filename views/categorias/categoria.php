@@ -52,7 +52,7 @@
                                         <?php foreach ($data["resultado"] as $i => $categorias) : ?>
                                             <tr>
                                                 <td><?php echo $categorias["cCatID"]; ?></td>                             
-                                                <td><img src="data:image/jpeg;base64,<?php echo base64_encode($categorias["cCatImagen"]); ?>" width="200px" height="100px"></td>
+                                                <td><img src="data:image/jpeg;base64,<?php echo $categorias["cCatImagen"]; ?>" width="200px" height="100px"></td>
                                                 <td><?php echo $categorias["cCatNombre"]; ?></td>
                                                 <td>
                                                     <a href="#" class="btn btn-warning updatebtn" data-toggle="modal" data-target="#actualizar" data-indice="<?php echo $i; ?>"><i class="fas fa-user-edit"></i></a>

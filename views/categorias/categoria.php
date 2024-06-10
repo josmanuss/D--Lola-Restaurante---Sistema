@@ -226,9 +226,9 @@ $(document).ready(function() {
                     $.each(platos, function(index, plato) {
                         var fila = '<tr>' +
                             '<td>' + plato[0] + '</td>' + // ID
-                            '<td>' + plato[3] + '</td>' + // Nombre
-                            '<td>' + plato[4] + '</td>' + // Cantidad
-                            '<td>' + 'S/.' + plato[5] + '</td>' + // Precio
+                            '<td>' + plato[2] + '</td>' + // Nombre
+                            '<td>' + plato[3] + '</td>' + // Cantidad
+                            '<td>' + 'S/.' + plato[4] + '</td>' + // Precio
                             '</tr>';
                         tbody.append(fila);
                     });

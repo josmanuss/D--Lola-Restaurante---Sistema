@@ -51,7 +51,7 @@
         public function getPlatoIDCategoria($id){
             $conn = Conexion::Conexion();
             $platos = array();
-            $stmt = $conn->prepare("SELECT p.* FROM platos p INNER JOIN categoria c ON p.cCatID=c.cCatID 
+            $stmt = $conn->prepare("SELECT p.cPlaID, p.cCatID, p.cPlaNombre, p.cPlaCantidad, p.cPlaPrecio FROM platos p INNER JOIN categoria c ON p.cCatID=c.cCatID 
                                     WHERE c.cCatID = ?");
             $stmt->bind_param("i", $id);
             $stmt->execute();

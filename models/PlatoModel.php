@@ -8,7 +8,7 @@ class PlatoModel{
     }
 
     public function getPlato(){
-        $consulta = $this->db->prepare("SELECT * FROM platos");
+        $consulta = $this->db->prepare("SELECT cPlaID, cCatID, cPlaNombre, cPlaPrecio FROM platos");
         $consulta->execute();
         $resultado = $consulta->get_result();
         if ( $resultado->num_rows > 0){
@@ -36,7 +36,7 @@ class PlatoModel{
     }
     public function getPlatoPorNombrePrecio($data){
         $platos = array();
-        $consulta = $this->db->prepare("SELECT * FROM platos WHERE cPlaNombre = ? AND cPlaPrecio = ?");
+        $consulta = $this->db->prepare("SELECT cPlaID, cCatID, cPlaNombre, cPlaPrecio FROM platos WHERE cPlaNombre = ? AND cPlaPrecio = ?");
         $consulta->bind_param("sd",$data["nombre"],$data["precio"]);
         $consulta->execute();
         $resultado = $consulta->get_result();

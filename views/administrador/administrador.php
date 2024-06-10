@@ -6,6 +6,7 @@
             <h1 class="mb-3">Menú principal</h1>
 
             <h1>xdxx</h1>
+            <h1>Soy tu papa xd</h1>
         </div>
       </div>  
       <div class="row">

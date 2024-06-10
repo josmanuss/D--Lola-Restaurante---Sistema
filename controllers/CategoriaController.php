@@ -17,6 +17,7 @@
         {
             $data["titulo"] = "GESTION DE CATEGORIAS DE APERITIVOS";
             $data["resultado"] = $this->categorias->getCategoria();
+            echo '<pre>';print_r($data);'</pre>'; exit();
             $data["contenido"] = "views/categorias/categoria.php";
             require_once TEMPLATE;
         }
@@ -34,7 +35,7 @@
         
         public function actualizar()
         {
-
+            echo "tu vieja"; 
         }
         
     }

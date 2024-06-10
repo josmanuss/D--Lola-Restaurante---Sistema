@@ -36,6 +36,8 @@
         public function actualizar()
         {
             echo "tu vieja"; 
+
+            echo "hola";
         }
         
     }

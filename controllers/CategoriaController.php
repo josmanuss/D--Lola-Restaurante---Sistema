@@ -24,7 +24,7 @@
         public function platosCategoria(): void {
             if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $id = $_POST["id"];
-                echo '<pre>'; print_r($_POST);'</pre>'; exit();
+                //echo '<pre>'; print_r($_POST);'</pre>'; exit();
                 $data["resultado"] = $this->categorias->getPlatoIDCategoria($id);
                 if ($data["resultado"] != null) {
                     echo json_encode(["success" => true, "mensaje" => "PLATOS ENCONTRADOS", "platos" => $data["resultado"]]);

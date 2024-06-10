@@ -36,7 +36,7 @@
         public function actualizar()
         {
             echo "tu vieja"; 
-
+            echo "phpmuyadmin";
             echo "holaaaa";
         }
         

@@ -20,11 +20,12 @@
         // }
 
         public function getCategoria(){
-            $stmt = $this->db->prepare("SELECT * FROM categoria");
+            $stmt = $this->db->prepare("SELECT cCatImagen FROM categoria");
             $stmt->execute();
             $resultado = $stmt->get_result();
             if ( $resultado->num_rows > 0){
                 while ( $fila = $resultado->fetch_assoc()){
+                    $fila["cCatImagen"] = base64_encode($fila["cCatImagen"]);
                     $this->categorias[] = $fila;
                 }
             }

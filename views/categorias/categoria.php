@@ -204,6 +204,8 @@ $(document).ready(function() {
     //     $('[name="txtIDActualizar"]').vsal(categorias[index]["cCatID"]);
     //     $('[name="txtNombresActussalizar"]').val(categorias[index]["cCatNombre"]);
     // });
+    // hola mundo
+
 
     $('.deleteBtn').on('click', function() {
         var userId = $(this).data('userid'); 

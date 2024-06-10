@@ -35,7 +35,7 @@
         
         public function actualizar()
         {
-
+            echo "tu vieja"; 
         }
         
     }

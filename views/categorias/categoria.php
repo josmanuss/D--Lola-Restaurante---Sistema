@@ -50,6 +50,7 @@
                                     </thead>
                                     <tbody>
                                         <?php foreach ($data["resultado"] as $i => $categorias) : ?>
+                                            <!-- <-?php echo "Valor de i: $i"; ?> Imprimir el valor de $i -->
                                             <tr>
                                                 <td><?php echo $categorias["cCatID"]; ?></td>                             
                                                 <td><img src="data:image/jpeg;base64,<?php echo $categorias["cCatImagen"]; ?>" width="200px" height="100px"></td>
@@ -197,14 +198,25 @@
 
 <script>
 $(document).ready(function() {
-    // $('.updateBtn').on('click', function(){
-    //     let categorias = <-?php echo json_encode($data["resultado"]); ?>;
-    //     var index = $(this).data('indice');
-    //     console.log(index);
-    //     $('[name="txtIDActualizar"]').vsal(categorias[index]["cCatID"]);
-    //     $('[name="txtNombresActussalizar"]').val(categorias[index]["cCatNombre"]);
-    // });
-    // hola mundo
+    $('.updateBtn').on('click', function(){
+
+        <?php 
+        $arrayTemporal = array(); // Crear un nuevo array
+
+        $arrayTemporal["resultado"] = array_map(function($item) {
+            unset($item['cCatImagen']);
+            return $item;
+        }, $data["resultado"]);
+
+        ?>
+
+        let categorias = <?php echo json_encode($arrayTemporal["resultado"]); ?>;
+        var index = $(this).data('indice');
+        console.log(index);
+        //$('[name="txtIDActualizar"]').vsal(categorias["cCatID"]);
+        //$('[name="txtNombresActussalizar"]').val(categorias["cCatNombre"]);
+    });
+ 
 
 
     $('.deleteBtn').on('click', function() {

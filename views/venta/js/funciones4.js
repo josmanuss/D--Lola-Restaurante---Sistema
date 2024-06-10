@@ -143,28 +143,16 @@ $(document).ready(function() {
 
     $("#botonPagar").on('click', function(event) {
         var totalEfectivo = 0;
-
-        $('#pagosContainer input').each(function() {
-            var valor = $(this).val().replace(/[^0-9.,]/g, '');
-            if (!isNaN(valor) && valor !== "") {
-                totalEfectivo += parseFloat(valor);
-            }
+        var pagos = $("#pagosContainer");
+        pagos.find(".input-number").each(function() {
+            totalEfectivo += parseFloat($(this).val()); // Suma el valor de cada elemento .input-number
         });
-
-        var totalTexto = $('#total').text();
-        var totalNumerico = parseFloat(totalTexto.match(/\d+(\.\d+)?/)[0]);
-
-        if (totalEfectivo >= totalNumerico) {
-            pagarVenta(totalEfectivo);
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'ERROR',
-                text: 'El efectivo debe ser mayor o igual al total'
-            });
-        }
+        console.log("Total Efectivo:", totalEfectivo); // Imprime el total después de sumar todos los valores
     });
-
+    
+    
+    
+    
     $('#pagosContainer').on('click', '.duplicate-btn', function(event) {
         if (!$("#dinero-exacto").is(":checked")){
             const newPago = $(this).closest('.detallePagos').clone();

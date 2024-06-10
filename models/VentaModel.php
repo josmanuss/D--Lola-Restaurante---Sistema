@@ -48,7 +48,7 @@
             return $fila;
         }
         public function getVentas(){
-            $stmt = $this->db->prepare("SELECT * FROM mostrarventas");
+            $stmt = $this->db->prepare("SELECT * FROM venta");
             $stmt->execute();
             $resultado = $stmt->get_result();
             if ( $resultado->num_rows > 0 ){
@@ -61,7 +61,7 @@
             return $this->ventas;
         }
         public function getVentaID($id){
-            $stmt = $this->db->prepare("SELECT * FROM mostrarventas WHERE iVenID = ?");
+            $stmt = $this->db->prepare("SELECT * FROM venta WHERE iVenID = ?");
             $stmt->bind_param("i",$id);
             $stmt->execute();
             $resultado = $stmt->get_result();

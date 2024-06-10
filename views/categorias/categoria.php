@@ -197,13 +197,13 @@
 
 <script>
 $(document).ready(function() {
-    $('.updateBtn').on('click', function(){
-        let categorias = <?php echo json_encode($data["resultado"]); ?>;
-        var index = $(this).data('indice');
-        console.log(index);
-        $('[name="txtIDActualizar"]').val(categorias[index]["cCatID"]);
-        $('[name="txtNombresActualizar"]').val(categorias[index]["cCatNombre"]);
-    });
+    // $('.updateBtn').on('click', function(){
+    //     let categorias = <-?php echo json_encode($data["resultado"]); ?>;
+    //     var index = $(this).data('indice');
+    //     console.log(index);
+    //     $('[name="txtIDActualizar"]').val(categorias[index]["cCatID"]);
+    //     $('[name="txtNombresActualizar"]').val(categorias[index]["cCatNombre"]);
+    // });
 
     $('.deleteBtn').on('click', function() {
         var userId = $(this).data('userid'); 

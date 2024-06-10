@@ -20,4 +20,3 @@ if(isset($_GET["c"])){
     $accionTMP = ACCION_DEFAULT;
     $control->$accionTMP();
 }
-// ejemplo de commit en git

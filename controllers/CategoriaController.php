@@ -15,7 +15,7 @@
         }
         public function index() : void 
         {
-            $data["titulo"] = "GESTION DE CATEGORIAS DE APERITIVOS";
+            $data["titulo"] = "GESTION DEE CATEGORIAS DE APERITIVOS";
             $data["resultado"] = $this->categorias->getCategoria();
             //echo '<pre>';print_r($data);'</pre>'; exit();
             $data["contenido"] = "views/categorias/categoria.php";
@@ -24,6 +24,7 @@
         public function platosCategoria(): void {
             if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $id = $_POST["id"];
+                echo '<pre>'; print_r($_POST);'</pre>'; exit();
                 $data["resultado"] = $this->categorias->getPlatoIDCategoria($id);
                 if ($data["resultado"] != null) {
                     echo json_encode(["success" => true, "mensaje" => "PLATOS ENCONTRADOS", "platos" => $data["resultado"]]);

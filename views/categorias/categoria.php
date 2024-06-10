@@ -202,7 +202,7 @@ $(document).ready(function() {
     //     var index = $(this).data('indice');
     //     console.log(index);
     //     $('[name="txtIDActualizar"]').val(categorias[index]["cCatID"]);
-    //     $('[name="txtNombresActualizar"]').val(categorias[index]["cCatNombre"]);
+    //     $('[name="txtNombresActussalizar"]').val(categorias[index]["cCatNombre"]);
     // });
 
     $('.deleteBtn').on('click', function() {

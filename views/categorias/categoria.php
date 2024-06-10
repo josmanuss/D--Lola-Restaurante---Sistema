@@ -199,22 +199,18 @@
 <script>
 $(document).ready(function() {
     $('.updateBtn').on('click', function(){
-
         <?php 
         $arrayTemporal = array(); // Crear un nuevo array
-
         $arrayTemporal["resultado"] = array_map(function($item) {
             unset($item['cCatImagen']);
             return $item;
         }, $data["resultado"]);
-
         ?>
 
         let categorias = <?php echo json_encode($arrayTemporal["resultado"]); ?>;
         var index = $(this).data('indice');
-        console.log(index);
-        //$('[name="txtIDActualizar"]').vsal(categorias["cCatID"]);
-        //$('[name="txtNombresActussalizar"]').val(categorias["cCatNombre"]);
+        $('[name="txtIDActualizar"]').vsal(categorias[index]["cCatID"]);
+        $('[name="txtNombresActussalizar"]').val(categorias[index]["cCatNombre"]);
     });
  
 

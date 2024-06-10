@@ -201,7 +201,7 @@ $(document).ready(function() {
     //     let categorias = <-?php echo json_encode($data["resultado"]); ?>;
     //     var index = $(this).data('indice');
     //     console.log(index);
-    //     $('[name="txtIDActualizar"]').val(categorias[index]["cCatID"]);
+    //     $('[name="txtIDActualizar"]').vsal(categorias[index]["cCatID"]);
     //     $('[name="txtNombresActussalizar"]').val(categorias[index]["cCatNombre"]);
     // });
 

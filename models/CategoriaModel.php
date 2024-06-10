@@ -20,7 +20,7 @@
         // }
 
         public function getCategoria(){
-            $stmt = $this->db->prepare("SELECT cCatImagen FROM categoria");
+            $stmt = $this->db->prepare("SELECT * FROM categoria");
             $stmt->execute();
             $resultado = $stmt->get_result();
             if ( $resultado->num_rows > 0){

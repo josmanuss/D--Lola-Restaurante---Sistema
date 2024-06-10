@@ -4,6 +4,8 @@
       <div class="header">
         <div class="col-sm-6 p-2">
             <h1 class="mb-3">Menú principal</h1>
+
+            <h1>xd</h1>
         </div>
       </div>  
       <div class="row">

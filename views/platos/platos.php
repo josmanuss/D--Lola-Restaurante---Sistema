@@ -226,8 +226,4 @@
         });
     }
 
-    // $(document).ready(function() {
-    //     actualizarTabla();
-    //     setInterval(actualizarTabla, 2000); // Cambia este valor según la frecuencia de actualización deseada
-    // });
 </script>

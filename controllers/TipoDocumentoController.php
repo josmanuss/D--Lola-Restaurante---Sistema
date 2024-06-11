@@ -19,7 +19,7 @@ class TipoDocumentoController{
     public function index(){
         $data["titulo"] = "GESTION DE TIPO DE DOCUMENTO";
         $data["resultado"] = $this->tipoDocumento->getTipoDocumento();
-        $data["contenido"] = "views/personas/tipodocumento/tipo_documento.php";
+        $data["contenido"] = "views/tipodocumento/tipo_documento.php";
         require_once TEMPLATE;
     }
 

@@ -10,7 +10,7 @@ endif;
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -292,15 +292,16 @@ endif;
     $('#tbl-VentasCajero').DataTable();
     $('#tbl-VentasAdmin').DataTable();
     $('#tbl-PedidosAdmin').DataTable();
-  });
 
-  $("#modal-eliminar").on('show.bs.modal', function(e) {
-    $(this).find('.btn-Confirmar').attr('href', $(e.relatedTarget).data('href'))
-  });
+    window.addEventListener('beforeunload', function (e) {
+      window.location.href = 'index.php?c=LoginController&a=salir'
+    });
 
+
+
+
+  });
 </script>
-
-
 
 </body>
 </html>

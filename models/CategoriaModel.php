@@ -118,7 +118,7 @@
 
         public function update($id, $imagen, $nombre){
             $conn = Conexion::Conexion();
-            $updateCat = $conn->prepare("UPDATE categoria SET cCatImagen = ?, cCatNombre = ?" WHERE cCatID)
+            $updateCat = $conn->prepare("UPDATE categoria SET cCatImagen = ?, cCatNombre = ? WHERE cCatID = ?");
         }
     }
 ?>

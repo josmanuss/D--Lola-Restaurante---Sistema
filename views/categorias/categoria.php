@@ -89,6 +89,24 @@
                                 <input type="text" class="form-control" name="txtNombres" value="<?php echo $_REQUEST["txtNombres"] ?? ''; ?>">
                             </div>
                         </div>
+
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Subir Imagen</label>
+                            <div class="col-sm-9">
+                                <input type="file" class="form-control" name="imagen" id="imagen">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="col-sm-3 col-form-label"></div>
+                            <div class="col-sm-9">
+                                <img id="imagePreview" 
+                                    src="" 
+                                    alt="Vista Previa de la Imagen" 
+                                    class="img-fluid" 
+                                    style="max-height: 300px; display: none;">
+                            </div>
+                        </div>
+
                         <div class="mb-3 row">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-9">
@@ -131,9 +149,6 @@
         </div>
     </div>
 
-
-
-
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -163,6 +178,19 @@
 
 <script>
 $(document).ready(function() {
+
+    $('#imagen').on('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader()
+            reader.onload = function(e) {
+                const img = $('#imagePreview');
+                img.attr('src', e.target.result);
+                img.show();
+            }
+            reader.readAsDataURL(file);
+        }
+    });
 
     $(".updateBtn").on("click", function(event) {
         var recordId = $(this).data("recordid");

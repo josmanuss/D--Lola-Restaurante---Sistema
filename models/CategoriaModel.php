@@ -104,15 +104,21 @@
         }
 
 
-        public function save($nombre): bool{
+        public function save($imagen, $nombre): bool{
             $conn = Conexion::Conexion();
-            $saveCat = $conn->prepare("INSERT INTO categoria (cCatNombre) VALUES (?)");
-            $saveCat->bind_param("s", $nombre);
+            $saveCat = $conn->prepare("INSERT INTO categoria (cCatImagen, cCatNombre) VALUES (?, ?)");
+            $saveCat->bind_param("bs", $imagen, $nombre);
+            $saveCat->send_long_data(0, $imagen);
             $saveCat->execute();
             $filasAfectadas = $saveCat->affected_rows > 0;
             $saveCat->close();
             $conn->close();
             return $filasAfectadas;
+        }
+
+        public function update($id, $imagen, $nombre){
+            $conn = Conexion::Conexion();
+            $updateCat = $conn->prepare("UPDATE categoria SET cCatImagen = ?, cCatNombre = ?" WHERE cCatID)
         }
     }
 ?>

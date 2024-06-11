@@ -17,10 +17,41 @@
         {
             $data["titulo"] = "GESTION DEE CATEGORIAS DE APERITIVOS";
             $data["resultado"] = $this->categorias->getCategoria();
-            //echo '<pre>';print_r($data);'</pre>'; exit();
             $data["contenido"] = "views/categorias/categoria.php";
             require_once TEMPLATE;
         }
+
+        public function registrar(): void
+        {
+            if ($_SERVER["REQUEST_METHOD"] === "POST"){
+                $nombre = $_POST["nombres"];
+                $imagen = file_get_contents($_FILES['imagen']['tmp_name']);
+                $exitoso = $this->categorias->save($imagen, $nombre);
+                if ($exitoso){
+                    header("Location: index.php?c=CategoriaController");
+                }
+                else{
+                    echo "ERROR DE REGISTRO"; exit();
+                }
+            }
+        }
+
+        public function actualizar()
+        {
+            if ($_SERVER["REQUEST_METHOD"] === "POST"){
+                $id = $_POST["id-categoria"];
+                $nombre = $_POST["nombres"];
+                $imagen = file_get_contents($_FILES['imagen']['tmp_name']);
+                $exitoso = $this->categorias->update($id,$imagen, $nombre);
+                if ($exitoso){
+                    header("Location: index.php?c=CategoriaController");
+                }
+                else{
+                    echo "ERROR DE ACTUALIZACION"; exit();
+                }
+            }
+        }
+        
         public function platosCategoria(): void {
             if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $id = $_POST["id"];
@@ -46,12 +77,4 @@
             }
         }
 
-        public function actualizar()
-        {
-            echo "xd";
-            echo "tu vieja"; 
-            echo "phpmuyadmin";
-            echo "holaaaa";
-        }
-        
     }

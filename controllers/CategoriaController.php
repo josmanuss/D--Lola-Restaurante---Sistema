@@ -38,7 +38,6 @@
                 $id_categoria = $_POST["record_id"];
                 $data["consultar"] = $this->categorias->getCategoriaID($id_categoria);
                 $data["titulo"] = "Actualizar Categoria";
-                //echo "<pre>"; print_r($data);"</pre>"; exit();
                 $data["contenido"] = "views/categorias/categoria_actualizar.php";
                 require_once TEMPLATE;
             }

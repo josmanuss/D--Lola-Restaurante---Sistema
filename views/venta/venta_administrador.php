@@ -135,14 +135,15 @@
                     <div class="table-responsive">
                         <table class="table table-striped table-hover" id="tabla-detalle">
                             <thead class="thead-dark">
-                            <tr>
-                                <th>ID</th>
-                                <th>ID Categoria</th>
-                                <th>Nombre</th>
-                                <th>Cantidad</th>
-                            </tr>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>ID Categoria</th>
+                                    <th>Nombre</th>
+                                    <th>Cantidad</th>
+                                </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody>
+                            </tbody>
                         </table>
                     </div>
                 </div>

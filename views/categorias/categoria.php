@@ -56,7 +56,7 @@
                                                 <td><img src="data:image/jpeg;base64,<?php echo $categorias["cCatImagen"]; ?>" width="200px" height="100px"></td>
                                                 <td><?php echo $categorias["cCatNombre"]; ?></td>
                                                 <td>
-                                                    <button class="btn btn-warning updatebtn" data-recordid="<?php echo $categorias["cCatID"];?>"><i class="fas fa-user-edit"></i></button>
+                                                    <button class="btn btn-warning updateBtn" data-recordid="<?php echo $categorias["cCatID"];?>"><i class="fas fa-user-edit"></i></button>
                                                     <a href="#" class="btn btn-danger deleteBtn" data-toggle="modal" data-target="#deleteModal" data-recordid="<?php echo $categorias["cCatID"]; ?>"><i class="fas fa-trash"></i></a>
                                                     <a href="" class="btn btn-success viewPlatosBtn" data-toggle="modal" data-target="#modalTablaPlatos" data-recordid="<?php echo $categorias["cCatID"];?>"><i class="fas fa-eye"></i></a>
                                                 </td>
@@ -103,41 +103,6 @@
     </div>    
 
 
-    <div class="modal fade" id="actualizar" tabindex="-1" role="dialog" aria-labelledby="actualizarLabel" aria-hidden="true">    
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="actualizarLabel">Actualizar categoria</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="#" method="POST" autocomplete="off" enctype="multipart/form-data">
-                        <div class="mb-3 row">
-                            <label class="col-sm-3 col-form-label">ID</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" name="txtIDActualizar" value="<?php echo $_REQUEST["txtIDActualizar"] ?? ''; ?>">
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <label class="col-sm-3 col-form-label">Nombres</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" name="txtNombresActualizar" value="<?php echo $_REQUEST["txtNombresActualizar"] ?? ''; ?>">
-                            </div>
-                        </div>
-                        <div class="mb-3 row">
-                            <div class="col-sm-3"></div>
-                            <div class="col-sm-9">
-                                <input type="submit" value="Actualizar Categoria" class="btn btn-block btn-success" name="btnEnviar">
-                                <button type="button" class="btn btn-block btn-secondary mb-3" data-dismiss="modal">Cancelar</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>    
 
     <div class="modal fade" id="modalTablaPlatos" tabindex="-1" role="dialog" aria-labelledby="modalTablaPlatosLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
@@ -199,22 +164,23 @@
 <script>
 $(document).ready(function() {
 
-    document.querySelectorAll(".updateBtn").forEach(function(btn) {
-        btn.addEventListener("click", function(event) {
-            var recordId = event.target.dataset.recordid;
-            var form = document.createElement('form');
-            form.method = 'POST';
-            form.action = 'index.php?c=CategoriaControllerr&a=verCategoria';
-            var record_id_input = document.createElement('input');
-            record_id_input.type = 'hidden';
-            record_id_input.name = 'record_id';
-            record_id_input.value = recordId;
-            form.appendChild(record_id_input);
-            document.body.appendChild(form);
-            form.submit();
+    $(".updateBtn").on("click", function(event) {
+        var recordId = $(this).data("recordid");
+        var form = $("<form>", {
+            method: "POST",
+            action: "index.php?c=CategoriaController&a=verCategoria"
         });
-    });
+        
+        var recordIdInput = $("<input>", {
+            type: "hidden",
+            name: "record_id",
+            value: recordId
+        });
 
+        form.append(recordIdInput);
+        $("body").append(form);
+        form.submit();
+    });
 
     $('.deleteBtn').on('click', function() {
         var userId = $(this).data('userid'); 

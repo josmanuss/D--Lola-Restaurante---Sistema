@@ -56,7 +56,7 @@
                                                 <td><img src="data:image/jpeg;base64,<?php echo $categorias["cCatImagen"]; ?>" width="200px" height="100px"></td>
                                                 <td><?php echo $categorias["cCatNombre"]; ?></td>
                                                 <td>
-                                                    <a href="#" class="btn btn-warning updatebtn" data-toggle="modal" data-target="#actualizar" data-indice="<?php echo $i; ?>"><i class="fas fa-user-edit"></i></a>
+                                                    <button class="btn btn-warning updatebtn" data-recordid="<?php echo $categorias["cCatID"];?>"><i class="fas fa-user-edit"></i></button>
                                                     <a href="#" class="btn btn-danger deleteBtn" data-toggle="modal" data-target="#deleteModal" data-recordid="<?php echo $categorias["cCatID"]; ?>"><i class="fas fa-trash"></i></a>
                                                     <a href="" class="btn btn-success viewPlatosBtn" data-toggle="modal" data-target="#modalTablaPlatos" data-recordid="<?php echo $categorias["cCatID"];?>"><i class="fas fa-eye"></i></a>
                                                 </td>
@@ -198,21 +198,22 @@
 
 <script>
 $(document).ready(function() {
-    $('.updateBtn').on('click', function(){
-        <?php 
-        $arrayTemporal = array(); // Crear un nuevo array
-        $arrayTemporal["resultado"] = array_map(function($item) {
-            unset($item['cCatImagen']);
-            return $item;
-        }, $data["resultado"]);
-        ?>
 
-        let categorias = <?php echo json_encode($arrayTemporal["resultado"]); ?>;
-        var index = $(this).data('indice');
-        $('[name="txtIDActualizar"]').vsal(categorias[index]["cCatID"]);
-        $('[name="txtNombresActussalizar"]').val(categorias[index]["cCatNombre"]);
+    document.querySelectorAll(".updateBtn").forEach(function(btn) {
+        btn.addEventListener("click", function(event) {
+            var recordId = event.target.dataset.recordid;
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'index.php?c=CategoriaControllerr&a=verCategoria';
+            var record_id_input = document.createElement('input');
+            record_id_input.type = 'hidden';
+            record_id_input.name = 'record_id';
+            record_id_input.value = recordId;
+            form.appendChild(record_id_input);
+            document.body.appendChild(form);
+            form.submit();
+        });
     });
- 
 
 
     $('.deleteBtn').on('click', function() {

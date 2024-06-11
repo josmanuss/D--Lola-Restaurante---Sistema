@@ -6,14 +6,29 @@
                     <h3 class="card-title"><?php echo $data["titulo"]; ?></h3>
                 </div>
                 <div class="card-body">
-                <form action="index.php?c=CategoriaController&a=actualizar" method="POST" autocomplete="off" enctype="multipart/form-data">
+                    <form action="index.php?c=CategoriaController&a=actualizar" method="POST" autocomplete="off" enctype="multipart/form-data">
                         <div class="mb-3 row">
-                            <input type="hidden" name="id-categoria" class="form-control">
+                            <input type="hidden" name="id-categoria" class="form-control" value="<?php echo $data["consultar"]["cCatID"];?>">
                             <label class="col-sm-3 col-form-label">Nombres</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="txtNombres" value="<?php echo $_REQUEST["txtNombres"] ?? ''; ?>">
+                                <input type="text" class="form-control" name="txtNombres" value="<?php echo $data["consultar"]["cCatNombre"]; ?>">
                             </div>
                         </div>
+                        
+                        <!-- Image Upload Section -->
+                        <div class="mb-3 row">
+                            <label class="col-sm-3 col-form-label">Subir Imagen</label>
+                            <div class="col-sm-9">
+                                <input type="file" class="form-control" name="imagenCategoria" id="imagenCategoria" onchange="previewImage(event)">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="col-sm-3 col-form-label"></div>
+                            <div class="col-sm-9">
+                                <img id="imagePreview" src="" alt="Vista Previa de la Imagen" class="img-fluid" style="max-height: 200px; display: none;">
+                            </div>
+                        </div>
+
                         <div class="mb-3 row">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-9">
@@ -27,3 +42,17 @@
         </div>
     </div>
 </div>
+
+<script>
+    function previewImage(event) {
+        var input = event.target;
+        var reader = new FileReader();
+        reader.onload = function(){
+            var dataURL = reader.result;
+            var imagePreview = document.getElementById('imagePreview');
+            imagePreview.src = dataURL;
+            imagePreview.style.display = 'block';
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+</script>

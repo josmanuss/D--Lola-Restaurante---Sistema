@@ -33,7 +33,18 @@
             }
         }
 
-        
+        public function verCategoria(){
+            if($_SERVER["REQUEST_METHOD"] === "POST"){
+                $id_categoria = $_POST["id_categoria"];
+                $data["consultar"] = $this->categorias->getCategoriaID($id_categoria);
+                $data["contenido"] = "views/categorias/categoria_actualizar.php";
+                require_once TEMPLATE;
+            }
+            else{
+                require_once ERROR404;
+            }
+        }
+
         public function actualizar()
         {
             echo "xd";

@@ -32,6 +32,23 @@
             return $this->categorias;
         }
 
+
+        public function getCategoriaID($id_categoria){
+            $categoriaEncontrada = array();
+            $stmt = $this->db->prepare("SELECT * FROM categoria WHERE cCatID = ?");
+            $stmt->bind_param("i", $id_categoria);
+            $stmt->execute();
+            $resultado = $stmt->get_result();
+            if ( $resultado->num_rows > 0){
+                while ( $fila = $resultado->fetch_assoc()){
+                    $fila["cCatImagen"] = base64_encode($fila["cCatImagen"]);
+                    $categoriaEncontrada[] = $fila;
+                }
+            }
+            return $categoriaEncontrada;
+        }
+
+
         public function idCategoria($data): int {
             $this->db = Conexion::Conexion();
         

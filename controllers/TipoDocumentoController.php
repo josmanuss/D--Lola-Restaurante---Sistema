@@ -2,7 +2,7 @@
 <?php
 class TipoDocumentoController{
     protected $tipoDocumento;
-    protected $validaciones;
+    
     protected $errores;
     
     public function __construct(){
@@ -10,9 +10,7 @@ class TipoDocumentoController{
             session_start();
         }
         require_once "models/TipoDocumentoModel.php";
-        require_once "controllers/ValController.php";
         $this->tipoDocumento = new TipoDocumentoModel();
-        $this->validaciones = new ValController();
         $this->errores = [];
     }
 

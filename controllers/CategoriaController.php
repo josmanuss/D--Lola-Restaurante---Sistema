@@ -1,16 +1,14 @@
 <?php
     class CategoriaController{
         protected $categorias;
-        protected $validaciones;
+        
         protected $errores;
         public function __construct(){
             if ( session_status() == PHP_SESSION_NONE){
                 session_start();
             }
             require_once "models/CategoriaModel.php";
-            require_once "controllers/ValController.php";
             $this->categorias = new CategoriaModel();
-            $this->validaciones = new ValController();
             $this->errores = [];
         }
         public function index() : void 

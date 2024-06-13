@@ -8,7 +8,7 @@ class PlatoModel{
     }
 
     public function getPlato(){
-        $consulta = $this->db->prepare("SELECT cPlaID, cCatID, cPlaNombre, cPlaPrecio FROM platos");
+        $consulta = $this->db->prepare("SELECT cPlaID, cCatID, cPlaNombre, cPlaPrecio, cPlaCantidad FROM platos");
         $consulta->execute();
         $resultado = $consulta->get_result();
         if ( $resultado->num_rows > 0){

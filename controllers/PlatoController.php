@@ -2,7 +2,7 @@
     class PlatoController{
         protected $platos;
         protected $categorias;
-        protected $validaciones;
+        
         protected $errores;
 
         public function __construct(){
@@ -11,10 +11,8 @@
             }
             require_once "models/CategoriaModel.php";
             require_once "models/PlatoModel.php";
-            require_once "controllers/ValController.php";
             $this->categorias = new CategoriaModel();
             $this->platos = new PlatoModel();
-            $this->validaciones = new ValController();
             $this->errores = [];
         }
         public function index() : void 
@@ -31,11 +29,6 @@
             $data["categorias"] = $this->categorias->getCategoria();
             $data["contenido"] = "views/platos/plato_nuevo.php";
             require_once TEMPLATE;
-        }
-
-        public function getPlatoJSON(){
-            $data["contenido"] = $this->platos->getPlato();
-            echo json_encode($data["contenido"]);
         }
 
         public function envioRegistrar(){

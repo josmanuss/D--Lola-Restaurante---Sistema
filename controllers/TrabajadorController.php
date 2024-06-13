@@ -2,7 +2,7 @@
 
 class TrabajadorController{
     protected $trabajador;
-    protected $validaciones;
+    
     protected $errores;
 
     public function __construct()
@@ -11,9 +11,8 @@ class TrabajadorController{
             session_start();
         }
         require_once "models/TrabajadorModel.php";
-        require_once "controllers/ValController.php";
         $this->trabajador = new TrabajadorModel();
-        $this->validaciones = new ValController();
+        
         $this->errores = [];
     }
 
@@ -136,38 +135,6 @@ class TrabajadorController{
             else{
                 echo json_encode(["success"=>false]);
             }
-        }
-    }
-
-    private function validarNombres($valor)
-    {
-        $opciones = [
-            "options" => [
-                "min_range" => 3,
-                "max_range" => 10
-            ]
-        ];
-
-        if (!$this->validaciones->validarRequeridos($valor)) {
-            $this->errores["nombres"] = "Debes ingresar un valor en el campo nombres";
-        } else if (!$this->validaciones->validarLongitudes($valor, $opciones)) {
-            $this->errores["nombres"] = "Longitud de caracteres inválidos para el campo nombre";
-        }
-    }
-
-    private function validarApellidos($valor)
-    {
-        $opciones = [
-            "options" => [
-                "min_range" => 3,
-                "max_range" => 60
-            ]
-        ];
-
-        if (!$this->validaciones->validarRequeridos($valor)) {
-            $this->errores["apellidos"] = "Debes ingresar un valor en el campo apellidos";
-        } else if (!$this->validaciones->validarLongitudes($valor, $opciones)) {
-            $this->errores["apellidos"] = "Longitud de caracteres inválidos para el campo Apellidos";
         }
     }
 }

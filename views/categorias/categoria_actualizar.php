@@ -46,17 +46,12 @@
 </div>
 
 <script>
-    $(document).ready(function() {
-        $('#fileInput').on('change', function(event) {
-            var input = event.target;
-            var reader = new FileReader();
-            reader.onload = function() {
-                var dataURL = reader.result;
-                var imagePreview = $('#imagePreview');
-                imagePreview.attr('src', dataURL);
-                imagePreview.show();
-            };
-            reader.readAsDataURL(input.files[0]);
-        });
-    });
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            var imagePreview = document.getElementById('imagePreview'); 
+            imagePreview.src = reader.result;
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    }
 </script>

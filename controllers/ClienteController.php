@@ -2,7 +2,7 @@
 
 class ClienteController{
     protected $cliente;
-    protected $validaciones;
+    
     protected $errores;
 
     public function __construct()
@@ -11,9 +11,7 @@ class ClienteController{
             session_start();
         }
         require_once "models/ClienteModel.php";
-        require_once "controllers/ValController.php";
         $this->cliente = new ClienteModel();
-        $this->validaciones = new ValController();
         $this->errores = [];
     }
 

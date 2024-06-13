@@ -95,55 +95,33 @@
                             <option value="<?=$categoria["cCatNombre"]?>"><?php echo $categoria["cCatNombre"] ?></option>
                         <?php endforeach; ?>
                     </select>    
-                    <?php if (isset($data["errores"]["nombres"])) : ?>
-                        <div class="text-danger">
-                            <?php echo $data["errores"]["nombres"]; ?>
-                        </div>
-                    <?php endif; ?>
+
                 </div>
             </div>
             <div class="mb-3 row">
                 <label class="col-sm-3 col-form-label">Nombres</label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control" name="txtNombres" value="<?php echo $_REQUEST["txtNombres"] ?? ''; ?>">
-                    <?php if (isset($data["errores"]["nombres"])) : ?>
-                        <div class="text-danger">
-                            <?php echo $data["errores"]["nombres"]; ?>
-                        </div>
-                    <?php endif; ?>
+
                 </div>
             </div>
             <div class="mb-3 row">
                 <label class="col-sm-3 col-form-label">Precio</label>
                 <div class="col-sm-9">
                     <input type="number" class="form-control" name="spinnerPrecio" value="<?php echo $_REQUEST["spinnerPrecio"] ?? ''; ?>">
-                    <?php if (isset($data["errores"]["spinnerPrecio"])) : ?>
-                        <div class="text-danger">
-                            <?php echo $data["errores"]["spinnerPrecio"]; ?>
-                        </div>
-                    <?php endif; ?>
+
                 </div>
             </div>
             <div class="mb-3 row">
                 <label class="col-sm-3 col-form-label">Cantidad</label>
                 <div class="col-sm-9">
                     <input type="number" class="form-control" name="spinnerCantidad" value="<?php echo $_REQUEST["spinnerCantidad"] ?? ''; ?>">
-                    <?php if (isset($data["errores"]["spinnerCantidad"])) : ?>
-                        <div class="text-danger">
-                            <?php echo $data["errores"]["spinnerCantidad"]; ?>
-                        </div>
-                    <?php endif; ?>
                 </div>
             </div>
             <div class="mb-3 row">
                 <label class="col-sm-3 col-form-label">Descripcion</label>
                 <div class="col-sm-9">
                     <textarea class="form-control" name="txtDescripcion" value="<?php echo $_REQUEST["txtDescripcion"] ?? ''; ?>"></textarea>
-                    <?php if (isset($data["errores"]["descripcionPlato"])) : ?>
-                        <div class="text-danger">
-                            <?php echo $data["errores"]["descripcionPlato"]; ?>
-                        </div>
-                    <?php endif; ?>
                 </div>
             </div>
             <div class="mb-3 row">
@@ -193,37 +171,5 @@
         });
     });
 
-    function actualizarTabla() {
-        $.ajax({
-            url: 'index.php?c=PlatoController&a=getPlatoJSON',
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) {
-                $.each(data, function(index, plato) {
-                    var filaExistente = $('#tbl-Platos tbody tr[data-id="' + plato.cPlaID + '"]');
-                    if (filaExistente.length) {
-                        filaExistente.find('td:eq(1)').text(plato.cCatID);
-                        filaExistente.find('td:eq(2)').text(plato.cPlaNombre);
-                        filaExistente.find('td:eq(3)').text(plato.cPlaCantidad);
-                        filaExistente.find('td:eq(4)').text('S/.' + plato.cPlaPrecio);
-                    } else {
-                        var fila = '<tr data-id="' + plato.cPlaID + '">' +
-                            '<td>' + plato.cPlaID + '</td>' +
-                            '<td>' + plato.cCatID + '</td>' +
-                            '<td>' + plato.cPlaNombre + '</td>' +
-                            '<td>' + plato.cPlaCantidad + '</td>' +
-                            '<td>' + 'S/.' + plato.cPlaPrecio + '</td>' +
-                            '<td>' +
-                            '<a href="#" class="btn btn-xs btn-warning"><i class="fas fa-user-edit"></i></a>' +
-                            '<a href="#" class="btn btn-xs btn-danger deleteBtn" data-toggle="modal" data-target="#deleteModal" data-recordid="' + plato.cCatID + '"><i class="fas fa-trash"></i></a>' +
-                            '</td>' +
-                            '</tr>';
-
-                        $('#tbl-Platos tbody').append(fila);
-                    }
-                });
-            }
-        });
-    }
 
 </script>

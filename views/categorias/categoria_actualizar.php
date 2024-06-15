@@ -28,7 +28,7 @@
                                     src="data:image/jpeg;base64,<?php echo $data['consultar'][0]['cCatImagen']; ?>" 
                                     alt="Vista Previa de la Imagen" 
                                     class="img-fluid" 
-                                    style="max-height: 300px; display: block;">
+                                    style="max-height: 1000px; display: block;">
                             </div>
                         </div>
                         <div class="mb-3 row">

@@ -130,6 +130,7 @@ $(document).ready(function () {
       var totalTexto = $("#total").text();
       var separarTotal = totalTexto.match(/\d+(\.\d+)?/);
       var totalNumerico = parseFloat(separarTotal[0]);
+      console.log("Total Efectivo:", totalEfectivo); // Total Efectivo: 0
 
       if (totalEfectivo >= totalNumerico) {
         var vuelto = totalEfectivo - totalNumerico;
@@ -155,15 +156,6 @@ $(document).ready(function () {
     if (checkeado) {
       $("#input-number").val(totalNumerico);
     }
-  });
-
-  $("#botonPagar").on("click", function (event) {
-    var totalEfectivo = 0;
-    var pagos = $("#pagosContainer");
-    pagos.find(".input-number").each(function () {
-      totalEfectivo += parseFloat($(this).val()); // Suma el valor de cada elemento .input-number
-    });
-    console.log("Total Efectivo:", totalEfectivo); // Imprime el total después de sumar todos los valores
   });
 
   $("#pagosContainer").on("click", ".duplicate-btn", function (event) {

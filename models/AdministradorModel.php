@@ -74,38 +74,37 @@ class AdministradorModel{
     }
 
     public function totalVentasHechas(){
-        $resultado = 0;
-        $sql = $this->db->prepare("SELECT COUNT(*) AS TotalVentas FROM venta WHERE cVenEstado = 'Pagada' ");
+        $sql = $this->db->prepare("SELECT COUNT(*) AS TotalVentas FROM venta");
         $sql->execute();
         $result = $sql->get_result();
         if ( $result->num_rows == 0 ){
             $sql->close();
-            return $resultado;
+            return $this->ventas;
         }
         else{
             while ( $row = $result->fetch_assoc()){
-                $resultado = $row["TotalVentas"];
+                $this->ventas = $row["TotalVentas"];
             }
             $sql->close();
-            return $resultado;
+            return $this->ventas;
         }
     }
 
     public function gananciasVentas(){
-        $resultado = 0;
-        $sql = $this->db->prepare("SELECT SUM(fPedTotal) AS TotalGanancias FROM venta");
+        
+        $sql = $this->db->prepare("SELECT SUM(fVenTotal) AS TotalGanancias FROM venta");
         $sql->execute();
         $result = $sql->get_result();
         if ( $result->num_rows == 0 ){
             $sql->close();
-            return $resultado;
+            return $this->ganancias;
         }
         else{
             while ( $row = $result->fetch_assoc()){
-                $resultado = $row["TotalGanancias"];
+                $this->ganancias = $row["TotalGanancias"];
             }
             $sql->close();
-            return $resultado;
+            return $this->ganancias;
         }
     }
 

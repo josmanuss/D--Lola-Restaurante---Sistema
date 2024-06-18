@@ -38,8 +38,10 @@
         {
             if ($_SERVER["REQUEST_METHOD"] === "POST"){
                 $id = $_POST["id-categoria"];
-                $nombre = $_POST["nombres"];
-                $imagen = file_get_contents($_FILES['imagen']['tmp_name']);
+                $nombre = $_POST["txtNombres"];
+                $nombreimagen = $_FILES['imagen']['name'];
+                $tipoimagen = $_FILES['imagen']['type'];
+                $imagen = file_get_contents($_FILES['imagenCategoria']['tmp_name']);
                 $exitoso = $this->categorias->update($id,$imagen, $nombre);
                 if ($exitoso){
                     header("Location: index.php?c=CategoriaController");

@@ -139,9 +139,14 @@
         
 
 
-        public function delete($idPersona)
-        {
-
+        public function deleteCustomer($idPersona) : bool
+        {   
+            $sql = "DELETE * FROM cliente WHERE cCliID = ?";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bind_param("i",$idPersona);
+            $success = $stmt->execute();
+            $stmt->close();
+            return $success;
         }
 
     }

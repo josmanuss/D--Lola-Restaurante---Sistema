@@ -29,6 +29,7 @@ class ClienteController{
         }
         else{
             require_once ERROR404;
+            exit();
         }
     }
     
@@ -109,9 +110,6 @@ class ClienteController{
 
     public function validarTipoCliente(){
         if($_SERVER["REQUEST_METHOD"]==="POST"){
-
-            //echo '<pre>';print_r($_POST);'</pre>'; exit();
-
             $id = $this->cliente->validateCustomerType($_POST["tipoCliente"]);
             if (isset($id)){
                 echo json_encode(["success"=>true, "id"=>$id]);
@@ -124,24 +122,16 @@ class ClienteController{
             echo json_encode(["success"=>false]);
         }
     }
-
-
-    // public function validarTipoCliente($id){
-    //     $id_cliente = $this->cliente->validateCustomerType($id);
-    //     if (isset($id)){
-    //         echo json_encode(["success"=>true, "id"=>$id_cliente]);
-    //     }
-    //     else{
-    //         echo json_encode(["success"=>false]);
-    //     }
-    // }
-
-
-
     public function eliminar($id)
     {
-
-        exit();
+        $exitoso = $this->cliente->deleteCustomer($id);
+        if($exitoso){
+            $_SESSION["mensaje"] = "CLIENTE ELIMINADO CON EXITO";
+            header("location: index.php?c=ClienteController");
+        }
+        else{
+            echo "Error de eliminacion"; exit();
+        }
     }
 
     public function buscarClienteDNI(){

@@ -8,17 +8,6 @@
             $this->categorias = array();
         }
 
-        // public function getCategoria(){
-        //     $stmt = $this->db->query("SELECT * FROM categoria");
-        //     if ( $stmt->num_rows > 0 ){
-        //         while ( $fila = $stmt->fetch_assoc()){
-        //             $this->categorias[] = $fila;
-        //         }
-        //     }
-        //     $stmt->close();
-        //     return $this->categorias;
-        // }
-
         public function getCategoria(){
             $stmt = $this->db->prepare("SELECT * FROM categoria");
             $stmt->execute();
@@ -31,7 +20,6 @@
             }
             return $this->categorias;
         }
-
 
         public function getCategoriaID($id_categoria){
             $categoriaEncontrada = array();
@@ -47,7 +35,6 @@
             }
             return $categoriaEncontrada;
         }
-
 
         public function idCategoria($data): int {
             $this->db = Conexion::Conexion();
@@ -103,7 +90,6 @@
             return $platos;
         }
 
-
         public function save($imagen, $nombre): bool{
             $conn = Conexion::Conexion();
             $saveCat = $conn->prepare("INSERT INTO categoria (cCatImagen, cCatNombre) VALUES (?, ?)");
@@ -119,6 +105,13 @@
         public function update($id, $imagen, $nombre){
             $conn = Conexion::Conexion();
             $updateCat = $conn->prepare("UPDATE categoria SET cCatImagen = ?, cCatNombre = ? WHERE cCatID = ?");
+            $updateCat->bind_param("bsi",$imagen,$nombre,$id);
+            $updateCat->send_long_data(0, $imagen);
+            $updateCat->execute();
+            $filasAfectadas = $updateCat->affected_rows > 0;
+            $updateCat->close();
+            $conn->close();
+            return $filasAfectadas;
         }
     }
 ?>

@@ -15,9 +15,9 @@ class AdministradorController{
                 'trabajador' => $this->admin->cantidadTrabajadores(),
                 'trabajador_activo' => $this->admin->cantidadTrabajadoresActivos(),
                 'categoria' => $this->admin->cantidadCategorias(),
-                'plato' => $this->admin->cantidadPlatos()
-                //'venta' => $this->admin->totalVentasHechas(),
-                //'ganancia' => $this->admin->gananciasVentas()
+                'plato' => $this->admin->cantidadPlatos(),
+                'venta' => $this->admin->totalVentasHechas(),
+                'ganancia' => $this->admin->gananciasVentas()
 
             );
             $data["contenido"] = "views/administrador/administrador.php";

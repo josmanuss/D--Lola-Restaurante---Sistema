@@ -6,7 +6,7 @@
                     <h3 class="card-title"><?php echo $data["titulo"]; ?></h3>
                 </div>
                 <div class="card-body">
-                    <form action="index.php?c=CategoriaController&a=actualizar" method="POST" autocomplete="off" enctype="multipart/form-data">
+                    <form action="index.php?c=CategoriaController&a=actualizar" id="formulario-actualizar-categoria" method="POST" autocomplete="off" enctype="multipart/form-data">
                         <div class="mb-3 row">
                             <input type="hidden" name="id-categoria" class="form-control" value="<?php echo $data["consultar"][0]["cCatID"];?>">
                             <label class="col-sm-3 col-form-label">Nombres</label>
@@ -46,6 +46,35 @@
 </div>
 
 <script>
+
+    $(document).ready(function(){
+        function validarFormulario(formulario){
+            formulario.submit(function(event){
+                var nombreCategoria = $("[name='txtNombres']");
+                var imagenCategoria = $("[name='imagenCategoria']");
+                if ( nombreCategoria.val().trim() === ''){
+                    event.preventDefault();
+                    Swal.fire({
+                        icon: 'warning',
+                        title: "",
+                        text: 'FALTA NOMBRES'    
+                    });
+                    return;
+                }
+                if ( imagenCategoria[0].files.lenght <= 0 ){
+                    event.preventDefault();
+                    Swal.fire({
+                        icon: "error",
+                        title: "",
+                        text: "FALTA IMAGEN"
+                    });
+                    return;
+                }
+            });
+            validarFormulario($("#formulario-actualizar-categoria"));
+        }
+    });
+
     function previewImage(event) {
         var reader = new FileReader();
         reader.onload = function() {

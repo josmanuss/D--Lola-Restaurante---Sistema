@@ -97,7 +97,8 @@
                                     <p id="sub-total">SUB TOTAL: S/.</p>
                                     <p id="vuelto">VUELTO RECIBIDO: S/.</p>
                                     <p id="total">TOTAL: S/.</p>
-                                    <p id="total-final">TOTAL: S/.</p>
+                                    <p class="d-inline-block">TOTAL: S/.</p>
+                                    <p id="total-final" class="d-inline-block"></p>
                                     <!-- <p>Ingrese efectivo:</p>
                                     <input type="number" class="form-control" id="efectivo"> -->
                                 </div>
@@ -119,5 +120,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script type="text/javascript">var record_id = "<?php echo $record_id; ?>";</script>
+<script type="text/javascript">
+    var record_id = "<?php echo $record_id; ?>";
+</script>
 <script src="views/venta/js/funciones4.js"></script>

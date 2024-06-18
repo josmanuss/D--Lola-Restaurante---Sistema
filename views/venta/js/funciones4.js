@@ -130,7 +130,10 @@ $(document).ready(function () {
       var totalTexto = $("#total").text();
       var separarTotal = totalTexto.match(/\d+(\.\d+)?/);
       var totalNumerico = parseFloat(separarTotal[0]);
-      console.log("Total Efectivo:", totalEfectivo); // Total Efectivo: 0
+      console.log("Total Efectivo:", totalEfectivo);
+      //   Total Efectivo: 0
+      // insertar el total de efectivo en id:total-final
+      $("#total-final").text(totalEfectivo.toFixed(2));
 
       if (totalEfectivo >= totalNumerico) {
         var vuelto = totalEfectivo - totalNumerico;

@@ -47,7 +47,7 @@ $(document).ready(function () {
           tbody.append(filaTotal);
           $("#op-gravadas").append((totalSum - totalSum * 0.18).toFixed(2));
           $("#igv").append((totalSum * 0.18).toFixed(2));
-          $("#sub-total").append(totalSum.toFixed(2));
+          $("#sub-total-pagar").append(totalSum.toFixed(2));
           $("#vuelto").append(0);
           $("#total").append(totalSum.toFixed(2));
 

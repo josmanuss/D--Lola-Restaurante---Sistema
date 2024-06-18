@@ -94,7 +94,7 @@
                                 <div class="col-md-12">
                                     <p id="op-gravadas">OP. GRAVADAS: S/.</p>
                                     <p id="igv">IGV(18%): S/.</p>
-                                    <p id="sub-total">SUB TOTAL: S/.</p>
+                                    <p id="sub-total-pagar">SUB TOTAL: S/.</p>
                                     <p id="vuelto">VUELTO RECIBIDO: S/.</p>
                                     <p id="total">TOTAL: S/.</p>
                                     <p class="d-inline-block">TOTAL: S/.</p>

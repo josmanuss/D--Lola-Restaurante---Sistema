@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function() {
         $("#tablaModalLabel").html("Detalle de pedido: "+record_id);
         
         $.ajax({
-            url: "index.php?c=VentaController&a=verDetallePedido",
+            url: "index.php?c=PedidoController&a=verDetallePedido",
             method: "POST",
             data: { record_id: record_id },
             async: true,
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function() {
             var recordId = event.target.dataset.recordid;
             var form = document.createElement('form');
             form.method = 'POST';
-            form.action = 'index.php?c=VentaController&a=pagarPedido';
+            form.action = 'index.php?c=PedidoController&a=pagarPedido';
             var record_id_input = document.createElement('input');
             record_id_input.type = 'hidden';
             record_id_input.name = 'record_id';

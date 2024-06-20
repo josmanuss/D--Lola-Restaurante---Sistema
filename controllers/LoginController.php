@@ -34,10 +34,10 @@ class LoginController{
                     header("location: index.php?c=AdministradorController");
                 }   
                 else if ($_SESSION["trabajador"]["iCarID"] == "2" ){
-                    header("location: index.php?c=VentaController");
+                    header("location: index.php?c=PedidoController");
                 }
                 else{
-                    header("location: index.php?c=VentaController");
+                    header("location: index.php?c=PedidoController");
                 }
             }
         } catch (Exception $e) {

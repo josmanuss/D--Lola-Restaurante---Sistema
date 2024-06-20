@@ -83,7 +83,7 @@
                                             </div>
                                             <div class="row mt-2">
                                                 <div class="col-md-12">
-                                                    <input type="checkbox" id="dinero-exacto">&nbsp;Dinero exacto
+                                                    <input type="checkbox" class="dinero-exacto" id="dinero-exacto">&nbsp;Dinero exacto
                                                 </div>
                                             </div>
                                         </div>
@@ -96,11 +96,9 @@
                                     <p id="igv">IGV(18%): S/.</p>
                                     <p id="sub-total-pagar">SUB TOTAL: S/.</p>
                                     <p id="vuelto">VUELTO RECIBIDO: S/.</p>
-                                    <p id="total">TOTAL: S/.</p>
-                                    <p class="d-inline-block">TOTAL: S/.</p>
+                                    <p id="total">TOTAL : S/.</p>
+                                    <p class="d-inline-block totalPagar" >TOTAL A PAGAR: S/.</p>
                                     <p id="total-final" class="d-inline-block"></p>
-                                    <!-- <p>Ingrese efectivo:</p>
-                                    <input type="number" class="form-control" id="efectivo"> -->
                                 </div>
                             </div>
                             <div class="row mt-3">

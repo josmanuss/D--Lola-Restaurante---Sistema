@@ -65,7 +65,7 @@ function agregarFila(valor){
                         '<td>' + plato[1] + '</td>' +
                         '<td>' + plato[2] + '</td>' +
                         '<td><input type="number" class="form-control" value="0"></td>' + 
-                        '<td>' + plato[4] + '</td>' +
+                        '<td>' + plato[3] + '</td>' +
                         '<td>' +
                             '<button class="btn btn-danger" id="eliminarPlatoTabla"><i class="fas fa-trash-alt mr-2"></i>Eliminar</button>'+ 
                         '</td>' + 
@@ -92,7 +92,7 @@ function agregarFila(valor){
 
 function enviarVentaCaja(pedido, detallepedido) {
     $.ajax({
-        url: 'index.php?c=VentaController&a=agregarPedido',
+        url: 'index.php?c=PedidoController&a=agregarPedido',
         method: 'POST',
         data: { valores_pedido: JSON.stringify(pedido), valores_detalle_pedido: JSON.stringify(detallepedido)},
         async : true,
@@ -194,6 +194,7 @@ $(document).ready(function() {
         Swal.fire({
             icon : 'success',
             title : 'Plato eliminado',
+            showConfirmButton: false,
             timer : 2500
         });
     });
@@ -203,6 +204,7 @@ $(document).ready(function() {
         Swal.fire({
             icon : 'success',
             title : 'Tabla vacia',
+            showConfirmButton: false,
             timer : 2500
         });
     });    

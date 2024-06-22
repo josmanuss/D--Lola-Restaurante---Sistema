@@ -1,11 +1,3 @@
-<style>
-    .detallePagos .remove-btn {
-        position: absolute;
-        right: 10px;
-        top: 10px;
-    }
-</style>
-
 <div class="content-wrapper">
     <div class="content-header">
         <div class="container-fluid">
@@ -96,9 +88,8 @@
                                     <p id="igv">IGV(18%): S/.</p>
                                     <p id="sub-total-pagar">SUB TOTAL: S/.</p>
                                     <p id="vuelto">VUELTO RECIBIDO: S/.</p>
-                                    <p id="total">TOTAL : S/.</p>
-                                    <p class="d-inline-block totalPagar" >TOTAL A PAGAR: S/.</p>
-                                    <p id="total-final" class="d-inline-block"></p>
+                                    <p class="totalPagar" >TOTAL A PAGAR: S/.0.00</p>
+                                    <input type="hidden" name="cajero" class="cajero" id="cajero" value="<?php echo $_SESSION["trabajador"]["cTraID"];?>">
                                 </div>
                             </div>
                             <div class="row mt-3">

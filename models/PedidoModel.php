@@ -8,6 +8,15 @@ class PedidoModel{
         $this->db = Conexion::Conexion();
     }   
 
+
+    public function idCliente($id){
+        $stmt = $this->db->prepare("SELECT cCliID FROM pedido WHERE cPedID = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+        return $resultado->num_rows > 0 ? $resultado->fetch_assoc()["cCliID"] : null;
+    }
+    
     public function getPago(){
         $pagos = array();
         $stmt = $this->db->prepare("SELECT * FROM pago");
@@ -38,8 +47,9 @@ class PedidoModel{
     }
 
     public function pay($data){
+        $data = intval($data);
         $stmt = $this->db->prepare("UPDATE pedido SET cPedEstado = 'PAGADO' WHERE cPedID = ?");
-        $stmt->bind_param("i", $data["id_pedido"]);
+        $stmt->bind_param("i", $data);
         $stmt->execute();
         $success = $stmt->affected_rows > 0;
         $stmt->close();

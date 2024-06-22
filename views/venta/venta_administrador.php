@@ -96,22 +96,24 @@
                                 <th>Cliente</th>
                                 <th>Fecha</th>
                                 <th>Total</th>
-                                <th>Estado</th>
                                 <th>Opciones</th>
                             </tr>
                         </thead>
                         <tbody>
                         <?php foreach ($data["resultado"] as $ventas ) : ?>
                             <tr>
-                                <td><?php echo $ventas["iVenID"]; ?></td>
-                                <td><?php echo $ventas["cliente"]; ?></td>
-                                <td><?php echo $ventas["dPedFecha"];?></td>
-                                <td><?php echo $ventas["fPedTotal"];?></td>
-                                <td><?php echo $ventas["tVenEstado"];?></td>
+                                <td><?php echo $ventas["ID_VENTA"]; ?></td>
+                                <?php if (empty($ventas["NombreApellidoCliente"])) : ?>
+                                    <td><?php echo $ventas["TIPOCLIENTE"]; ?></td>
+                                <?php else : ?>
+                                    <td><?php echo $ventas["NombreApellidoCliente"]; ?></td>
+                                <?php endif; ?>
+                                <td><?php echo $ventas["Fecha"];?></td>
+                                <td><?php echo $ventas["Total"];?></td>
                                 <td>
-                                    <a href="#" class="btn btn-danger deleteBtn" data-toggle="modal" data-target="#deleteModal" data-recordid="<?php echo $ventas["iVenID"]; ?>"><i class="fas fa-trash"></i></a>
-                                    <a href="index.php?c=VentaController&a=generarTicketVenta&id=<?php echo $ventas["iVenID"]; ?>" class="btn btn-danger reportBtnPDF" target="_blank"><i class="fas fa-file-pdf"></i></a>
-                                    <a href="#" class="btn btn-primary reportBtnView" data-toggle="modal" data-target="#tablaModal" data-recordid="<?php echo $ventas["iVenID"]; ?>"><i class="fas fa-book"></i></a>
+                                    <a href="#" class="btn btn-danger deleteBtn" data-toggle="modal" data-target="#deleteModal" data-recordid="<?php echo $ventas["ID_VENTA"]; ?>"><i class="fas fa-trash"></i></a>
+                                    <a href="index.php?c=VentaController&a=generarComprobanteVenta&id=<?php echo $ventas["ID_VENTA"]; ?>" class="btn btn-danger reportBtnPDF" target="_blank"><i class="fas fa-file-pdf"></i></a>
+                                    <a href="#" class="btn btn-primary reportBtnView" data-toggle="modal" data-target="#tablaModal" data-recordid="<?php echo $ventas["ID_VENTA"]; ?>"><i class="fas fa-book"></i></a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>    
@@ -137,7 +139,7 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th>ID</th>
-                                    <th>ID Categoria</th>
+                                    <th>Categoria</th>
                                     <th>Nombre</th>
                                     <th>Cantidad</th>
                                 </tr>
@@ -158,28 +160,28 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
-document.querySelectorAll(".reportBtnView").forEach(function(button) {
-    button.addEventListener("click", function() {
+$(".reportBtnView").each(function() {
+    $(this).on("click", function() {
         var record_id = $(this).data("recordid");
+        
         $.ajax({
-            url :"index.php?c=VentaController&a=verDetalleVenta",
-            method : "POST",
-            data : {record_id: record_id},
-            async : true,
-            success : function(response){
+            url: "index.php?c=VentaController&a=verDetalleVenta",
+            method: "POST",
+            data: { record_id: record_id },
+            success: function(response) {
                 var respuesta = JSON.parse(response);
                 if (respuesta.success) {
                     var detalleV = respuesta.detalle;
                     var tbody = $("#tabla-detalle tbody");
                     tbody.empty();
-                    $.each(detalleV, function(index, detalle){
-                        var fila = 
-                        '<tr>'+
-                            '<td>' + detalle[0] +'</td>'+
-                            '<td>' + detalle[1] +'</td>'+
-                            '<td>' + detalle[2] +'</td>'+
-                            '<td>' + detalle[3] +'</td>'+
-                        '</tr>';    
+                    $.each(detalleV, function(index, detalle) {
+                        var fila =
+                            '<tr>' +
+                            '<td>' + detalle["cPlaID"] + '</td>' +
+                            '<td>' + detalle["cCatNombre"] + '</td>' +
+                            '<td>' + detalle["cPlaNombre"] + '</td>' +
+                            '<td>' + detalle["iDetCantidad"] + '</td>' +
+                            '</tr>';
                         tbody.append(fila);
                     });
                 } else {
@@ -206,9 +208,6 @@ function recargarPaginaAsincronamente() {
         }
     });
 }
-
-setInterval(recargarPaginaAsincronamente, 1000); 
-
 </script>
 
 

@@ -78,25 +78,30 @@ class PedidoController{
         }
     }
 
-    public function metodoPagarPedido(): void{
-        if ($_SERVER["REQUEST_METHOD"] === "POST"){
-            $id_pedido = isset($_POST["id_pedido"]) ? $_POST["id_pedido"] : '';
-            $montoPagado = isset($_POST["monto_pagado"]) ? $_POST["monto_pagado"] : '';
-            $data = array(
-                'id_pedido' => $id_pedido,
-                'monto_pagado' => $montoPagado
-            );
-            $exitoso = $this->pedido->pay($data);
-            if ( $exitoso == TRUE ){
-                $ventaInsertar = $this->pedido->getPedidoID($id_pedido);
-
-                
-                $exitoso = $this->ventaGuardar->saveSale($data);
-
-                echo json_encode(["success"=>true,"mensaje"=>"Pedido insertado en venta"]);
+    public function metodoPagarPedido(): void {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            try{
+                $datosVenta = json_decode($_POST["datos_venta"]);
+                $datosDetalleVenta = json_decode($_POST["datos_detalleventa"]);
+                $datosDetallePagos = json_decode($_POST["datos_detallepagos"]);
+                $cliente = $this->pedido->idCliente($datosVenta[0]->idPedido);
+                $exitoso1 = $this->ventaGuardar->saveSale($datosVenta[0], $cliente);
+                if ($exitoso1) {
+                    $idVenta = $this->ventaGuardar->maxVenta();
+                    if ($idVenta > 0) {
+                        foreach ($datosDetalleVenta as $detalleVenta) {
+                            $this->ventaGuardar->saveSaleDetail($idVenta, $detalleVenta);
+                        }
+                        foreach ($datosDetallePagos as $detallePagos) {
+                            $this->ventaGuardar->saveDetailPay($idVenta, $detallePagos);
+                        }
+                        $this->pedido->pay($datosVenta[0]->idPedido);
+                        echo json_encode(["success"=>true, "mensaje"=>"Venta pagada correctamente"]);
+                    }
+                }
             }
-            else{
-                echo json_encode(["success"=>false,"mensaje"=>"Error al pagar"]);
+            catch(Exception $e){
+                echo json_encode(["success"=>false, "mensaje"=> $e->getMessage()]);
             }
         }
     }
@@ -225,11 +230,11 @@ class PedidoController{
 
         $this->pdf->SetXY(0,$this->pdf->GetY()+21);
         $this->pdf->SetFont('Arial','',14);
+
+ 
         # Nombre del archivo PDF #
         $this->pdf->Output("I","Orden_Nro_".$id.".pdf",true);
     }
-
-
     
     private function showError404() : void {
         if (defined('ERROR404')) {

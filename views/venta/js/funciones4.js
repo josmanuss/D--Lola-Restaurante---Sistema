@@ -61,13 +61,14 @@ $(document).ready(function () {
       });
   }
 
-  function pagarVenta(valorPagar) {
+  function pagarVenta(venta, detalleVenta, detallePagos) {
       $.ajax({
           url: "index.php?c=PedidoController&a=metodoPagarPedido",
           method: "POST",
           data: {
-              id_pedido: $("#idVenta").text(),
-              monto_pagado: valorPagar,
+              datos_venta: JSON.stringify(venta),
+              datos_detalleventa : JSON.stringify(detalleVenta),
+              datos_detallepagos : JSON.stringify(detallePagos)
           },
           async: true,
           success: function (response) {
@@ -103,48 +104,51 @@ $(document).ready(function () {
       display: "none",
   });
   $("body").append(div);
-  console.log(div.val());
   mostrarFilas(record_id);
 
-  $(document).on(
-      "input keyup",
-      "#input-number, #pagosContainer input",
-      function () {
-          var totalEfectivo = 0;
+  $(document).on("input keyup", "#input-number, #pagosContainer input", function () {
+    var totalEfectivo = 0;
 
-          $("#pagosContainer input").each(function () {
-              var valor = $(this)
-                  .val()
-                  .replace(/[^0-9.,]/g, "");
-              if (!isNaN(valor) && valor !== "") {
-                  totalEfectivo += parseFloat(valor);
-              }
-          });
+    $("#pagosContainer input").each(function () {
+        var valor = $(this).val().replace(/[^0-9.,-]/g, "");  // Allow negative sign temporarily for validation
+        valor = valor.replace(',', '.');  
+        var numero = parseFloat(valor);
+        if (!isNaN(numero)) {
+            if (numero < 0) {
+                $(this).val("0");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se permiten números negativos.'
+                });
+                return false;
+            }
+            totalEfectivo += numero;
+        }
+    });
+    
+    
+    $(".totalPagar").text("TOTAL A PAGAR: S/." + totalEfectivo.toFixed(2));
 
-          var totalTexto = $("#total").text();
-          var separarTotal = totalTexto.match(/\d+(\.\d+)?/);
-          var totalNumerico = parseFloat(separarTotal[0]);
-          $("#total-final").text(totalEfectivo.toFixed(2));
+    var totalTexto = $("#sub-total").text();
+    var separarTotal = totalTexto.match(/\d+(\.\d+)?/);
+    var totalNumerico = parseFloat(separarTotal[0]);
+    var vuelto = totalEfectivo - totalNumerico;
 
-          if (totalEfectivo >= totalNumerico) {
-              var vuelto = totalEfectivo - totalNumerico;
-              if (vuelto === 0) {
-                  $("#vuelto").attr("class", "text text-danger");
-                  $("#vuelto").text("VUELTO RECIBIDO: S/." + vuelto.toFixed(2));
-              } else {
-                  $("#vuelto").removeAttr("class");
-                  $("#vuelto").text("VUELTO RECIBIDO: S/." + vuelto.toFixed(2));
-              }
-          } else {
-              $("#vuelto").removeAttr("class");
-              $("#vuelto").text("VUELTO RECIBIDO: S/.0");
-          }
-      }
-  );
+    if (vuelto >= 0) {
+        $("#vuelto").removeAttr("class");
+        $("#vuelto").text("VUELTO RECIBIDO: S/." + vuelto.toFixed(2));
+    } else {
+        $("#vuelto").attr("class", "text text-danger");
+        $("#vuelto").text("VUELTO RECIBIDO: S/.0");
+    }
+  });
+
+
 
   $(document).on("change", "#dinero-exacto", function () {
       var checkeado = $(this).is(":checked");
-      var totalTexto = $("#total").text();
+      var totalTexto = $("#sub-total").text();
       var separarTotal = totalTexto.match(/\d+(\.\d+)?/);
       var totalNumerico = parseFloat(separarTotal[0]);
       if (checkeado) {
@@ -183,32 +187,56 @@ $(document).ready(function () {
       $("#input-number").trigger("input");
   });
 
-  $("#botonPagar").on("click",function(event){
+
+ $("#botonPagar").on("click", function(event) {
+     let textoTotalPagar = $(".totalPagar").text();
+     let numeroTotalPagar = parseFloat(textoTotalPagar.match(/\d+(\.\d+)?/)?.[0]);
+     let valorSubTotalPagar = parseFloat($("#sub-total-pagar").text().match(/\d+(\.\d+)?/)?.[0]);
+     if (numeroTotalPagar < valorSubTotalPagar) {
+         event.preventDefault();
+         Swal.fire({
+             icon: 'error',
+             title: 'ERROR',
+             text: 'Total a pagar insuficiente'
+         });
+         return;
+     }
+
+     let venta = [{
+        idPedido : record_id,
+        cajero: $("#cajero").val(), 
+        comprobante : $("#select-documento").val(), 
+        monto: numeroTotalPagar
+     }];
+     
+     let detalleVenta = obtenerDetallesPlatos();
+     let detallePagos = obtenerDetallePagos();
+     pagarVenta(venta,detalleVenta,detallePagos);
+ });
 
 
-      // if ( cantidad < subtotal ){
-      //   console.log(subtotal);
-      //   console.log(cantidad);
-      // }
-  });
-
+  
   function obtenerDetallesPlatos() {
       var detallesPlatos = [];
       $("#tbl-DetallePlatos tbody tr").not(":last").each(function () {
           var detalle = {};
-          detalle.columna1 = $(this).find("td:eq(0)").text(); // Obtener texto de la primera columna
-          detalle.columna4 = $(this).find("td:eq(3)").text(); // Obtener texto de la cuarta columna
+          detalle.idPlato = $(this).find("td:eq(0)").text(); 
+          detalle.cantidad = $(this).find("td:eq(3)").text(); 
           detallesPlatos.push(detalle);
       });
-
       return detallesPlatos;
   }
 
-  setTimeout(function(){
-    var subTotalText = $("#sub-total").text().match(/\d+(\.\d+)?/)[0];
-    var subTotal = parseFloat(subTotalText);
-    console.log(subTotal);
-}, 2000);
+  function obtenerDetallePagos(){
+      var detallePagos = [];
+      $("#pagosContainer .detallePagos").each(function(){
+            var detalle = {};
+            detalle.tipoPago = $(this).find("#select-pago").val();
+            detalle.totalPagado = $(this).find("#input-number").val();
+            detallePagos.push(detalle);
+      });
+      return detallePagos;
+  }
 
 
 });

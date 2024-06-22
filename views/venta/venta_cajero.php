@@ -61,28 +61,6 @@
         </div>
     </div>
 
-    <div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-3">
-                    <label for="fecha_inicial">Fecha Inicial:</label>
-                    <input type="date" id="fecha_inicial" name="fecha_inicial" class="form-control">
-                </div>
-                <div class="col-md-3">
-                    <label for="fecha_final">Fecha Final:</label>
-                    <input type="date" id="fecha_final" name="fecha_final" class="form-control">
-                </div>
-                <div class="col-md-3">
-                    <label>&nbsp;</label>
-                    <input type="submit" id="busquedafechas" name="busquedafechas" value = "Buscar entre fechas" class="form-control btn btn-primary">
-                </div>
-                <div class="col-md-3">
-                    <label for="fecha_final">&nbsp;</label>
-                    <input type="submit" id="mostrartodas" name="mostrartodas" value = "Mostrar todas" class="form-control btn btn-primary">
-                </div>
-            </div>
-        </div>
-    </div>
     
     <div class="content mt-4">
         <div class="container-fluid">

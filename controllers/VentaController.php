@@ -23,24 +23,30 @@ class VentaController {
 
     public function index(): void {
         $carID = isset($_SESSION["trabajador"]["iCarID"]) ? intval($_SESSION["trabajador"]["iCarID"]) : 0;
-        if ($carID == 1) {
+        if ($carID === 1) {
             $this->verVentasAdministrador();
-        } else {
+        } 
+        else if ( $carID === 2 ){
+            $traID = isset($_SESSION["trabajador"]["cTraID"]) ? intval($_SESSION["trabajador"]["cTraID"]) : 0;
+            $this->verVentasCajero($traID);
+        }
+        else {
             $this->showError404();
         }
-        
+    }
+    
+    public function verVentasCajero($traID){
+        $data["titulo"] = "Ver ventas realizadas - Cajero";
+        $data["resultado"] = $this->venta->getVentaCajero($traID);
+        $data["contenido"] = "views/venta/venta_cajero.php";
+        require_once TEMPLATE;
     }
 
-    
-
-
-
-    
     public function verVentasAdministrador() : void {
-        $data["titulo"] = "Reportes de ventas - Administrador";
-        $data["resultado"] = $this->venta->getVentas();
-        $data["contenido"] = "views/venta/venta_administrador.php";
-        require_once TEMPLATE;
+        // $data["titulo"] = "Reportes de ventas - Administrador";
+        // $data["resultado"] = $this->venta->getVentas();
+        // $data["contenido"] = "views/venta/venta_administrador.php";
+        // require_once TEMPLATE;
     }
 
     public function verDetalleVenta(){
@@ -56,8 +62,6 @@ class VentaController {
 
         }
     }
-
-
     public function obtenerReporteTotalProductos(){
         $productosObtenidos = $this->venta->reportProducts();
         if ( isset($productosObtenidos)){
@@ -127,7 +131,7 @@ class VentaController {
             $this->pdf->Ln(4);
             $total += $detalleventa["PrecioFinal"];
         }            
-        $this->pdf->Ln(7);
+        $this->pdf->Ln(1);
     
         // Resumen de la venta
 
@@ -171,8 +175,20 @@ class VentaController {
         $this->pdf->Cell(18,5,iconv("UTF-8", "ISO-8859-1",""),0,0,'C');
         $this->pdf->Cell(22,5,iconv("UTF-8", "ISO-8859-1","CAMBIO"),0,0,'C');
         $this->pdf->Cell(32, 5, iconv("UTF-8", "ISO-8859-1", "S/." . strval(number_format(floatval($datos_venta["Total"]) - floatval($total), 2, '.', '')) . " PEN"), 0, 0, 'C');
+        $this->pdf->Ln(9);
+        $this->pdf->MultiCell(0,5,iconv("UTF-8", "ISO-8859-1","*** Para poder realizar un reclamo o devolución debe de presentar este ticket ***"),0,'C',false);
+        $this->pdf->SetFont('Arial','B',9);
+        $this->pdf->Cell(0,7,iconv("UTF-8", "ISO-8859-1","Gracias por su compra"),'',0,'C');
+        $this->pdf->Ln(9);
+    
+        # Codigo de barras #
+        $this->pdf->Code128(5,$this->pdf->GetY(),"COD000001V000".strval($id),70,20);
+        $this->pdf->SetXY(0,$this->pdf->GetY()+21);
+        $this->pdf->SetFont('Arial','',14);
+        $this->pdf->MultiCell(0,5,iconv("UTF-8", "ISO-8859-1","COD000001V000".strval($id)),0,'C',false);
         
-        $this->pdf->Ln(5);
+
+
         $this->pdf->Output("I", "Venta_Nro_" . $id . ".pdf", true);
     }
     

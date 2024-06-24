@@ -60,7 +60,7 @@ function graficoProductosVendidos(){
         });
 
         var chart = new Chart(grafico,{
-            type : "bar",
+            type : "pie",
             data : {
                 labels : titulos, 
                 datasets : [
@@ -89,7 +89,7 @@ function graficoTrabajadores(){
         });
 
         var chart = new Chart(grafico,{
-            type : "pie",
+            type : "bar",
             data : {
                 labels : titulo, 
                 datasets : [

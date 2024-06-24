@@ -5,6 +5,7 @@ class AdministradorModel{
     protected $trabajadoresActivos;
     protected $categorias;
     protected $platos;
+    protected $pedidos;
     protected $ventas;
     protected $ganancias;
 
@@ -15,6 +16,7 @@ class AdministradorModel{
         $this->trabajadoresActivos = 0;
         $this->categorias = 0;
         $this->platos = 0;
+        $this->pedidos = 0;
         $this->ventas = 0;
         $this->ganancias = 0;
         $this->db = Conexion::Conexion();
@@ -63,6 +65,16 @@ class AdministradorModel{
         return $this->categorias;
     }
 
+
+    public function cantidadPedidosPendientes(): int{
+        $sql = $this->db->query("SELECT COUNT(*) FROM pedido WHERE cPedEstado != 'PAGADO'");
+        if($sql->num_rows>0){
+            $fila = $sql->fetch_assoc();
+            $this->pedidos = $fila["COUNT(*)"];
+        }
+        $sql->close();
+        return $this->pedidos;
+    }
     public function cantidadPlatos(): int{
         $sql = $this->db->query("SELECT COUNT(*) FROM platos");
         if ( $sql->num_rows > 0){

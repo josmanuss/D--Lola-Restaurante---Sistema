@@ -71,7 +71,7 @@
                                         <td><?php echo $trabajador["cUserRol"]; ?></td>
                                         <td>
                                             <a href="index.php?c=TrabajadorController&a=verTrabajador&id=<?php echo $trabajador["cUserID"];?>" class="btn btn-xs btn-warning updateBtn"><i class="fas fa-user-edit"></i></a>
-                                            <a href="" class="btn btn-xs btn-danger deleteBtn" data-toggle="modal" data-target="#deleteModal" data-recordid="<?php echo $trabajador["cTraID"]; ?>"><i class="fas fa-trash"></i></a>
+                                            <a href="" class="btn btn-xs btn-danger deleteBtn" data-toggle="modal" data-target="#deleteModal" data-recordid="<?php echo $trabajador["cPerID"]; ?>"><i class="fas fa-trash"></i></a>
                                         </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -330,7 +330,7 @@
 <script type="text/javascript">
     $('.deleteBtn').on('click', function() {
         var userId = $(this).data('recordid');
-        var deleteUrl = 'index.php?c=TrabajadorController&a=eliminar&id=' + userId;
+        var deleteUrl = 'index.php?c=TrabajadorController&a=eliminarTrabajador&id=' + userId;
         $('#deleteRecordBtn').attr('href', deleteUrl);
     });    
 </script>

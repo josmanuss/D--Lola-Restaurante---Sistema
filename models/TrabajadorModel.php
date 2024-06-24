@@ -68,14 +68,12 @@
     
         public function delete($data) : bool{
             $success = false;
+            $stmt = null;
             try {
                 if (!is_numeric($data) || $data <= 0) {
                     throw new Exception("El ID de la persona no es válido.");
                 }
                 $stmt = $this->db->prepare("DELETE FROM persona WHERE cPerID = ?");
-                if (!$stmt) {
-                    throw new Exception("Error en la preparación de la consulta.");
-                }
                 $stmt->bind_param("i", $data);
                 $stmt->execute();
                 if ($stmt->affected_rows > 0) {

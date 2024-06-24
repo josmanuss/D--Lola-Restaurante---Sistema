@@ -1,92 +1,138 @@
 <div class="content-wrapper">
-  <main>
-    <div class="container-fluid px-4">
-      <div class="header">
-        <div class="col-sm-6 p-2">
-            <h1 class="mb-3">Menú principal</h1>
-        </div>
-      </div>  
-      <div class="row">
-        <div class="col-xl-3 col-md-6">
-            <div class="card bg-primary text-white mb-4">
-                <div class="card-body">
-                    <span style="float: left; margin-right: 5px;"><?php echo $data["cantidades"]["trabajador_activo"];?></span>
-                    <i class="fas fa-users"></i>&nbsp;Trabajadores activos
-                </div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">Ver detalles</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                </div>
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Administración</h1>
+          </div><!-- /.col -->
+
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+              <div class="inner">
+                <h3><?php echo $data["cantidades"]["trabajador_activo"];?></h3>
+
+                <p>Usuarios Conectados</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-users"></i>
+              </div>
+              <a href="#" class="small-box-footer">Ver mas <i class="fas fa-arrow-circle-right"></i></a>
             </div>
-        </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="card bg-warning text-white mb-4">
-                <div class="card-body">
-                      <span style="float: left; margin-right: 5px;"><?php echo $data["cantidades"]['cliente'];?></span>
-                      <i class="fas fa-user"></i>&nbsp;Clientes
-                    </div>
-                    <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="#">Ver detalles</a>
-                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                    </div>
-                </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-warning">
+              <div class="inner">
+                <h3><?php echo $data["cantidades"]['cliente'];?></h3>
+                <p>Clientes</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-user"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
-            <div class="col-xl-3 col-md-6">
-                <div class="card bg-success text-white mb-4">
-                    <div class="card-body">
-                    <span style="float: left; margin-right: 5px;"><?php echo $data["cantidades"]['trabajador'];?></span>
-                    <i class="fas fa-hard-hat"></i>&nbsp;Trabajadores</div>
-                  <div class="card-footer d-flex align-items-center justify-content-between">
-                      <a class="small text-white stretched-link" href="#">Ver detalles</a>
-                      <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                  </div>
-              </div>
           </div>
-          <div class="col-xl-3 col-md-6">
-              <div class="card bg-danger text-white mb-4">
-                  <div class="card-body"><span style="float: left; margin-right: 5px;"><?php echo $data["cantidades"]['categoria'];?></span>
-                  <i class="fas fa-shopping-cart"></i>&nbsp;Categorias</div>
-                  <div class="card-footer d-flex align-items-center justify-content-between">
-                      <a class="small text-white stretched-link" href="#">Ver detalles</a>
-                      <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                  </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-primary">
+              <div class="inner">
+                <h3><?php echo $data["cantidades"]['trabajador'];?></h3>
+                <p>Trabajadores</p>
               </div>
-          </div>
-          <div class="col-xl-3 col-md-6">
-              <div class="card bg-primary text-white mb-4">
-                  <div class="card-body"><span style="float: left; margin-right: 5px;"><?php echo $data["cantidades"]['plato'];?></span>
-                  <i class="fas fa-wine-glass"></i>&nbsp;Platos</div>
-                  <div class="card-footer d-flex align-items-center justify-content-between">
-                      <a class="small text-white stretched-link" href="#">Ver detalles</a>
-                      <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                  </div>
+              <div class="icon">
+                <i class="fas fa-hard-hat"></i>
               </div>
-          </div>
-          <div class="col-xl-3 col-md-6">
-              <div class="card bg-danger text-white mb-4">
-                  <div class="card-body"><span style="float: left; margin-right: 5px;"><?php echo $data["cantidades"]["venta"];?></span>
-                  <i class="fas fa-shopping-bag"></i>&nbsp;Total de ventas: </div>
-                  <div class="card-footer d-flex align-items-center justify-content-between">
-                      <a class="small text-white stretched-link" href="#">Ver detalles</a>
-                      <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                  </div>
-              </div>
-          </div>
-          <div class="col-xl-3 col-md-6">
-            <div class="card bg-success text-white mb-4">
-                <div class="card-body">
-                    <span style="float: left;"><i class="fas fa-dollar-sign"></i>&nbsp;Ganancias</span> <!-- Texto -->
-                    <span style="float: right; margin-left: 5px;">S/.<?php echo $data["cantidades"]['ganancia'];?></span> <!-- Número -->
-                </div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <div class="small text-white stretched-link"></div>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-danger">
+              <div class="inner">
+                <h3><?php echo $data["cantidades"]['categoria'];?></h3>
+                <p>Categorias</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-shopping-cart"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-success">
+              <div class="inner">
+                <h3><?php echo $data["cantidades"]['plato'];?></h3>
+                <p>Platos</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-wine-glass-alt"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-gray">
+              <div class="inner">
+                <h3><?php echo $data["cantidades"]['pedido'];?></h3>
+                <p>Pedidos</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-utensils"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-gray">
+              <div class="inner">
+                <h3><?php echo $data["cantidades"]['venta'];?></h3>
+                <p>Ventas</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-shopping-bag"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-purple">
+              <div class="inner">
+                <h3>S/.<?php echo $data["cantidades"]['ganancia'];?></h3>
+                <p>Ganancias</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-shopping-cart"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
         </div>
 
-      </div>
-      <div class="row">
+        <div class="row">
           <div class="col-xl-6">
               <div class="card mb-4">
                   <div class="card-header">
@@ -116,7 +162,9 @@
           </div>
       </div>
     </div>
-  </main>  
+
+    </section>
+    <!-- /.content -->
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

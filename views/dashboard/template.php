@@ -28,6 +28,8 @@ endif;
   <link rel="stylesheet" href="views/dashboard/plugins/daterangepicker/daterangepicker.css">
   <link rel="stylesheet" href="views/dashboard/plugins/summernote/summernote-bs4.min.css">
   <link rel="shortcut icon" type="image/x-icon" src="https://josmanuss.github.io/Restaurante-D-Lola-Cix/img/logo-dlola2.jpg">
+  <link rel="stylesheet" href="https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json">
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -289,17 +291,13 @@ endif;
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.12.1/datatables.min.js"></script>
 <script>
   $(document).ready(function() {
-    $('#tbl-Categorias').DataTable();
-    $('#tbl-Clientes').DataTable();
-    $('#tbl-Trabajador').DataTable();
-    $('#tbl-Platos').DataTable();
-    $('#tbl-Cargos').DataTable();
-    $('#tbl-TipoDocumento').DataTable();
-    $('#tbl-VentasMozo').DataTable();
-    $('#tbl-VentasCajero').DataTable();
-    $('#tbl-VentasAdmin').DataTable();
-    $('#tbl-PedidosAdmin').DataTable();
-
+    $('#tbl-Categorias, #tbl-Clientes, #tbl-Trabajador, #tbl-Platos, #tbl-Cargos, #tbl-TipoDocumento, #tbl-VentasMozo, #tbl-VentasCajero, #tbl-VentasAdmin, #tbl-PedidosAdmin').DataTable(
+      {
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+        }
+      }
+    );
     window.addEventListener('beforeunload', function (e) {
       window.location.href = 'index.php?c=LoginController&a=salir'
     });

@@ -85,7 +85,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="#" method="POST" autocomplete="off" enctype="multipart/form-data">
+        <form action="index.php?c=PlatoController&a=guardar" method="POST" autocomplete="off" enctype="multipart/form-data">
             <div class="mb-3 row">
                 <label class="col-sm-3 col-form-label">Categorias</label>
                 <div class="col-sm-9">
@@ -95,21 +95,18 @@
                             <option value="<?=$categoria["cCatNombre"]?>"><?php echo $categoria["cCatNombre"] ?></option>
                         <?php endforeach; ?>
                     </select>    
-
                 </div>
             </div>
             <div class="mb-3 row">
                 <label class="col-sm-3 col-form-label">Nombres</label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control" name="txtNombres" value="<?php echo $_REQUEST["txtNombres"] ?? ''; ?>">
-
                 </div>
             </div>
             <div class="mb-3 row">
                 <label class="col-sm-3 col-form-label">Precio</label>
                 <div class="col-sm-9">
                     <input type="number" class="form-control" name="spinnerPrecio" value="<?php echo $_REQUEST["spinnerPrecio"] ?? ''; ?>">
-
                 </div>
             </div>
             <div class="mb-3 row">
@@ -136,9 +133,6 @@
     </div>
   </div>
 </div>
-
-
-
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -165,7 +159,7 @@
 <script>
     $(document).ready(function() {
         $('.deleteBtn').on('click', function() {
-            var userId = $(this).data(' ');
+            var userId = $(this).data('recordid');
             var deleteUrl = 'index.php?c=CategoriaController&a=eliminar&id=' + userId;
             $('#deleteRecordBtn').attr('href', deleteUrl);
         });

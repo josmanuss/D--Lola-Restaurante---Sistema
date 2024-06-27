@@ -1,5 +1,5 @@
 <?php 
-
+//jhair
 date_default_timezone_set("America/Lima");
 require_once "config/Conexion.php";
 require_once "config/config.php";

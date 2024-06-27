@@ -43,10 +43,9 @@ class VentaController {
     }
 
     public function verVentasAdministrador() : void {
-        // $data["titulo"] = "Reportes de ventas - Administrador";
-        // $data["resultado"] = $this->venta->getVentas();
-        // $data["contenido"] = "views/venta/venta_administrador.php";
-        // require_once TEMPLATE;
+        $data["titulo"] = "Reportes de ventas - Administrador";
+        $data["contenido"] = "views/venta/venta_administrador.php";
+        require_once TEMPLATE;
     }
 
     public function verDetalleVenta(){

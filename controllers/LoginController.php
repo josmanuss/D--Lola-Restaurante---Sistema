@@ -19,26 +19,18 @@ class LoginController{
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $email = isset($_POST["usuario"]) ? $_POST["usuario"] : "";
                 $clave = isset($_POST["password"]) ? $_POST["password"] : "";
-                $data["autenticar"] = array(
-                    "correo" => $email,
-                    "clave" => $clave
-                );
-                
+                $data = ["autenticar" => ["correo" => $email, "clave" => $clave]];
                 $datos["tE"] = $this->login->validarDatosSesion($data["autenticar"]);
                 if ( session_status() == PHP_SESSION_NONE){
                     session_start();
                 }
                 $_SESSION["trabajador"] = $datos["tE"];
                 $this->login->usuarioActivo($data["autenticar"]);
-                if ( $_SESSION["trabajador"]["iCarID"] == "1" ){
-                    header("location: index.php?c=AdministradorController");
-                }   
-                else if ($_SESSION["trabajador"]["iCarID"] == "2" ){
-                    header("location: index.php?c=PedidoController");
-                }
-                else{
-                    header("location: index.php?c=PedidoController");
-                }
+                $route = match ($_SESSION["trabajador"]["iCarID"]) {
+                    "1" => "Administrador",
+                    "2" => "Pedido",
+                };
+                header("location: index.php?c={$route}Controller");
             }
         } catch (Exception $e) {
             if ( session_status() == PHP_SESSION_NONE){

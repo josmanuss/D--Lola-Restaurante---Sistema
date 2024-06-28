@@ -185,9 +185,6 @@ class VentaController {
         $this->pdf->SetXY(0,$this->pdf->GetY()+21);
         $this->pdf->SetFont('Arial','',14);
         $this->pdf->MultiCell(0,5,iconv("UTF-8", "ISO-8859-1","COD000001V000".strval($id)),0,'C',false);
-        
-
-
         $this->pdf->Output("I", "Venta_Nro_" . $id . ".pdf", true);
     }
     

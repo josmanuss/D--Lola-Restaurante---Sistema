@@ -267,7 +267,7 @@ $(document).ready(function() {
                 });
             }
             else if (!algunValorCero) { 
-                let valoresDNIyTotal = [$('[name="idCliente"]').val(), trabajadorMozoID, suma];
+                let valoresDNIyTotal = [$(".mesa").val(),$('[name="idCliente"]').val(), trabajadorMozoID, suma];
                 console.log(valoresDNIyTotal);                
                 enviarVentaCaja(valoresDNIyTotal,valoresTabla);
             }

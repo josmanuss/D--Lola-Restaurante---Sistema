@@ -17,6 +17,15 @@ class PedidoModel{
         return $resultado->num_rows > 0 ? $resultado->fetch_assoc()["cCliID"] : null;
     }
     
+    public function selectTableOrder() {
+        $stmt = $this->db->prepare("SELECT * FROM mesa WHERE estado = 'LIBRE'");
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+        $stmt->close();
+        return $resultado->fetch_all(MYSQLI_ASSOC);
+    }
+    
+
     public function getPago(){
         $pagos = array();
         $stmt = $this->db->prepare("SELECT * FROM pago");
@@ -118,9 +127,9 @@ class PedidoModel{
 
 
     
-    public function saveOrder($id_usuario, $id_trabajador, $precioTotal){
-        $consulta = $this->db->prepare("INSERT INTO pedido(cCliID, cTraID, cPedTotal) VALUES (?,?,?)");
-        $consulta->bind_param("iid",$id_usuario, $id_trabajador, $precioTotal);
+    public function saveOrder($id_mesa,$id_usuario, $id_trabajador, $precioTotal){
+        $consulta = $this->db->prepare("INSERT INTO pedido(cMesID, cCliID, cTraID, cPedTotal) VALUES (?,?,?,?)");
+        $consulta->bind_param("iiid",$id_mesa,$id_usuario, $id_trabajador, $precioTotal);
         $consulta->execute();
         $success = $consulta->affected_rows > 0;
         $consulta->close();

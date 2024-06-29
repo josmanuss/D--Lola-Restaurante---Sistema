@@ -17,6 +17,15 @@ class PedidoModel{
         return $resultado->num_rows > 0 ? $resultado->fetch_assoc()["cCliID"] : null;
     }
     
+
+    public function idMesa($id){
+        $stmt = $this->db->prepare("SELECT cMesID FROM pedido WHERE cPedID = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+        return $resultado->num_rows > 0 ? $resultado->fetch_assoc()["cMesID"] : null;
+    }
+    
     public function selectTableOrder() {
         $stmt = $this->db->prepare("SELECT * FROM mesa WHERE estado = 'LIBRE'");
         $stmt->execute();

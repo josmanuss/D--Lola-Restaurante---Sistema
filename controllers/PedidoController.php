@@ -96,7 +96,8 @@ class PedidoController{
                 $datosDetalleVenta = json_decode($_POST["datos_detalleventa"]);
                 $datosDetallePagos = json_decode($_POST["datos_detallepagos"]);
                 $cliente = $this->pedido->idCliente($datosVenta[0]->idPedido);
-                $exitoso1 = $this->ventaGuardar->saveSale($datosVenta[0], $cliente);
+                $mesa = $this->pedido->idMesa($datosVenta[0]->idPedido);
+                $exitoso1 = $this->ventaGuardar->saveSale($datosVenta[0], $mesa, $cliente);
                 if ($exitoso1) {
                     $idVenta = $this->ventaGuardar->maxVenta();
                     if ($idVenta > 0) {

@@ -113,10 +113,10 @@
             return $this->detalleventa;
         }
 
-        public function saveSale($venta, $cliente){
-            $consulta = $this->db->prepare("INSERT INTO venta(cCliID,cTraID,iTipoComID,fVenTotal) 
-            VALUES (?,?,?,?)");
-            $consulta->bind_param("iiid",$cliente, $venta->cajero, $venta->comprobante, $venta->monto);
+        public function saveSale($venta, $mesa, $cliente){
+            $consulta = $this->db->prepare("INSERT INTO venta(cMesID, cCliID,cTraID,iTipoComID,fVenTotal) 
+            VALUES (?,?,?,?,?)");
+            $consulta->bind_param("iiiid",$mesa,$cliente, $venta->cajero, $venta->comprobante, $venta->monto);
             $consulta->execute();
             $success = $consulta->affected_rows > 0;
             $consulta->close();

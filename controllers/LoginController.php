@@ -26,11 +26,15 @@ class LoginController{
                 }
                 $_SESSION["trabajador"] = $datos["tE"];
                 $this->login->usuarioActivo($data["autenticar"]);
-                $route = match ($_SESSION["trabajador"]["iCarID"]) {
-                    "1" => "Administrador",
-                    "2" => "Pedido",
-                };
-                header("location: index.php?c={$route}Controller");
+                if ( $_SESSION["trabajador"]["iCarID"] == "1" ){
+                    header("location: index.php?c=AdministradorController");
+                }   
+                else if ($_SESSION["trabajador"]["iCarID"] == "2" ){
+                    header("location: index.php?c=PedidoController");
+                }
+                else{
+                    header("location: index.php?c=PedidoController");
+                }
             }
         } catch (Exception $e) {
             if ( session_status() == PHP_SESSION_NONE){

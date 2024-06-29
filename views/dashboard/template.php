@@ -247,7 +247,7 @@ endif;
               </a>
             </li> 
             <li class="nav-item">
-              <a href="index.php?c=VentaController" class="nav-link">
+              <a href="index.php?c=PedidoController" class="nav-link">
                 <i class="fas fa-shopping-bag nav-icon"></i>
                   <p>Nuevo Pedido</p>
               </a>

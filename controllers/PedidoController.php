@@ -38,7 +38,6 @@ class PedidoController{
     public function verMesasDisponibles(){
         $data["titulo"] = "SELECCIONA UNA MESA DISPONIBLE";
         $data["mesa"] = $this->pedido->selectTableOrder();
-
         //echo "<pre>"; print_r($data["mesa"]); "</pre>"; exit();
         $data["contenido"] = "views/venta/seleccionar_mesa.php";
         require_once TEMPLATE;

@@ -73,6 +73,28 @@ class PedidoModel{
         $stmt->close();
         return $success;   
     }
+
+    public function statusChange($id){
+        $stmt = $this->db->prepare("UPDATE pedido SET cPedEstado = 'PARA_CORREGIR' WHERE cPedID = ?");
+        $stmt->bind_param("i",$id);
+        $stmt->execute();
+        $success = $stmt->affected_rows > 0;
+        $stmt->close();
+        return $success;   
+    }
+
+    public function getPedido_Modificar(){
+        $stmt = $this->db->prepare("SELECT * FROM vw_pedidos WHERE Estado = 'PARA_CORREGIR'");
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+        if($resultado->num_rows>0){
+            while($fila=$resultado->fetch_assoc()){
+                $this->pedido[] = $fila;
+            }
+        }
+        $stmt->close();
+        return $this->pedido;
+    }    
     
     public function getPedido(){
         $stmt = $this->db->prepare("SELECT * FROM vw_pedidos WHERE Estado = 'EN_PROCESO_VENTA'");

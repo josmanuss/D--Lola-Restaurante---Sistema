@@ -247,6 +247,10 @@ class PedidoController{
         # Nombre del archivo PDF #
         $this->pdf->Output("I","Orden_Nro_".$id.".pdf",true);
     }
+
+
+    
+
     
     private function showError404() : void {
         if (defined('ERROR404')) {
@@ -255,5 +259,25 @@ class PedidoController{
             echo "Error 404: Página no encontrada";
         }
     }
+
+    public function mostrarPedidosModificar(){
+        $data["titulo"] = "Pedidos a modificar";
+        $data["pedido"] = $this->pedido->getPedido_Modificar();
+        $data["contenido"] = "views/venta/modificar_pedido.php";
+        require_once TEMPLATE;
+    }
+
+    public function reenviar($id){
+        if($this->pedido->statusChange($id)){
+            header("location: index.php?c=PedidoController");
+        }
+        else{
+            exit("ERROR DE REENVIO DE PEDIDO");
+        }
+   }
+
+
+
+
 
 }

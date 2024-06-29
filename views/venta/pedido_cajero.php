@@ -101,6 +101,7 @@
                                             <button class="btn btn-success payBtn" data-recordid="<?php echo $pedido["ID_Pedido"]; ?>"><i class="fas fa-money-check-alt"></i>Pagar</button>
                                             <a href="#" class="btn btn-warning detailBtn" data-recordid="<?php echo $pedido["ID_Pedido"]; ?>"><i class="fas fa-book"></i>Ver detalle</a>
                                             <a href="index.php?c=PedidoController&a=generarTicketOrden&id=<?php echo $pedido["ID_Pedido"]; ?>" target="_blank" class="btn btn-danger pdfBtn"><i class="fas fa-file-pdf"></i>Descargar en pdf</a>
+                                            <a href="index.php?c=PedidoController&a=reenviar&id=<?php echo $pedido["ID_Pedido"];?>" class="btn btn-danger retornarBtn"><i class="fas fa-arrow-left"></i></a>
                                             <a href="#" class="btn btn-danger eliminarBtn"><i class="fas fa-trash"></i></a>
                                         </td>
                                     </tr>

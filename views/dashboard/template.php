@@ -253,6 +253,12 @@ endif;
               </a>
             </li>
             <li class="nav-item">
+              <a href="index.php?c=PedidoController&a=mostrarPedidosModificar" class="nav-link">
+                <i class="fas fa-shopping-bag nav-icon"></i>
+                  <p>Modificar Pedido</p>
+              </a>
+            </li>
+            <li class="nav-item">
               <hr style="border-bottom:1px solid #4f5962;">
             </li>
             <li class="nav-item menu-open ">

@@ -90,7 +90,7 @@ class VentaController {
     
         // Encabezado del comprobante
         $this->pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", strtoupper($nombreEmpresa)), 0, 'C', false);
-        $this->pdf->SetFont('Arial', '', 9);
+        $this->pdf->SetFont('Arial', 'B', 9);
         $this->pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "RUC: 1729278258"), 0, 'C', false);
         $this->pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Direccion: C. Teodoro Cárdenas 133, Lima 15046"), 0, 'C', false);
         $this->pdf->MultiCell(0, 5, iconv("UTF-8", "ISO-8859-1", "Teléfono: 955222600"), 0, 'C', false);
@@ -110,7 +110,7 @@ class VentaController {
     
         // Tabla de productos
         $this->pdf->SetFont('Arial', 'B', 10);
-        $this->pdf->SetFont('Arial', '', 9);
+        $this->pdf->SetFont('Arial', 'B', 9);
         $this->pdf->Ln(1);
         $this->pdf->Cell(0, 5, iconv("UTF-8", "ISO-8859-1", "-------------------------------------------------------------------"), 0, 0, 'C');
         $this->pdf->Ln(3);

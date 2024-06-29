@@ -3,7 +3,7 @@ class LoginController{
     public $login;
     public $errores;
     public $validaciones;
-//hola mundo
+
     public function __construct(){
         require_once "models/LoginModel.php";
         $this->login = new LoginModel();

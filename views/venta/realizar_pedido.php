@@ -94,6 +94,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-4">
+                    <input type="hidden" class="mesa" value="<?php echo $id;?>">
                     <h1 class="m-0"><?php echo $data["titulo"];?></h1>
                 </div>
             </div>
@@ -191,3 +192,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript" src="views/venta/js/funciones1.js"></script>
 <script type="text/javascript" src="views/venta/js/funciones2.js"></script>
+
+
+
+

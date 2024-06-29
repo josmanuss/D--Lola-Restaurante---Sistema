@@ -28,13 +28,22 @@ class PedidoController{
         if ($carID == 2) {
             $this->verPedidosCajero();
         } elseif ($carID == 3) {
-            $this->realizarPedido(); 
+            $this->verMesasDisponibles(); 
         } else {
             $this->showError404();
         }
         
     }
 
+    public function verMesasDisponibles(){
+        $data["titulo"] = "SELECCIONA UNA MESA DISPONIBLE";
+        $data["mesa"] = $this->pedido->selectTableOrder();
+
+        //echo "<pre>"; print_r($data["mesa"]); "</pre>"; exit();
+        $data["contenido"] = "views/venta/seleccionar_mesa.php";
+        require_once TEMPLATE;
+    }
+    
     public function verDetallePedido(){
         if ( $_SERVER["REQUEST_METHOD"] === "POST"){
             $recordID = $_POST["record_id"];
@@ -47,10 +56,12 @@ class PedidoController{
             }
         }
     }
-
-    public function realizarPedido() : void {
+    
+    public function realizarPedido($id) : void {
         $data["titulo"] = "Realizar pedido";
         $data["dni"] = $this->clientes->clientesDNI();
+        $_SESSION["mesa"] = [$id];
+        //echo "<pre>"; print_r($id); "</pre>"; exit();
         $data["contenido"] = "views/venta/realizar_pedido.php";
         require_once TEMPLATE;
     }
@@ -118,13 +129,14 @@ class PedidoController{
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             try{
                 $pedido = json_decode($_POST["valores_pedido"]);
+
                 $detalle_pedido = json_decode($_POST["valores_detalle_pedido"]);
                 $columnas_detalle = ["id_plato", "id_categoria", "nombre", "cantidad", "precio"];
                 $detalle_pedido_agregar = array_map(function($fila) use ($columnas_detalle) {
                     return array_combine($columnas_detalle, $fila);
                 }, $detalle_pedido);
 
-                $exitoso1 = $this->pedido->saveOrder($pedido[0],$pedido[1],$pedido[2]);
+                $exitoso1 = $this->pedido->saveOrder($pedido[0],$pedido[1],$pedido[2],$pedido[3]);
                 if ($exitoso1 == TRUE) {
                     $idVenta = $this->pedido->maxPedido();
                     if ($idVenta > 0) {

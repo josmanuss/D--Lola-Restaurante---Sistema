@@ -142,98 +142,62 @@
         </div>
     </div>
 
-<!-- Contenido del modal pedidoModal -->
-<div class="modal fade" id="pedidoModal" tabindex="-1" role="dialog" aria-labelledby="pedidoModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="pedidoModalLabel">Información del Pedido</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <!-- Contenido del cliente -->
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="card">
-                <div class="card-header">
-                  <h5 class="m-0">Cliente:</h5>
-                </div>
-                <div class="card-body">
-                  <div class="form-group row">
-                    <label for="tipoCliente" class="col-sm-3 col-form-label">Tipo de Cliente</label>
-                    <div class="col-sm-9">
-                        <p class="form-control"></p>                      
-                    </div>
-                  </div>
-                  <div class="form-group row">
-                    <label for="DNI" class="col-sm-3 col-form-label">DNI Cliente:</label>
-                    <div class="col-sm-9">
-                        <p class="form-control"></p>
-                    </div>
-                  </div>
-                  <div class="form-group row">
-                    <label for="DNI" class="col-sm-3 col-form-label">ID Cliente</label>
-                    <div class="col-sm-9">
-                        <p class="form-control"></p>
-                    </div>
-                  </div>
-                  <div class="form-group row">
-                    <label for="DNI" class="col-sm-3 col-form-label">Nombres y apellidos:</label>
-                    <div class="col-sm-9">
-                        <p class="form-control"></p>
-                    </div>
-                  </div>
-
-                  <input type="hidden" name="mozo" id="mozo" class="mozo" value="ID_DE_TRABAJADOR">
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="card">
-                <div class="card-header">
-                  <h5 class="m-0">Información del Pedido</h5>
-                </div>
-                <div class="card-body">
-                  <label>Platos a buscar:</label>
-                  <div id="autocomplete-container">
-                    <input type="search" class="form-control mb-2" placeholder="Ingrese el nombre del plato:" id="buscarPlato">
-                    <div id="autocomplete-results"></div>
-                  </div>
-                  <div class="table-responsive">
-                    <table class="table table-striped table-hover" id="tabla-productosvender">
-                      <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>ID Categoría</th>
-                          <th>Nombre</th>
-                          <th>Cantidad</th>
-                          <th>Precio</th>
-                          <th>Opciones</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                      </tbody>
-                    </table>
-                    <div class="form-group">
-                      <button class="btn btn-danger btn-block" id="vaciarTabla-actualizar">Vaciar tabla</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+    <div class="modal fade" id="pedidoModal" tabindex="-1" role="dialog" aria-labelledby="pedidoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="pedidoModalLabel">Información del Pedido</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary">Guardar Cambios</button>
-      </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+            <!-- Información del Pedido -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="m-0 titulo-pedido"></h5>
+                            </div>
+                            <div class="card-body">
+                                <label>Platos a buscar:</label>
+                                <div id="autocomplete-container">
+                                    <input type="search" class="form-control mb-2" placeholder="Ingrese el nombre del plato:" id="buscarPlato">
+                                    <div id="autocomplete-results"></div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover" id="tabla-productosactualizar">
+                                    <thead class="thead-light">
+                                        <tr>
+                                        <th>ID</th>
+                                        <th>Categoría</th>
+                                        <th>Nombre</th>
+                                        <th>Cantidad</th>
+                                        <th>Precio</th>
+                                        <th>Opciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                    </table>
+                                    <div class="form-group">
+                                        <button class="btn btn-danger btn-block" id="vaciarTabla-actualizar">Vaciar tabla</button>
+                                    </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <!-- Fin Información del Pedido -->
+            </div>
+        </div>
+        </div>
     </div>
-  </div>
-</div>
+    </div>
+
+
+
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -253,22 +217,24 @@
                     success: function(response){
                     var respuesta = JSON.parse(response);
                     if (respuesta.success){
+                        $(".titulo-pedido").text("Informacion del pedido "+id_pedido);
                         var platos = respuesta.detalle;
-                        var tbody = $('#tabla-productosvender tbody');
+                        var tbody = $('#tabla-productosactualizar tbody');
                         tbody.empty();
-                        $.each(platos,function(index, plato){
+                        $.each(platos, function(index, plato){
                             var fila = '<tr>' +
-                                '<td>' + plato[0] + '</td>' +
-                                '<td>' + plato[1] + '</td>' +
-                                '<td>' + plato[2] + '</td>' +
-                                '<td><input type="number" class="form-control" value="'+plato[4]+'"></td>' + 
-                                '<td>' + plato[3] + '</td>' +
-                                '<td>' +
-                                    '<a class="btn btn-xs btn-warning" id="actualizarCantidad"><i class="fas fa-trash-alt mr-2"></i></a>'+ 
-                                    '<a class="btn btn-xs btn-danger" id="eliminarDetalle"><i class="fas fa-trash-alt mr-2"></i></a>'+ 
-                                '</td>' + 
+                                '<form id="pedido" method="POST">' +
+                                    '<td>' + plato["IDPedido"] + '</td>' +
+                                    '<td>' + plato["Categoria"] + '</td>' +
+                                    '<td>' + plato["NombrePlato"] + '</td>' +
+                                    '<td><input type="number" class="form-control" value="' + plato["Cantidad"] + '"></td>' + 
+                                    '<td>' + plato["PrecioFinal"] + '</td>' +
+                                    '<td>' +
+                                        '<a class="btn btn-xs btn-warning" id="actualizarCantidad"><i class="fas fa-user-edit mr-2"></i></a>'+ 
+                                        '<a class="btn btn-xs btn-danger" id="eliminarDetalle"><i class="fas fa-trash mr-2"></i></a>'+ 
+                                    '</td>' + 
+                                '</form>' +
                             '</tr>';
-                            $('#buscarPlato').val('');
                             tbody.append(fila);
                         });
 
@@ -292,6 +258,6 @@
 </script>
 
 
-<script type="text/javascript" src="views/venta/js/funciones1.js"></script>
+<script type="text/javascript" src="views/venta/js/funciones5.js"></script>
 <script type="text/javascript" src="views/venta/js/funciones2.js"></script>
 

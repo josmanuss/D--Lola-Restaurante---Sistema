@@ -159,15 +159,6 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card mb-4">
-                      <div class="card-header">
-                        <i class="fas fa-chart-bar"></i>
-                          Trabajadores por categoria
-                      </div>
-                    <div class="card-body"><canvas id="myBarChartTrabajador" width="100%"></canvas></div>
-                  </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-chart-bar me-1"></i>
                             Reporte de Ventas

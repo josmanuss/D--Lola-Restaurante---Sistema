@@ -98,9 +98,7 @@ function enviarVentaCaja(pedido, detallepedido) {
         async : true,
         success: function(response) {
             var respuesta = JSON.parse(response);
-            console.log(respuesta);
             if (respuesta.success) {
-                console.log("La venta se ha enviado a caja correctamente");
                 Swal.fire({
                     icon: 'success',
                     title: 'Éxito',
@@ -267,8 +265,7 @@ $(document).ready(function() {
                 });
             }
             else if (!algunValorCero) { 
-                let valoresDNIyTotal = [$(".mesa").val(),$('[name="idCliente"]').val(), trabajadorMozoID, suma];
-                console.log(valoresDNIyTotal);                
+                let valoresDNIyTotal = [$(".mesa").val(),$('[name="idCliente"]').val(), trabajadorMozoID, suma];             
                 enviarVentaCaja(valoresDNIyTotal,valoresTabla);
             }
         }

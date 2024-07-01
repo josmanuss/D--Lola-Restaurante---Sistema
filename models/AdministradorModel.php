@@ -19,105 +19,63 @@ class AdministradorModel{
         $this->pedidos = 0;
         $this->ventas = 0;
         $this->ganancias = 0;
-        $this->db = Conexion::Conexion();
+        $this->db = Conexion::ConexionSQL();
     }
 
-    public function cantidadClientes(): int{
-        $sql = $this->db->query("SELECT COUNT(*) FROM recuperarclientes");
-        if ( $sql->num_rows > 0 ){
-            $fila = $sql->fetch_assoc();
-            $this->clientes = $fila["COUNT(*)"];
-        }
-        $sql->close();
+    public function cantidadClientes(): int {
+        $sql = $this->db->query("SELECT COUNT(*) AS count FROM recuperarclientes");
+        $fila = $sql->fetch(PDO::FETCH_ASSOC);
+        $this->clientes = (int) $fila['count'];
         return $this->clientes;
     }
-    
+
     public function cantidadTrabajadores(): int {
         $sql = $this->db->query("SELECT COUNT(*) AS cantidad FROM usuario WHERE cUserRol <> 'normal'");
-        if ($sql) { 
-            $fila = $sql->fetch_assoc(); 
-            $this->trabajadores = $fila['cantidad']; 
-        }
-        $sql->close();
+        $fila = $sql->fetch(PDO::FETCH_ASSOC);
+        $this->trabajadores = (int) $fila['cantidad'];
         return $this->trabajadores;
     }
+
     public function cantidadTrabajadoresActivos(): int {
-        $sql = $this->db->prepare("SELECT COUNT(*) AS cantidad FROM usuario WHERE cUserRol <> 'normal' AND cUsuActivo = 1");
-        $sql->execute(); 
-        $this->trabajadores = 0;
-        $result = $sql->get_result();
-        if ($result->num_rows > 0) { 
-            $fila = $result->fetch_assoc(); 
-            $this->trabajadores = $fila['cantidad']; 
-        }
-        
-        $sql->close(); 
+        $sql = $this->db->query("SELECT COUNT(*) AS cantidad FROM usuario WHERE cUserRol <> 'normal' AND cUsuActivo = 1");
+        $fila = $sql->fetch(PDO::FETCH_ASSOC);
+        $this->trabajadores = (int) $fila['cantidad'];
         return $this->trabajadores;
     }
-    
-    public function cantidadCategorias(): int{
-        $sql = $this->db->query("SELECT COUNT(*) FROM categoria");
-        if ( $sql->num_rows > 0){
-            $fila = $sql->fetch_assoc();
-            $this->categorias = $fila["COUNT(*)"];
-        }
-        $sql->close();
+
+    public function cantidadCategorias(): int {
+        $sql = $this->db->query("SELECT COUNT(*) AS cantidad FROM categoria");
+        $fila = $sql->fetch(PDO::FETCH_ASSOC);
+        $this->categorias = (int) $fila['cantidad'];
         return $this->categorias;
     }
 
-
-    public function cantidadPedidosPendientes(): int{
-        $sql = $this->db->query("SELECT COUNT(*) FROM pedido WHERE cPedEstado != 'PAGADO'");
-        if($sql->num_rows>0){
-            $fila = $sql->fetch_assoc();
-            $this->pedidos = $fila["COUNT(*)"];
-        }
-        $sql->close();
+    public function cantidadPedidosPendientes(): int {
+        $sql = $this->db->query("SELECT COUNT(*) AS cantidad FROM pedido WHERE cPedEstado != 'PAGADO'");
+        $fila = $sql->fetch(PDO::FETCH_ASSOC);
+        $this->pedidos = (int) $fila['cantidad'];
         return $this->pedidos;
     }
-    public function cantidadPlatos(): int{
-        $sql = $this->db->query("SELECT COUNT(*) FROM platos");
-        if ( $sql->num_rows > 0){
-            $fila = $sql->fetch_assoc();
-            $this->platos = $fila["COUNT(*)"];
-        }
-        $sql->close();
+
+    public function cantidadPlatos(): int {
+        $sql = $this->db->query("SELECT COUNT(*) AS cantidad FROM platos");
+        $fila = $sql->fetch(PDO::FETCH_ASSOC);
+        $this->platos = (int) $fila['cantidad'];
         return $this->platos;
     }
 
-    public function totalVentasHechas(){
-        $sql = $this->db->prepare("SELECT COUNT(*) AS TotalVentas FROM venta");
-        $sql->execute();
-        $result = $sql->get_result();
-        if ( $result->num_rows == 0 ){
-            $sql->close();
-            return $this->ventas;
-        }
-        else{
-            while ( $row = $result->fetch_assoc()){
-                $this->ventas = $row["TotalVentas"];
-            }
-            $sql->close();
-            return $this->ventas;
-        }
+    public function totalVentasHechas(): int {
+        $sql = $this->db->query("SELECT COUNT(*) AS TotalVentas FROM venta");
+        $fila = $sql->fetch(PDO::FETCH_ASSOC);
+        $this->ventas = (int) $fila['TotalVentas'];
+        return $this->ventas;
     }
 
-    public function gananciasVentas(){
-        
-        $sql = $this->db->prepare("SELECT SUM(fVenTotal) AS TotalGanancias FROM venta");
-        $sql->execute();
-        $result = $sql->get_result();
-        if ( $result->num_rows == 0 ){
-            $sql->close();
-            return $this->ganancias;
-        }
-        else{
-            while ( $row = $result->fetch_assoc()){
-                $this->ganancias = $row["TotalGanancias"];
-            }
-            $sql->close();
-            return $this->ganancias;
-        }
+    public function gananciasVentas(): float {
+        $sql = $this->db->query("SELECT SUM(fVenTotal) AS TotalGanancias FROM venta");
+        $fila = $sql->fetch(PDO::FETCH_ASSOC);
+        $this->ganancias = (float) $fila['TotalGanancias'];
+        return $this->ganancias;
     }
 
 

@@ -60,23 +60,32 @@ class PedidoController{
         $data["titulo"] = "Realizar pedido";
         $data["dni"] = $this->clientes->clientesDNI();
         $_SESSION["mesa"] = [$id];
-        //echo "<pre>"; print_r($id); "</pre>"; exit();
         $data["contenido"] = "views/venta/realizar_pedido.php";
         require_once TEMPLATE;
     }
 
-    public function actualizarPedido(): void{
-        if ($_SERVER["REQUEST_METHOD"]==='POST'){
-            $id_modificar = $_POST["id_pedido"];
-            $data["modalTitulo"] = "Actualizar Pedido";
-            $data["pedidoModificar"] = json_decode($_POST["pedido"]);
-            require_once "views/venta/modal_actualizar_pedido";
-        }
-        else{
-            require_once ERROR404;
+
+    public function agregarNuevaFila(){
+        if ($_SERVER["REQUEST_METHOD"] === "POST"){
+            try {
+                $data = array(
+                    'nombre' => $_POST["nombre"],
+                    'precio'=> $_POST["precio"]
+                );
+                $array = $this->platos->getPlatoPorNombrePrecio($data);
+                if ($array != null) {
+                    echo json_encode(["success" => true, "filas" => $array]);
+                } 
+                else {
+                    echo json_encode(["success" => false]);
+                }
+            } 
+            catch (Exception $e) {
+                echo json_encode(["success" => false, "error" => $e->getMessage()]);
+            }
         }
     }
-
+    
     public function pagarPedido() : void {
         if ($_SERVER["REQUEST_METHOD"] === "POST" ){
             $record_id = $_POST["record_id"];

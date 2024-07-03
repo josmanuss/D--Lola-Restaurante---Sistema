@@ -88,11 +88,6 @@
                         <label class="col-sm-3 col-form-label">Nombres</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="nombreCargo" name="nombreCargo" value="<?php echo $_REQUEST["nombreCargo"] ?? ''; ?>">
-                            <?php if (isset($data["errores"]["nombres"])) : ?>
-                                <div class="text-danger">
-                                    <?php echo $data["errores"]["nombres"]; ?>
-                                </div>
-                            <?php endif; ?>
                         </div>
                     </div>
                     <div class="mb-3 row">
@@ -123,11 +118,6 @@
                         <label class="col-sm-3 col-form-label">Nombres</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" name="nombreCargo" value="<?php echo $_REQUEST["nombreCargo"] ?? ''; ?>">
-                            <?php if (isset($data["errores"]["nombres"])) : ?>
-                                <div class="text-danger">
-                                    <?php echo $data["errores"]["nombres"]; ?>
-                                </div>
-                            <?php endif; ?>
                         </div>
                     </div>
                     <div class="mb-3 row">

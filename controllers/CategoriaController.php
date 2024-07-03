@@ -24,8 +24,7 @@
             if ($_SERVER["REQUEST_METHOD"] === "POST"){
                 $nombre = $_POST["nombres"];
                 $imagen = file_get_contents($_FILES['imagen']['tmp_name']);
-                $exitoso = $this->categorias->save($imagen, $nombre);
-                if ($exitoso){
+                if ($this->categorias->save($imagen, $nombre)){
                     header("Location: index.php?c=CategoriaController");
                 }
                 else{
@@ -42,8 +41,7 @@
                 $nombreimagen = $_FILES['imagen']['name'];
                 $tipoimagen = $_FILES['imagen']['type'];
                 $imagen = file_get_contents($_FILES['imagenCategoria']['tmp_name']);
-                $exitoso = $this->categorias->update($id,$imagen, $nombre);
-                if ($exitoso){
+                if ($this->categorias->update($id,$imagen, $nombre)){
                     header("Location: index.php?c=CategoriaController");
                 }
                 else{
@@ -56,7 +54,7 @@
             if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $id = $_POST["id"];
                 $data["resultado"] = $this->categorias->getPlatoIDCategoria($id);
-                if ($data["resultado"] != null) {
+                if (isset($data["resultado"])) {
                     echo json_encode(["success" => true, "mensaje" => "PLATOS ENCONTRADOS", "platos" => $data["resultado"]]);
                 } else {
                     echo json_encode(["success" => false, "mensaje" => "No se encontraron platos para esta categoría"]);

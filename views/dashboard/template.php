@@ -253,9 +253,9 @@ endif;
               </a>
             </li>
             <li class="nav-item">
-              <a href="index.php?c=PedidoController&a=mostrarPedidosModificar" class="nav-link">
+              <a href="index.php?c=PedidoController&a=mostrarPedidosPendientes" class="nav-link">
                 <i class="fas fa-shopping-bag nav-icon"></i>
-                  <p>Modificar Pedido</p>
+                  <p>Pedidos Pendientes</p>
               </a>
             </li>
             <li class="nav-item">

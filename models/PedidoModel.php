@@ -27,7 +27,7 @@ class PedidoModel{
     }
     
     public function selectTableOrder() {
-        $stmt = $this->db->prepare("SELECT * FROM mesa WHERE estado = 'LIBRE'");
+        $stmt = $this->db->prepare("SELECT * FROM mesa");
         $stmt->execute();
         $resultado = $stmt->get_result();
         $stmt->close();
@@ -74,6 +74,16 @@ class PedidoModel{
         return $success;   
     }
 
+
+    public function sendOrder($id){
+        $stmt = $this->db->prepare("UPDATE pedido SET cPedEstado = 'EN_PROCESO_VENTA' WHERE cPedID = ?");
+        $stmt->bind_param("i",$id);
+        $stmt->execute();
+        $success = $stmt->affected_rows > 0;
+        $stmt->close();
+        return $success;  
+    }
+
     public function statusChange($id){
         $stmt = $this->db->prepare("UPDATE pedido SET cPedEstado = 'PARA_CORREGIR' WHERE cPedID = ?");
         $stmt->bind_param("i",$id);
@@ -97,7 +107,7 @@ class PedidoModel{
     }    
     
     public function getPedido(){
-        $stmt = $this->db->prepare("SELECT * FROM vw_pedidos WHERE Estado = 'EN_PROCESO_VENTA'");
+        $stmt = $this->db->prepare("SELECT * FROM vw_pedidos");
         $stmt->execute();
         $resultado = $stmt->get_result();
         if($resultado->num_rows>0){
@@ -123,8 +133,20 @@ class PedidoModel{
         $stmt->close();
         return $pedido;
     }
-
-
+    public function getPedidoMozo($id): array{
+        $pedido = array();
+        $stmt = $this->db->prepare("SELECT * FROM vw_pedidos WHERE ID_Trabajador_Mozo = ?");
+        $stmt->bind_param("i",$id);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+        if($resultado->num_rows>0){
+            while($fila=$resultado->fetch_assoc()){
+                $pedido[] = $fila;
+            }
+        }
+        $stmt->close();
+        return $pedido;
+    }
 
     public function maxPedido(): int {
         $numero = 0;
@@ -154,9 +176,6 @@ class PedidoModel{
         $stmt->close();
         return $this->detallepedido;
     }
-
-
-
     
     public function saveOrder($id_mesa,$id_usuario, $id_trabajador, $precioTotal){
         $consulta = $this->db->prepare("INSERT INTO pedido(cMesID, cCliID, cTraID, cPedTotal) VALUES (?,?,?,?)");
@@ -173,6 +192,4 @@ class PedidoModel{
         $consulta->execute();
         $consulta->close();
     }
-
-
 }

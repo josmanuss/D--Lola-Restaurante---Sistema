@@ -190,8 +190,8 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script type="text/javascript" src="views/venta/js/funciones1.js"></script>
-<script type="text/javascript" src="views/venta/js/funciones2.js"></script>
+<script type="text/javascript" src="views/pedido/js/funciones1.js"></script>
+<script type="text/javascript" src="views/pedido/js/funciones2.js"></script>
 
 
 

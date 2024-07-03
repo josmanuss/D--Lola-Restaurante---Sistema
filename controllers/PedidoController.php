@@ -21,25 +21,28 @@ class PedidoController{
     }
     
     public function index(): void {
-        if ( session_status() == PHP_SESSION_NONE){
+        if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        $carID = isset($_SESSION["trabajador"]["iCarID"]) ? intval($_SESSION["trabajador"]["iCarID"]) : 0;
-        if ($carID == 2) {
-            $this->verPedidosCajero();
-        } elseif ($carID == 3) {
-            $this->verMesasDisponibles(); 
-        } else {
-            $this->showError404();
+        $carID = $_SESSION["trabajador"]["iCarID"] ?? 0;
+        switch ($carID) {
+            case 2:
+                $this->verPedidosCajero();
+                break;
+            case 3:
+                $this->verMesasDisponibles();
+                break;
+            default:
+                $this->showError404();
+                break;
         }
-        
     }
+    
 
     public function verMesasDisponibles(){
         $data["titulo"] = "SELECCIONA UNA MESA DISPONIBLE";
         $data["mesa"] = $this->pedido->selectTableOrder();
-        //echo "<pre>"; print_r($data["mesa"]); "</pre>"; exit();
-        $data["contenido"] = "views/venta/seleccionar_mesa.php";
+        $data["contenido"] = "views/pedido/seleccionar_mesa.php";
         require_once TEMPLATE;
     }
     
@@ -60,7 +63,7 @@ class PedidoController{
         $data["titulo"] = "Realizar pedido";
         $data["dni"] = $this->clientes->clientesDNI();
         $_SESSION["mesa"] = [$id];
-        $data["contenido"] = "views/venta/realizar_pedido.php";
+        $data["contenido"] = "views/pedido/realizar_pedido.php";
         require_once TEMPLATE;
     }
 
@@ -92,7 +95,7 @@ class PedidoController{
             $data["titulo"] = "Pagar venta";
             $data["comprobante"] = $this->pedido->getComprobante();
             $data["tipoPago"] = $this->pedido->getPago();
-            $data["contenido"] = "views/venta/pagar_pedido.php";
+            $data["contenido"] = "views/pedido/pagar_pedido.php";
             require_once TEMPLATE;
         }
     }
@@ -129,16 +132,21 @@ class PedidoController{
     public function verPedidosCajero() : void {
         $data["titulo"]= "Pedidos a pagar";
         $data["pedido"] = $this->pedido->getPedido();
-        $data["contenido"] = "views/venta/pedido_cajero.php";
+        $data["contenido"] = "views/pedido/pedido_cajero.php";
         require_once TEMPLATE;
     }
 
+    public function mostrarPedidosPendientes(): void{
+        $data["titulo"] = "PEDIDOS PENDIENTES";
+        $data["pedido"] = $this->pedido->getPedido();
+        $data["contenido"] = "views/pedido/pedidos_pendientes.php";
+        require_once TEMPLATE;
+    }
     
     public function agregarPedido() {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             try{
                 $pedido = json_decode($_POST["valores_pedido"]);
-
                 $detalle_pedido = json_decode($_POST["valores_detalle_pedido"]);
                 $columnas_detalle = ["id_plato", "id_categoria", "nombre", "cantidad", "precio"];
                 $detalle_pedido_agregar = array_map(function($fila) use ($columnas_detalle) {
@@ -201,7 +209,8 @@ class PedidoController{
         $this->pdf->Ln(5);
         $this->pdf->MultiCell(0,5,iconv("UTF-8", "ISO-8859-1","Fecha: ".$datos_pedido[0]["Fecha"]),0,'C',false);
         $this->pdf->MultiCell(0,5,iconv("UTF-8", "ISO-8859-1","Pedido Nro: ".$id),0,'C',false);
-        $this->pdf->MultiCell(0,5,iconv("UTF-8", "ISO-8859-1","Cajero: ".$datos_pedido[0]["NombreApellidoMozo"]),0,'C',false);
+        $this->pdf->MultiCell(0,5,iconv("UTF-8", "ISO-8859-1","Nro. Mesa: ".$datos_pedido[0]["cMesID"]),0,'C',false);
+        $this->pdf->MultiCell(0,5,iconv("UTF-8", "ISO-8859-1","Mozo: ".$datos_pedido[0]["NombreApellidoMozo"]),0,'C',false);
         $this->pdf->Ln(1);
         $this->pdf->Ln(1);
         $this->pdf->SetFont('Arial','B',10);
@@ -245,14 +254,10 @@ class PedidoController{
         $this->pdf->Cell(22,5,iconv("UTF-8", "ISO-8859-1","SUBTOTAL: "),0,0,'C');
         $this->pdf->Cell(32,5,iconv("UTF-8", "ISO-8859-1",strval(floatval($total))),0,0,'C');
         $this->pdf->Ln(5);
-        
         $this->pdf->Cell(18,5,iconv("UTF-8", "ISO-8859-1",""),0,0,'C');
         $this->pdf->Cell(70,20,iconv("UTF-8", "ISO-8859-1","Total a cancelar: S/.".strval(floatval($total))),0,0,'C');
-
         $this->pdf->SetXY(0,$this->pdf->GetY()+21);
         $this->pdf->SetFont('Arial','',14);
-
- 
         # Nombre del archivo PDF #
         $this->pdf->Output("I","Orden_Nro_".$id.".pdf",true);
     }
@@ -272,8 +277,17 @@ class PedidoController{
     public function mostrarPedidosModificar(){
         $data["titulo"] = "Pedidos a modificar";
         $data["pedido"] = $this->pedido->getPedido_Modificar();
-        $data["contenido"] = "views/venta/modificar_pedido.php";
+        $data["contenido"] = "views/pedido/modificar_pedido.php";
         require_once TEMPLATE;
+    }
+
+    public function enviarPedidoCaja($id){
+        if($this->pedido->sendOrder($id)){
+            header("location: index.php?c=PedidoController&a=mostrarPedidosPendientes");
+        }
+        else{
+            exit("Error de envio a caja");
+        }
     }
 
     public function reenviar($id){

@@ -57,16 +57,22 @@
                                     <tbody>
                                     <?php foreach ( $data["resultado"] as $Cliente) : ?>
                                         <tr>
-                                        <td><?php echo $Cliente["cCliID"]; ?></td>
-                                        <td><?php echo $Cliente["cPerNombre"]; ?></td>
-                                        <td><?php echo $Cliente["cPerApellidos"]; ?></td>
-                                        <td><?php echo $Cliente["cPerGenero"]; ?></td>
-                                        <td><?php echo $Cliente["cPerPais"]; ?></td>
-                                        <td><?php echo $Cliente["cCliTipoCliente"]; ?></td>
-                                        <td>
-                                            <a href="index.php?c=ClienteController&a=verCliente&id=<?php echo $Cliente["cCliID"];?>" class="btn btn-warning"><i class="fas fa-user-edit"></i></a>
-                                            <a href="#" class="btn btn-danger deleteBtn" data-toggle="modal" data-target="#deleteModal" data-recordid="<?php echo $Cliente["cCliID"]; ?>"><i class="fas fa-trash"></i></a>
-                                        </td>
+                                            <td><?php echo $Cliente["cCliID"]; ?></td>
+                                            <td><?php echo $Cliente["cPerNombre"]; ?></td>
+                                            <td><?php echo $Cliente["cPerApellidos"]; ?></td>
+                                            <td><?php echo $Cliente["cPerGenero"]; ?></td>
+                                            <td><?php echo $Cliente["cPerPais"]; ?></td>
+                                            <td><?php echo $Cliente["cCliTipoCliente"]; ?></td>
+                                            <td>
+                                                <a href="<?php echo $Cliente["cCliTipoCliente"] !== 'CLIENTE EN RESTAURANTE' ? 'index.php?c=ClienteController&a=verCliente&id=' . $Cliente["cCliID"] : '#'; ?>" 
+                                                class="btn btn-warning <?php echo $Cliente["cCliTipoCliente"] === 'CLIENTE EN RESTAURANTE' ? 'disabled' : ''; ?>">
+                                                    <i class="fas fa-user-edit"></i>
+                                                </a>
+                                                
+                                                <a href="#" class="btn btn-danger deleteBtn" data-toggle="modal" data-target="#deleteModal" data-recordid="<?php echo $Cliente["cCliID"]; ?>">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                     </tbody>

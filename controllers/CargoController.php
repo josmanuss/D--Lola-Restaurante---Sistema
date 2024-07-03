@@ -41,48 +41,43 @@ class CargoController{
     public function registrarCargo(): void{
         if ( $_SERVER["REQUEST_METHOD"] == "POST"){
             $nombre = isset($_POST["nombreCargo"]) ? $_POST["nombreCargo"] : '';
-            $exitoso = $this->cargos->save($nombre);
-            if ( $exitoso == TRUE ){
+            if ( $this->cargos->save($nombre) ){
                 $_SESSION['mensaje'] = "CARGO REGISTRADO CON EXITO";
                 header("location: index.php?c=CargoController");
             }
             else{
-                echo "No se pudo registrar correctamente el cargo";
+                exit("No se pudo registrar correctamente el cargo");
             }
         }
         else{
-            echo "Solicitud no permitida";
+            exit("Solicitud no permitida");
         }
     }
 
     public function actualizar(): void{
-        if( $_SERVER["REQUEST_METHOD"] == "POST" ){
+        if( $_SERVER["REQUEST_METHOD"] === "POST" ){
             $actualizar = array(
                 'id' => $_POST["idCargo"],
                 'nombre' => $_POST["nombreCargo"]
             );
-            $exitoso = $this->cargos->update($actualizar);
-            if ( $exitoso ){
+            if ( $this->cargos->update($actualizar) ){
                 $_SESSION['mensaje'] = "CARGO ACTUALIZADO CON EXITO";
                 header("location: index.php?=CargoController");
             }
             else{
-                echo "ERROR DE ACTUALIZACION"; exit();
+                exit("ERROR DE ACTUALIZACION");
             }
         }
     }
 
     public function eliminarCargo($id): void{
-        $exitoso = $this->cargos->delete($id);
-        if ( $exitoso == TRUE ){
+        if ( $this->cargos->delete($id) ){
             $_SESSION["mensaje"] = "CARGO ELIMINADO CORRECTAMENTE";
             header("location: index.php?c=CargoController");
         }
         else{
-            echo "NO SE PUDO ELIMINAR EL CARGO"; 
-            exit();
+            exit("NO SE PUDO ELIMINAR EL CARGO");
         }
-
     }
 
 }

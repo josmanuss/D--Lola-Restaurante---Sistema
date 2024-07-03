@@ -90,7 +90,7 @@ function agregarFila(valor){
     });
 }
 
-function enviarVentaCaja(pedido, detallepedido) {
+function registrarPedido(pedido, detallepedido) {
     $.ajax({
         url: 'index.php?c=PedidoController&a=agregarPedido',
         method: 'POST',
@@ -106,7 +106,7 @@ function enviarVentaCaja(pedido, detallepedido) {
                     showConfirmButton: false,
                     timer: 2500
                 }).then(() => {
-                    window.location.href = "index.php?c=TrabajadorController&a=verPerfil";
+                    window.location.href = "index.php?c=PedidoController&a=mostrarPedidosPendientes";
                 });
             } else {
                 console.log("Error: " + respuesta.mensaje);
@@ -266,7 +266,7 @@ $(document).ready(function() {
             }
             else if (!algunValorCero) { 
                 let valoresDNIyTotal = [$(".mesa").val(),$('[name="idCliente"]').val(), trabajadorMozoID, suma];             
-                enviarVentaCaja(valoresDNIyTotal,valoresTabla);
+                registrarPedido(valoresDNIyTotal,valoresTabla);
             }
         }
     });

@@ -8,11 +8,9 @@ class CajaController{
     }   
 
     public function index() {
-        // Iniciar sesión si no está iniciada
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-
         if (isset($_SESSION["trabajador"]) && isset($_SESSION["trabajador"]["iCarID"]) && $_SESSION["trabajador"]["iCarID"] === intval("2")) {
             $data["titulo"] = "Administración de caja";
             $data["contenido"] = "views/caja/caja.php";

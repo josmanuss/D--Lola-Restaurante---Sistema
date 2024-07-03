@@ -12,12 +12,13 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <?php foreach($data["mesa"] as $mesas): ?>
+                <?php foreach($data["mesa"] as $mesas): 
+                    if ($mesas["estado"] !== "OCUPADA"):
+                    ?>
                     <div class="col-lg-4 col-md-6 col-12"> 
-                      
                         <div class="small-box bg-gray">
                             <div class="inner">
-                                <h3><?php echo $mesas["id_mesa"];?></h3>
+                                <h3><?php echo $mesas["id_mesa"]; ?></h3>
                                 <p>Mesa</p>
                             </div>
                             <div class="icon">
@@ -30,10 +31,12 @@
                             <?php endif; ?>
                         </div>
                     </div>
+                    <?php endif; ?>
                 <?php endforeach; ?>
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </section>
+
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

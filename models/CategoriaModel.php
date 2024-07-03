@@ -70,25 +70,6 @@
             $conn->close();
             return $platos;
         }
-        
-        public function getPlatoIDCategoria1($data){
-            $conn = Conexion::Conexion();
-            $platos = array();
-            $stmt = $conn->prepare("SELECT p.* FROM platos p INNER JOIN categoria c ON p.cCatID=c.cCatID 
-                                    WHERE c.cCatID = ?");
-            $stmt->bind_param("i", $data["cCatID"]);
-            $stmt->execute();
-            $resultado = $stmt->get_result();
-            if ( $resultado->num_rows > 0 ){
-                while ( $fila = $resultado->fetch_assoc()){
-                    $platos[] = $fila;
-                }
-            }
-            $stmt->close();
-            $resultado->close();
-            $conn->close();
-            return $platos;
-        }
 
         public function save($imagen, $nombre): bool{
             $conn = Conexion::Conexion();

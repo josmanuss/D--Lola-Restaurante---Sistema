@@ -5,82 +5,52 @@ class CargoModel{
     protected $cargos;
 
     public function __construct(){
-        $this->db = Conexion::Conexion();
+        $this->db = Conexion::ConexionSQL();
         $this->cargos = array();
     }
 
     public function getCargo(): array {
-        $this->db = Conexion::Conexion();
+        $this->db = Conexion::ConexionSQL();
         $prepCar = $this->db->prepare("SELECT * FROM Cargo");
         $prepCar->execute();
-        $resultado = $prepCar->get_result();
-        if ( $resultado->num_rows > 0){
-            while ( $row = $resultado->fetch_assoc()){
-                $this->cargos[] = $row;
-            }
-        }
-        $resultado->close();
-        $prepCar->close();
+        $this->cargos[] =  $prepCar->fetchAll(PDO::FETCH_ASSOC);
+        $prepCar = null;
         return $this->cargos;
     }
-    public function getCargoID($id){
-        $this->db = Conexion::Conexion();
+    public function getCargoID($id) {
         $cargosID = null;
-        $prepCarID = $this->db->prepare("SELECT * FROM Cargo WHERE iCarID = ?");
-        $prepCarID->bind_param("i", $id);
-        $prepCarID->execute();
-        $resultadoID = $prepCarID->get_result();
-        if ( $resultadoID->num_rows > 0){
-            while ( $row = $resultadoID->fetch_array(MYSQLI_NUM)){
-                $cargosID = $row;
-            }
+        $query = "SELECT * FROM Cargo WHERE iCarID = :iCarID";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+            $cargosID = $row;
         }
-        $resultadoID->close();
-        $prepCarID->close();
         return $cargosID;
-    }
-    public function getCargoID1($id){
-        $this->db = Conexion::Conexion();
-        $cargosID = array();
-        $prepCarID = $this->db->prepare("SELECT * FROM Cargo WHERE iCarID = ?");
-        $prepCarID->bind_param("i", $id);
-        $prepCarID->execute();
-        $resultadoID = $prepCarID->get_result();
-        if ( $resultadoID->num_rows > 0){
-            while ( $row = $resultadoID->fetch_assoc()){
-                $cargosID[] = $row;
-            }
-        }
-        $resultadoID->close();
-        $prepCarID->close();
-        return $cargosID;
-    }
-    public function save($data){
-        $this->db = Conexion::Conexion();
-        $saveCar = $this->db->prepare("INSERT INTO Cargo (tCarNombre) VALUES(?);");
-        $saveCar->bind_param("s", $data);
-        $saveCar->execute();
-        $success = $saveCar->affected_rows > 0;
-        $saveCar->close();
-        return $success;
     }
 
-    public function update($data){
-        $this->db = Conexion::Conexion();
-        $updCar = $this->db->prepare("UPDATE cargo SET tCarNombre = ? WHERE iCarID = ?");
-        $updCar->bind_param("si", $data['nombre'],$data['id']);
-        $updCar->execute();
-        $success = $updCar->affected_rows > 0;
-        $updCar->close();
-        return $success;
+    public function save($data) {
+        $query = "INSERT INTO Cargo (tCarNombre) VALUES(:tCarNombre)";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':tCarNombre', $data, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
     }
-    public function delete($id){
-        $this->db = Conexion::Conexion();
-        $updCar = $this->db->prepare("DELETE FROM cargo WHERE iCarID = ?");
-        $updCar->bind_param("i", $id);
-        $updCar->execute();
-        $success = $updCar->affected_rows > 0;
-        $updCar->close();
-        return $success;
+
+    public function update($data) {
+        $query = "UPDATE cargo SET tCarNombre = :tCarNombre WHERE iCarID = :iCarID";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':tCarNombre', $data['nombre'], PDO::PARAM_STR);
+        $stmt->bindParam(':iCarID', $data['id'], PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
+    }
+
+    public function delete($id) {
+        $query = "DELETE FROM cargo WHERE iCarID = :iCarID";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':iCarID', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
     }
 }

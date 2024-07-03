@@ -88,23 +88,23 @@
                         <tbody>
                             <?php if (!empty($data["pedido"])) : ?>
                                 <?php foreach ($data["pedido"] as $pedido) : ?>
-                                    <tr>
-                                        <td><?php echo $pedido["ID_Pedido"]; ?></td>
-                                        <?php if (empty($pedido["NombreApellidoCliente"])) : ?>
-                                            <td><?php echo $pedido["TipoCliente"]; ?></td>
-                                        <?php else : ?>
-                                            <td><?php echo $pedido["NombreApellidoCliente"]; ?></td>
-                                        <?php endif; ?>
-                                        <td><?php echo $pedido["Fecha"]; ?></td>
-                                        <td><?php echo $pedido["Total"]; ?></td>
-                                        <td>
-                                            <button class="btn btn-success payBtn" data-recordid="<?php echo $pedido["ID_Pedido"]; ?>"><i class="fas fa-money-check-alt"></i>Pagar</button>
-                                            <a href="#" class="btn btn-warning detailBtn" data-recordid="<?php echo $pedido["ID_Pedido"]; ?>"><i class="fas fa-book"></i>Ver detalle</a>
-                                            <a href="index.php?c=PedidoController&a=generarTicketOrden&id=<?php echo $pedido["ID_Pedido"]; ?>" target="_blank" class="btn btn-danger pdfBtn"><i class="fas fa-file-pdf"></i>Descargar en pdf</a>
-                                            <a href="index.php?c=PedidoController&a=reenviar&id=<?php echo $pedido["ID_Pedido"];?>" class="btn btn-danger retornarBtn"><i class="fas fa-arrow-left"></i></a>
-                                            <a href="#" class="btn btn-danger eliminarBtn"><i class="fas fa-trash"></i></a>
-                                        </td>
-                                    </tr>
+                                    <?php if ($pedido["Estado"] === 'EN_PROCESO_VENTA') : ?>
+                                        <tr>
+                                            <td><?php echo $pedido["ID_Pedido"]; ?></td>
+                                            <?php if (empty($pedido["NombreApellidoCliente"])) : ?>
+                                                <td><?php echo $pedido["TipoCliente"]; ?></td>
+                                            <?php else : ?>
+                                                <td><?php echo $pedido["NombreApellidoCliente"]; ?></td>
+                                            <?php endif; ?>
+                                            <td><?php echo $pedido["Fecha"]; ?></td>
+                                            <td><?php echo $pedido["Total"]; ?></td>
+                                            <td>
+                                                <button class="btn btn-success payBtn" data-recordid="<?php echo $pedido["ID_Pedido"]; ?>"><i class="fas fa-money-check-alt"></i> Pagar</button>
+                                                <a href="#" class="btn btn-warning detailBtn" data-recordid="<?php echo $pedido["ID_Pedido"]; ?>"><i class="fas fa-book"></i> Ver detalle</a>
+                                                <a href="index.php?c=PedidoController&a=reenviar&id=<?php echo $pedido["ID_Pedido"]; ?>" class="btn btn-danger retornarBtn"><i class="fas fa-arrow-left"></i></a>
+                                            </td>
+                                        </tr>
+                                    <?php endif; ?>
                                 <?php endforeach; ?>
                             <?php endif; ?>
                         </tbody>
@@ -145,4 +145,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="views/venta/js/funciones3.js"></script>
+<script type="text/javascript" src="views/pedido/js/funciones3.js"></script>

@@ -150,7 +150,6 @@
             $resultado->close();
             $consulta->close();
             return $productos;
-        }
-        
+        }        
     }
 ?>

@@ -78,5 +78,17 @@ class AdministradorModel{
         return $this->ganancias;
     }
 
+    
+    public function reportSalesMonth(){
+        $totalVentas = array();
+        $stmt = $this->db->prepare("SELECT MONTH(v.dVenFecha) AS Mes,
+        SUM(dv.iDetCantidad) AS CantidadVendida FROM venta v INNER JOIN 
+        detalleventa dv ON v.iVenID = dv.iVenID GROUP BY Mes ORDER BY Mes;");
+        $stmt->execute();
+        $totalVentas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = null;
+        return $totalVentas;
+    }
+
 
 }

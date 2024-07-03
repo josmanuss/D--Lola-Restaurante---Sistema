@@ -27,5 +27,16 @@ class AdministradorController{
             require_once ERROR404;
         }
     }
+
+
+    public function reportesVentasMensuales(){
+        if (isset($_SESSION["trabajador"]) && $_SESSION["trabajador"]["iCarID"] == 1) {
+            $data = $this->admin->reportSalesMonth();
+            echo json_encode(["success" => true, "ventas" => $data]);
+        } else {
+            require_once ERROR404;
+        }
+    }
+    
     
 }

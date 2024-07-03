@@ -50,6 +50,8 @@ class PedidoController{
         if ( $_SERVER["REQUEST_METHOD"] === "POST"){
             $recordID = $_POST["record_id"];
             $data = $this->pedido->getDetallePedido(intval($recordID));
+            //echo '<pre>'; print_r($data);'</pre>'; exit();
+
             if ( $data != null ){
                 echo json_encode(["success"=>true, "detalle"=>$data]);
             }
@@ -63,6 +65,9 @@ class PedidoController{
         $data["titulo"] = "Realizar pedido";
         $data["dni"] = $this->clientes->clientesDNI();
         $_SESSION["mesa"] = [$id];
+
+
+        //echo '<pre>';print_r($data["dni"]);'</pre>'; exit();
         $data["contenido"] = "views/pedido/realizar_pedido.php";
         require_once TEMPLATE;
     }
@@ -200,7 +205,7 @@ class PedidoController{
         $this->pdf->MultiCell(0,5,iconv("UTF-8", "ISO-8859-1","Email: DLOLARESTAURANTE@DLOLA.COM"),0,'C',false);
         $this->pdf->SetFont('Arial','',9);
         $this->pdf->Ln(1);
-        $this->pdf->MultiCell(0,5,iconv("UTF-8", "ISO-8859-1", "ORDEN N°: " . $numeroPedido),0,'C',false);
+        $this->pdf->MultiCell(0,5,iconv("UTF-8", "ISO-8859-1", ""),0,'C',false);
         $this->pdf->MultiCell(0,5,iconv("UTF-8", "ISO-8859-1", "Cliente: " . $cliente),0,'C',false);
         $this->pdf->Ln(1);
 
@@ -242,20 +247,20 @@ class PedidoController{
         # Impuestos & totales #
         $this->pdf->Cell(18,5,iconv("UTF-8", "ISO-8859-1",""),0,0,'C');
         $this->pdf->Cell(22,5,iconv("UTF-8", "ISO-8859-1","OP.GRAVADAS: "),0,0,'C');
-        $this->pdf->Cell(32,5,iconv("UTF-8", "ISO-8859-1",strval(floatval($total - ($total*$igv)))),0,0,'C');
+        $this->pdf->Cell(32,5,iconv("UTF-8", "ISO-8859-1",number_format(floatval($total - ($total*$igv)), 2, '.', '')),0,0,'C');
         $this->pdf->Ln(5);
 
         $this->pdf->Cell(18,5,iconv("UTF-8", "ISO-8859-1",""),0,0,'C');
         $this->pdf->Cell(22,5,iconv("UTF-8", "ISO-8859-1","IGV (18%)"),0,0,'C');
-        $this->pdf->Cell(32,5,iconv("UTF-8", "ISO-8859-1",strval(floatval($total*$igv))),0,0,'C');
+        $this->pdf->Cell(32,5,iconv("UTF-8", "ISO-8859-1",number_format(floatval($total*$igv), 2, '.', '')),0,0,'C');
         $this->pdf->Ln(5);
 
         $this->pdf->Cell(18,5,iconv("UTF-8", "ISO-8859-1",""),0,0,'C');
         $this->pdf->Cell(22,5,iconv("UTF-8", "ISO-8859-1","SUBTOTAL: "),0,0,'C');
-        $this->pdf->Cell(32,5,iconv("UTF-8", "ISO-8859-1",strval(floatval($total))),0,0,'C');
+        $this->pdf->Cell(32,5,iconv("UTF-8", "ISO-8859-1",number_format(floatval($total), 2, '.', '')),0,0,'C');
         $this->pdf->Ln(5);
         $this->pdf->Cell(18,5,iconv("UTF-8", "ISO-8859-1",""),0,0,'C');
-        $this->pdf->Cell(70,20,iconv("UTF-8", "ISO-8859-1","Total a cancelar: S/.".strval(floatval($total))),0,0,'C');
+        $this->pdf->Cell(70,20,iconv("UTF-8", "ISO-8859-1","Total a cancelar: S/.".number_format(floatval($total), 2, '.', '')),0,0,'C');
         $this->pdf->SetXY(0,$this->pdf->GetY()+21);
         $this->pdf->SetFont('Arial','',14);
         # Nombre del archivo PDF #
@@ -274,12 +279,6 @@ class PedidoController{
         }
     }
 
-    public function mostrarPedidosModificar(){
-        $data["titulo"] = "Pedidos a modificar";
-        $data["pedido"] = $this->pedido->getPedido_Modificar();
-        $data["contenido"] = "views/pedido/modificar_pedido.php";
-        require_once TEMPLATE;
-    }
 
     public function enviarPedidoCaja($id){
         if($this->pedido->sendOrder($id)){
@@ -290,14 +289,7 @@ class PedidoController{
         }
     }
 
-    public function reenviar($id){
-        if($this->pedido->statusChange($id)){
-            header("location: index.php?c=PedidoController");
-        }
-        else{
-            exit("ERROR DE REENVIO DE PEDIDO");
-        }
-   }
+
 
 
 

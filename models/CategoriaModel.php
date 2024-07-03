@@ -1,98 +1,75 @@
 <?php
-    class CategoriaModel{
-        protected $db;
-        protected $categorias;
+class CategoriaModel {
+    protected $db;
+    protected $categorias;
 
-        public function __construct(){
-            $this->db = Conexion::Conexion();
-            $this->categorias = array();
-        }
-
-        public function getCategoria(){
-            $stmt = $this->db->prepare("SELECT * FROM categoria");
-            $stmt->execute();
-            $resultado = $stmt->get_result();
-            if ( $resultado->num_rows > 0){
-                while ( $fila = $resultado->fetch_assoc()){
-                    $fila["cCatImagen"] = base64_encode($fila["cCatImagen"]);
-                    $this->categorias[] = $fila;
-                }
-            }
-            return $this->categorias;
-        }
-
-        public function getCategoriaID($id_categoria){
-            $categoriaEncontrada = array();
-            $stmt = $this->db->prepare("SELECT * FROM categoria WHERE cCatID = ?");
-            $stmt->bind_param("i", $id_categoria);
-            $stmt->execute();
-            $resultado = $stmt->get_result();
-            if ( $resultado->num_rows > 0){
-                while ( $fila = $resultado->fetch_assoc()){
-                    $fila["cCatImagen"] = base64_encode($fila["cCatImagen"]);
-                    $categoriaEncontrada[] = $fila;
-                }
-            }
-            return $categoriaEncontrada;
-        }
-
-        public function idCategoria($data): int {
-            $this->db = Conexion::Conexion();
-        
-            $consulta = $this->db->prepare("SELECT cCatID FROM categoria WHERE cCatNombre = ?");
-            $consulta->bind_param("s", $data["categoria"]);
-            $exitoso = $consulta->execute();
-            if ($exitoso) {
-                $consulta->bind_result($idEncontrado);
-                $consulta->fetch();
-                $consulta->close();
-                return $idEncontrado ?? -1;
-            } else {
-                return -1;
-            }
-        }
-        
-        public function getPlatoIDCategoria($id){
-            $conn = Conexion::Conexion();
-            $platos = array();
-            $stmt = $conn->prepare("SELECT p.cPlaID, p.cCatID, p.cPlaNombre, p.cPlaCantidad, p.cPlaPrecio FROM platos p INNER JOIN categoria c ON p.cCatID=c.cCatID 
-                                    WHERE c.cCatID = ?");
-            $stmt->bind_param("i", $id);
-            $stmt->execute();
-            $resultado = $stmt->get_result();
-            if ($resultado->num_rows > 0){
-                while ($fila = $resultado->fetch_array(MYSQLI_NUM)){
-                    $platos[] = $fila;
-                }
-            }
-            $stmt->close();
-            $resultado->close();
-            $conn->close();
-            return $platos;
-        }
-
-        public function save($imagen, $nombre): bool{
-            $conn = Conexion::Conexion();
-            $saveCat = $conn->prepare("INSERT INTO categoria (cCatImagen, cCatNombre) VALUES (?, ?)");
-            $saveCat->bind_param("bs", $imagen, $nombre);
-            $saveCat->send_long_data(0, $imagen);
-            $saveCat->execute();
-            $filasAfectadas = $saveCat->affected_rows > 0;
-            $saveCat->close();
-            $conn->close();
-            return $filasAfectadas;
-        }
-
-        public function update($id, $imagen, $nombre){
-            $conn = Conexion::Conexion();
-            $updateCat = $conn->prepare("UPDATE categoria SET cCatImagen = ?, cCatNombre = ? WHERE cCatID = ?");
-            $updateCat->bind_param("bsi",$imagen,$nombre,$id);
-            $updateCat->send_long_data(0, $imagen);
-            $updateCat->execute();
-            $filasAfectadas = $updateCat->affected_rows > 0;
-            $updateCat->close();
-            $conn->close();
-            return $filasAfectadas;
-        }
+    public function __construct() {
+        $this->db = Conexion::ConexionSQL();
+        $this->categorias = array();
     }
+
+    public function getCategoria() {
+        $stmt = $this->db->prepare("SELECT * FROM categoria");
+        $stmt->execute();
+        $this->categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($this->categorias as &$categoria) {
+            $categoria["cCatImagen"] = base64_encode($categoria["cCatImagen"]);
+        }
+        return $this->categorias;
+    }
+
+    public function getCategoriaID($id_categoria) {
+        $stmt = $this->db->prepare("SELECT * FROM categoria WHERE cCatID = ?");
+        $stmt->execute([$id_categoria]);
+        $categoriaEncontrada = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($categoriaEncontrada as &$categoria) {
+            $categoria["cCatImagen"] = base64_encode($categoria["cCatImagen"]);
+        }
+        return $categoriaEncontrada;
+    }
+
+    public function idCategoria($data): int {
+        $consulta = $this->db->prepare("SELECT cCatID FROM categoria WHERE cCatNombre = ?");
+        $consulta->execute([$data["categoria"]]);
+        $idEncontrado = $consulta->fetchColumn();
+        return $idEncontrado ? (int) $idEncontrado : -1;
+    }
+
+    public function getPlatoIDCategoria($id){
+        $sql = "SELECT p.cPlaID, p.cCatID, p.cPlaNombre, p.cPlaCantidad, p.cPlaPrecio FROM platos p INNER JOIN categoria c ON p.cCatID=c.cCatID 
+                WHERE c.cCatID = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $platos = $stmt->fetchAll(PDO::FETCH_NUM);
+        return $platos;
+    }
+    
+    public function save($imagen, $nombre): bool {
+        $sql = "INSERT INTO categoria (cCatImagen, cCatNombre) VALUES (:cCatImagen, :cCatNombre)";
+        $saveCat = $this->db->prepare($sql);
+        
+        if ($imagen === null) {
+            $saveCat->bindValue(':cCatImagen', null, PDO::PARAM_NULL);
+        } else {
+            $saveCat->bindParam(':cCatImagen', $imagen, PDO::PARAM_LOB);
+        }
+        $saveCat->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+        $saveCat->execute();
+        $filasAfectadas = $saveCat->rowCount() > 0;
+        return $filasAfectadas;
+    }
+    
+    public function update($id, $imagen, $nombre): bool {
+        $sql = "UPDATE categoria SET cCatImagen = :cCatImagen, cCatNombre = :nombre WHERE cCatID = :cCatID";
+        $updateCat = $this->db->prepare($sql);
+        $updateCat->bindParam(':cCatImagen', $imagen, PDO::PARAM_LOB);
+        $updateCat->bindParam(':cCatNombre', $nombre, PDO::PARAM_STR);
+        $updateCat->bindParam(':cCatID', $id, PDO::PARAM_INT);
+        $updateCat->execute();
+        $filasAfectadas = $updateCat->rowCount() > 0;
+        return $filasAfectadas;
+    }
+    
+}
 ?>

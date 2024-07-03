@@ -7,147 +7,147 @@
 
         public function __construct()
         {
-            $this->db = Conexion::Conexion();
+            $this->db = Conexion::ConexionSQL();
             $this->Cliente = array();
         }
         
         public function getCliente()
         {
-            $stmt = $this->db->prepare("SELECT * FROM `recuperarclientes`");
-            $stmt->execute();
-            $result = $stmt->get_result();
-            
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    $this->Cliente[] = $row;
-                }
+            try {
+                $sql = "SELECT * FROM recuperarclientes";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute();
+                $this->Cliente = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $stmt->closeCursor();
+                
+                return $this->Cliente;
+            } catch (PDOException $e) {
+                return null;
             }
-            $stmt->close();
-            return $this->Cliente;
         }
-
+        
         public function clientesDNI()
         {
-            $dni = array();
-            $stmt = $this->db->prepare("SELECT tPerNumDoc AS DNI FROM `recuperarclientes`");
-            $stmt->execute();
-            $result = $stmt->get_result();
-            
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    $dni[] = $row;
-                }
+            try {
+                $sql = "SELECT tPerNumDoc AS DNI FROM recuperarclientes";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute();
+                $dni = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $stmt->closeCursor();
+                return $dni;
+            } catch (PDOException $e) {
+                return [];
             }
-            $stmt->close();
-            return $dni;
         }
         
         public function getClienteDNI($dni)
         {
-            $cliente = array();
-            $stmt = $this->db->prepare("SELECT rc.cCliID AS ClienteID, CONCAT(rc.cPerNombre, ' ', rc.cPerApellidos) AS NombreCompleto FROM recuperarclientes rc WHERE rc.tPerNumDoc = ?");
-            $stmt->bind_param("s",$dni);
-            $stmt->execute();
-            $resultado = $stmt->get_result();
-            if ( $resultado->num_rows > 0 ){
-                while ( $row = $resultado->fetch_array()){
-                    $cliente = $row;
-                }
+            try {
+                $sql = "SELECT c.cCliID AS ClienteID, CONCAT(p.cPerNombre, ' ', p.cPerApellidos) AS NombreCompleto 
+                        FROM cliente c 
+                        INNER JOIN persona p ON c.cPerID = p.cPerID 
+                        WHERE p.tPerNumDoc = :documento";
+                $stmt = $this->db->prepare($sql);
+                $stmt->bindParam(':documento', $dni, PDO::PARAM_STR);
+                $stmt->execute();
+                $cliente = $stmt->fetch(PDO::FETCH_ASSOC);
+                $stmt->closeCursor();
+                return $cliente;
+            } catch (PDOException $e) {
+                return null;
             }
-            $resultado->close();
-            $stmt->close();
-            return $cliente;
         }
+        
         public function getClienteID($id)
         {
-
-            $stmt = $this->db->prepare("CALL RecuperarClienteID(?)");
-            $stmt->bind_param("i", $id);
-            $stmt->execute();
-            $resultado = $stmt->get_result();
-            $this->ClienteID = null;
-            if ($resultado->num_rows > 0) {
-                while ($row = $resultado->fetch_assoc()) {
-                    $this->ClienteID = $row;
-                }
+            try {
+                $stmt = $this->db->prepare("CALL RecuperarClienteID(:_idCliente)");
+                $stmt->bindParam(':_idCliente', $id, PDO::PARAM_INT);
+                $stmt->execute();
+                $this->ClienteID = $stmt->fetch(PDO::FETCH_ASSOC);
+                $stmt->closeCursor();
+                return $this->ClienteID;
+            } catch (PDOException $e) {
+                return null;
             }
-            $stmt->close();
-            $resultado->close();
-            return $this->ClienteID;
         }
-        
+                
         public function save($data)
         {
-            $stmt = $this->db->prepare("CALL RegistrarCliente(?,?,?,?,?,?,?,?)");
-            $stmt->bind_param("sssissss", 
-                        $data["nombre"], 
-                        $data["apellido"],
-                        $data["fecha_nac"],
-                        $data["tipodocumento"],
-                        $data["numerodoc"],
-                        $data["correo"],
-                        $data["genero"],
-                        $data["pais"]
-            );
-            $stmt->execute();
-            $success = $stmt->affected_rows > 0;
-            $stmt->close();
-            return $success;
-        }
-        public function updateUser($data)
-        {
-            $stmt = $this->db->prepare("CALL ActualizarCliente(?,?,?,?,?,?,?,?,?,?,?,?)");
-            $stmt->bind_param("issdissssi", 
-                            $data["idpersona"],
-                            $data["nombre"], 
-                            $data["apellido"],
-                            $data["fecha_nac"],
-                            $data["tipodocumento"],
-                            $data["numerodoc"],
-                            $data["correo"],
-                            $data["genero"],
-                            $data["pais"],
-                            $data["habilitado"]
-            );
-            $stmt->execute();
-            if ($stmt->error) {
-                echo "Error en la ejecución del procedimiento almacenado: " . $stmt->error;
-            }
-            $success = $stmt->affected_rows > 0;
-
-            $stmt->close();
-            return $success;
-        }
-
-        public function validateCustomerType($id){
-            if (isset($id) && $id === "0") {
-                try {
-                    $conexion = Conexion::Conexion();
-                    $result = $conexion->query("SELECT cCliID FROM cliente WHERE cCliTipoCliente = 'CLIENTE EN RESTAURANTE' LIMIT 1");
-                    if ($result && $result->num_rows > 0) {
-                        $row = $result->fetch_assoc();
-                        $customerId = $row['cCliID'];
-                    } else {
-                        $customerId = null; 
-                    }
-                } catch (Exception $e) {
-                    $customerId = null;
-                }
-                return $customerId;
+            try {
+                $this->db->beginTransaction();
+                $stmt = $this->db->prepare("CALL RegistrarCliente(:_nombre, :_apellidos, :_edad, :_idTipoDoc, :_numDoc, :_correo, :_genero, :_pais)");
+                $stmt->bindParam(':_nombre', $data["nombre"], PDO::PARAM_STR);
+                $stmt->bindParam(':_apellidos', $data["apellido"], PDO::PARAM_STR);
+                $stmt->bindParam(':_edad', $data["fecha_nac"], PDO::PARAM_STR);
+                $stmt->bindParam(':_idTipoDoc', $data["tipodocumento"], PDO::PARAM_INT);
+                $stmt->bindParam(':_numDoc', $data["numerodoc"], PDO::PARAM_STR);
+                $stmt->bindParam(':_correo', $data["correo"], PDO::PARAM_STR);
+                $stmt->bindParam(':_genero', $data["genero"], PDO::PARAM_STR);
+                $stmt->bindParam(':_pais', $data["pais"], PDO::PARAM_STR);
+                $stmt->execute();
+                $success = $stmt->rowCount() > 0;
+                $this->db->commit();
+                $stmt->closeCursor();
+                return $success;
+            } catch (PDOException $e) {
+                $this->db->rollBack();
+                throw $e;
             }
         }
         
-
-
-        public function deleteCustomer($idPersona) : bool
-        {   
-            $sql = "DELETE * FROM cliente WHERE cCliID = ?";
-            $stmt = $this->db->prepare($sql);
-            $stmt->bind_param("i",$idPersona);
-            $success = $stmt->execute();
-            $stmt->close();
-            return $success;
+        public function updateUser($data)
+        {
+            try {
+                $this->db->beginTransaction();
+                $stmt = $this->db->prepare("CALL ActualizarCliente(:_idPersona, :_nombre, :_apellidos, :_edad, :_idTipoDoc, :_numDoc, :_correo, :_genero, :_pais, :_habilitado)");
+                $stmt->bindParam(':_idPersona', $data["idpersona"], PDO::PARAM_INT);
+                $stmt->bindParam(':_nombre', $data["nombre"], PDO::PARAM_STR);
+                $stmt->bindParam(':_apellidos', $data["apellido"], PDO::PARAM_STR);
+                $stmt->bindParam(':_edad', $data["fecha_nac"], PDO::PARAM_STR);
+                $stmt->bindParam(':_idTipoDoc', $data["tipodocumento"], PDO::PARAM_INT);
+                $stmt->bindParam(':_numDoc', $data["numerodoc"], PDO::PARAM_STR);
+                $stmt->bindParam(':_correo', $data["correo"], PDO::PARAM_STR);
+                $stmt->bindParam(':_genero', $data["genero"], PDO::PARAM_STR);
+                $stmt->bindParam(':_pais', $data["pais"], PDO::PARAM_STR);
+                $stmt->bindParam(':_habilitado', $data["habilitado"], PDO::PARAM_INT);
+                $stmt->execute();
+                $success = $stmt->rowCount() > 0;
+                $this->db->commit();
+                $stmt->closeCursor();
+                return $success;
+            } catch (PDOException $e) {
+                $this->db->rollBack();
+                throw $e;
+            }
+        }
+        
+        public function validateCustomerType($id) {
+            if (isset($id) && $id === "0") {
+                try {
+                    $sql = "SELECT cCliID FROM cliente WHERE cCliTipoCliente = 'CLIENTE EN RESTAURANTE' LIMIT 1";
+                    $stmt = $this->db->prepare($sql);
+                    $stmt->execute();
+                    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                    $customerId = $row ? $row['cCliID'] : null;
+                    return $customerId;
+                } catch (PDOException $e) {
+                    return null;
+                }
+            }
+            return null; 
         }
 
+        public function deleteCustomer($id): bool {
+            try {
+                $sql = "DELETE FROM cliente WHERE cPerID = :cPerID";
+                $stmt = $this->db->prepare($sql);
+                $stmt->bindParam(':cPerID', $id, PDO::PARAM_INT);
+                $success = $stmt->execute();
+                return $success;
+            } catch (PDOException $e) {
+                return false;
+            }
+        }
     }
 ?> 

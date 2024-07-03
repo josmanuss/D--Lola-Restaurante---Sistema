@@ -42,7 +42,7 @@
               <div class="icon">
                 <i class="fas fa-user"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="#" class="small-box-footer">Ver mas <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -56,7 +56,7 @@
               <div class="icon">
                 <i class="fas fa-hard-hat"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="#" class="small-box-footer">Ver mas <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -70,7 +70,7 @@
               <div class="icon">
                 <i class="fas fa-shopping-cart"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="#" class="small-box-footer">Ver mas <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -84,7 +84,7 @@
               <div class="icon">
                 <i class="fas fa-wine-glass-alt"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="#" class="small-box-footer">Ver mas <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -98,7 +98,7 @@
               <div class="icon">
                 <i class="fas fa-utensils"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="#" class="small-box-footer">Ver mas <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -113,7 +113,7 @@
               <div class="icon">
                 <i class="fas fa-shopping-bag"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="#" class="small-box-footer">Ver mas <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -125,9 +125,9 @@
                 <p>Ganancias</p>
               </div>
               <div class="icon">
-                <i class="fas fa-shopping-cart"></i>
+                <i class="fas fa-dollar-sign"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="#" class="small-box-footer">Ver mas <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
         </div>

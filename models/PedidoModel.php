@@ -5,191 +5,142 @@ class PedidoModel{
     protected $detallepedido;
 
     public function __construct(){
-        $this->db = Conexion::Conexion();
+        $this->db = Conexion::ConexionSQL();
     }   
 
 
-    public function idCliente($id){
-        $stmt = $this->db->prepare("SELECT cCliID FROM pedido WHERE cPedID = ?");
-        $stmt->bind_param("i", $id);
+    public function idCliente($id) {
+        $stmt = $this->db->prepare("SELECT cCliID FROM pedido WHERE cPedID = :cPedID");
+        $stmt->bindParam(":cPedID", $id, PDO::PARAM_STR);
         $stmt->execute();
-        $resultado = $stmt->get_result();
-        return $resultado->num_rows > 0 ? $resultado->fetch_assoc()["cCliID"] : null;
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado ? $resultado["cCliID"] : null;
     }
     
 
-    public function idMesa($id){
-        $stmt = $this->db->prepare("SELECT cMesID FROM pedido WHERE cPedID = ?");
-        $stmt->bind_param("i", $id);
+    public function idMesa($id) {
+        $stmt = $this->db->prepare("SELECT cMesID FROM pedido WHERE cPedID = :cPedID");
+        $stmt->bindParam(":cPedID", $id, PDO::PARAM_INT);
         $stmt->execute();
-        $resultado = $stmt->get_result();
-        return $resultado->num_rows > 0 ? $resultado->fetch_assoc()["cMesID"] : null;
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado ? $resultado["cMesID"] : null;
     }
+    
     
     public function selectTableOrder() {
         $stmt = $this->db->prepare("SELECT * FROM mesa");
         $stmt->execute();
-        $resultado = $stmt->get_result();
-        $stmt->close();
-        return $resultado->fetch_all(MYSQLI_ASSOC);
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $resultado;
+    }
+    
+    public function getPago() {
+        $stmt = $this->db->prepare("SELECT * FROM pago");
+        $stmt->execute();
+        $pagos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return isset($pagos) ? $pagos: null;
+    }
+    
+    public function getComprobante() {
+        $stmt = $this->db->prepare("SELECT * FROM tipocomprobante");
+        $stmt->execute();
+        $fila = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+        return $fila;
     }
     
 
-    public function getPago(){
-        $pagos = array();
-        $stmt = $this->db->prepare("SELECT * FROM pago");
-        $stmt->execute();
-        $resultado = $stmt->get_result();
-        if ($resultado->num_rows > 0){
-            while ($row = $resultado->fetch_assoc()){
-                $pagos[] = $row;
-            }
-        }
-        $resultado->close();
-        $stmt->close();
-        return $pagos;
-    }
-    public function getComprobante(){
-        $fila = null;
-        $stmt = $this->db->prepare("SELECT * FROM tipocomprobante");
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ( $result->num_rows > 0){
-            while ( $row = $result->fetch_assoc()){
-                $fila[] = $row;
-            }
-        }
-        $result->close();
-        $stmt->close();
-        return $fila;
-    }
-
-    public function pay($data){
+    public function pay($data) {
         $data = intval($data);
-        $stmt = $this->db->prepare("UPDATE pedido SET cPedEstado = 'PAGADO' WHERE cPedID = ?");
-        $stmt->bind_param("i", $data);
+        $stmt = $this->db->prepare("UPDATE pedido SET cPedEstado = 'PAGADO' WHERE cPedID = :cPedID");
+        $stmt->bindParam(":cPedID", $data, PDO::PARAM_INT);
         $stmt->execute();
-        $success = $stmt->affected_rows > 0;
-        $stmt->close();
-        return $success;   
+        $success = $stmt->rowCount() > 0; // Verifica si se afectó alguna fila (al menos una fila actualizada)
+        return $success;
     }
+    
 
-
-    public function sendOrder($id){
-        $stmt = $this->db->prepare("UPDATE pedido SET cPedEstado = 'EN_PROCESO_VENTA' WHERE cPedID = ?");
-        $stmt->bind_param("i",$id);
+    public function sendOrder($id) {
+        $stmt = $this->db->prepare("UPDATE pedido SET cPedEstado = 'EN_PROCESO_VENTA' WHERE cPedID = :cPedID");
+        $stmt->bindParam(":cPedID", $id, PDO::PARAM_INT);
         $stmt->execute();
-        $success = $stmt->affected_rows > 0;
-        $stmt->close();
-        return $success;  
+        $success = $stmt->rowCount() > 0;
+        return $success;
     }
-
-    public function statusChange($id){
-        $stmt = $this->db->prepare("UPDATE pedido SET cPedEstado = 'PARA_CORREGIR' WHERE cPedID = ?");
-        $stmt->bind_param("i",$id);
-        $stmt->execute();
-        $success = $stmt->affected_rows > 0;
-        $stmt->close();
-        return $success;   
-    }
-
-    public function getPedido_Modificar(){
-        $stmt = $this->db->prepare("SELECT * FROM vw_pedidos WHERE Estado = 'PARA_CORREGIR'");
-        $stmt->execute();
-        $resultado = $stmt->get_result();
-        if($resultado->num_rows>0){
-            while($fila=$resultado->fetch_assoc()){
-                $this->pedido[] = $fila;
-            }
-        }
-        $stmt->close();
-        return $this->pedido;
-    }    
     
     public function getPedido(){
         $stmt = $this->db->prepare("SELECT * FROM vw_pedidos");
         $stmt->execute();
-        $resultado = $stmt->get_result();
-        if($resultado->num_rows>0){
-            while($fila=$resultado->fetch_assoc()){
-                $this->pedido[] = $fila;
-            }
-        }
-        $stmt->close();
+        $this->pedido = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $this->pedido;
     }
 
     public function getPedidoID($id): array{
         $pedido = array();
-        $stmt = $this->db->prepare("SELECT * FROM vw_pedidos WHERE ID_Pedido = ?");
-        $stmt->bind_param("i",$id);
+        $stmt = $this->db->prepare("SELECT * FROM vw_pedidos WHERE ID_Pedido = :ID_Pedido");
+        $stmt->bindParam(":ID_Pedido",$id, PDO::PARAM_INT);
         $stmt->execute();
-        $resultado = $stmt->get_result();
-        if($resultado->num_rows>0){
-            while($fila=$resultado->fetch_assoc()){
-                $pedido[] = $fila;
-            }
-        }
-        $stmt->close();
+        $pedido = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $pedido;
     }
-    public function getPedidoMozo($id): array{
-        $pedido = array();
-        $stmt = $this->db->prepare("SELECT * FROM vw_pedidos WHERE ID_Trabajador_Mozo = ?");
-        $stmt->bind_param("i",$id);
+    public function getPedidoMozo($id): array {
+        $stmt = $this->db->prepare("SELECT * FROM vw_pedidos WHERE ID_Trabajador_Mozo = :ID_TrabajadorMozo");
+        $stmt->bindParam(':ID_Trabajador_Mozo', $id, PDO::PARAM_INT);
         $stmt->execute();
-        $resultado = $stmt->get_result();
-        if($resultado->num_rows>0){
-            while($fila=$resultado->fetch_assoc()){
-                $pedido[] = $fila;
-            }
-        }
-        $stmt->close();
+        $pedido = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
         return $pedido;
     }
+    
 
     public function maxPedido(): int {
         $numero = 0;
-        $consulta = $this->db->prepare("SELECT MAX(cPedID) AS maximo FROM pedido");
+        $sql = "SELECT MAX(cPedID) AS maximo FROM pedido";
+        $consulta = $this->db->prepare($sql);
         $consulta->execute();
-        $resultado = $consulta->get_result();
-        if ($resultado->num_rows > 0) {
-            $fila = $resultado->fetch_assoc();
-            $numero = $fila['maximo']; 
+        $resultado = $consulta->fetch(PDO::FETCH_ASSOC);
+        if ($resultado && isset($resultado['maximo'])) {
+            $numero = (int) $resultado['maximo'];
         }
+        
         return $numero;
     }
+    
 
-    public function getDetallePedido($id) : array{
-        $this->detallepedido = array();
-        $stmt = $this->db->prepare("CALL ObtenerPedidosPorID(?);");
-        $stmt->bind_param("i",$id);
+    public function getDetallePedido($id): array {
+        $this->db = Conexion::ConexionSQL();
+        $sql = "CALL ObtenerPedidosPorID(:pedidoID)";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(":pedidoID", $id, PDO::PARAM_INT);
         $stmt->execute();
-        $resultado = $stmt->get_result();
-
-        if ( $resultado->num_rows > 0 ){
-            while ( $fila = $resultado->fetch_array()){
-                $this->detallepedido[] = $fila;
-            }
-        }
-        $resultado->close();
-        $stmt->close();
+        $this->detallepedido = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();        
         return $this->detallepedido;
     }
     
+    
     public function saveOrder($id_mesa,$id_usuario, $id_trabajador, $precioTotal){
-        $consulta = $this->db->prepare("INSERT INTO pedido(cMesID, cCliID, cTraID, cPedTotal) VALUES (?,?,?,?)");
-        $consulta->bind_param("iiid",$id_mesa,$id_usuario, $id_trabajador, $precioTotal);
+        $this->db = Conexion::ConexionSQL();
+        $consulta = $this->db->prepare("INSERT INTO pedido(cMesID, cCliID, cTraID, cPedTotal) VALUES (:cMesID,:cCliID,:cTraID,:cPedTotal)");
+        $consulta->bindParam(":cMesID", $id_mesa, PDO::PARAM_INT);
+        $consulta->bindParam(":cCliID", $id_usuario, PDO::PARAM_INT);
+        $consulta->bindParam(":cTraID", $id_trabajador, PDO::PARAM_INT);
+        $consulta->bindParam(":cPedTotal", $precioTotal, PDO::PARAM_INT);
         $consulta->execute();
-        $success = $consulta->affected_rows > 0;
-        $consulta->close();
+        $success = $consulta->rowCount() > 0;
+        $consulta->closeCursor();
         return $success;
     }
 
     public function saveOrderDetail($id_venta, $data){
-        $consulta = $this->db->prepare("INSERT INTO detallepedido(cPedID, cPlaID, iDepCantidad) VALUES(?,?,?);");
-        $consulta->bind_param("iii",$id_venta,$data["id_plato"],$data["cantidad"]);
+        $this->db = Conexion::ConexionSQL();
+        $sql = "INSERT INTO detallepedido(cPedID, cPlaID, iDepCantidad) VALUES(:cPedID, :cPlaID, :iDepCantidad)";
+        $consulta = $this->db->prepare($sql);
+        $consulta->bindParam(':cPedID', $id_venta, PDO::PARAM_INT);
+        $consulta->bindParam(':cPlaID', $data["id_plato"], PDO::PARAM_INT);
+        $consulta->bindParam(':iDepCantidad', $data["cantidad"], PDO::PARAM_INT);
         $consulta->execute();
-        $consulta->close();
+        $consulta->closeCursor();
     }
+    
 }

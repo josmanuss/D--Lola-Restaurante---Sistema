@@ -19,19 +19,19 @@ $(document).ready(function () {
                       var fila =
                           "<tr>" +
                           "<td>" +
-                          detalle[1] +
+                          detalle["Categoria"] +
                           "</td>" +
                           "<td>" +
-                          detalle[2] +
+                          detalle["Categoria"] +
                           "</td>" +
                           "<td>" +
-                          detalle[3] +
+                          detalle["NombrePlato"] +
                           "</td>" +
                           "<td>" +
-                          detalle[4] +
+                          detalle["Cantidad"] +
                           "</td>" +
                           "<td>" +
-                          detalle[5] +
+                          detalle["Precio"] +
                           "</td>" +
                           "</tr>";
                       tbody.append(fila);

@@ -80,7 +80,6 @@ class AdministradorModel{
 
     
     public function reportSalesMonth(){
-        $totalVentas = array();
         $stmt = $this->db->prepare("SELECT MONTH(v.dVenFecha) AS Mes,
         SUM(dv.iDetCantidad) AS CantidadVendida FROM venta v INNER JOIN 
         detalleventa dv ON v.iVenID = dv.iVenID GROUP BY Mes ORDER BY Mes;");

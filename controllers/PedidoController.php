@@ -50,8 +50,6 @@ class PedidoController{
         if ( $_SERVER["REQUEST_METHOD"] === "POST"){
             $recordID = $_POST["record_id"];
             $data = $this->pedido->getDetallePedido(intval($recordID));
-            //echo '<pre>'; print_r($data);'</pre>'; exit();
-
             if ( $data != null ){
                 echo json_encode(["success"=>true, "detalle"=>$data]);
             }

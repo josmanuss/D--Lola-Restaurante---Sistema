@@ -10,10 +10,9 @@ class CargoModel{
     }
 
     public function getCargo(): array {
-        $this->db = Conexion::ConexionSQL();
         $prepCar = $this->db->prepare("SELECT * FROM Cargo");
         $prepCar->execute();
-        $this->cargos[] =  $prepCar->fetchAll(PDO::FETCH_ASSOC);
+        $this->cargos =  $prepCar->fetchAll(PDO::FETCH_ASSOC);
         $prepCar = null;
         return $this->cargos;
     }

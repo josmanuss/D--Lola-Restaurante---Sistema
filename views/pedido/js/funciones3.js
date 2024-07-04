@@ -1,10 +1,8 @@
 document.addEventListener("DOMContentLoaded", function() {
-    $(document).on("click", ".detailBtn", function() {
+    $(document).on("click", ".btnDetail", function() {
         $('#tablaModal').modal('show');
-    
         var record_id = $(this).data('recordid');
         $("#tablaModalLabel").html("Detalle de pedido: "+record_id);
-        
         $.ajax({
             url: "index.php?c=PedidoController&a=verDetallePedido",
             method: "POST",
@@ -17,13 +15,14 @@ document.addEventListener("DOMContentLoaded", function() {
                     var tbody = $("#tabla-detalle tbody");
                     tbody.empty();
                     $.each(detalleV, function(index, detalle) {
-                        var fila = '<tr>' +
-                                       '<td>' + detalle[0] + '</td>' +
-                                       '<td>' + detalle[1] + '</td>' +
-                                       '<td>' + detalle[2] + '</td>' +
-                                       '<td>' + detalle[3] + '</td>' +
-                                       '<td>' + detalle[4] + '</td>' +
-                                   '</tr>';
+                        var fila = 
+                        '<tr>' +
+                            '<td>' + detalle.IDPlato + '</td>' +
+                            '<td>' + detalle.Categoria + '</td>' +
+                            '<td>' + detalle.NombrePlato + '</td>' +
+                            '<td>' + detalle.Cantidad + '</td>' +
+                            '<td>' + detalle.Precio + '</td>' +
+                        '</tr>';
                         tbody.append(fila);
                     });
                 } else {

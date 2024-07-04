@@ -45,7 +45,6 @@ class PedidoModel{
         $stmt = $this->db->prepare("SELECT * FROM tipocomprobante");
         $stmt->execute();
         $fila = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
         return $fila;
     }
     
@@ -108,7 +107,6 @@ class PedidoModel{
     
 
     public function getDetallePedido($id): array {
-        $this->db = Conexion::ConexionSQL();
         $sql = "CALL ObtenerPedidosPorID(:pedidoID)";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(":pedidoID", $id, PDO::PARAM_INT);
@@ -120,7 +118,6 @@ class PedidoModel{
     
     
     public function saveOrder($id_mesa,$id_usuario, $id_trabajador, $precioTotal){
-        $this->db = Conexion::ConexionSQL();
         $consulta = $this->db->prepare("INSERT INTO pedido(cMesID, cCliID, cTraID, cPedTotal) VALUES (:cMesID,:cCliID,:cTraID,:cPedTotal)");
         $consulta->bindParam(":cMesID", $id_mesa, PDO::PARAM_INT);
         $consulta->bindParam(":cCliID", $id_usuario, PDO::PARAM_INT);
@@ -133,7 +130,6 @@ class PedidoModel{
     }
 
     public function saveOrderDetail($id_venta, $data){
-        $this->db = Conexion::ConexionSQL();
         $sql = "INSERT INTO detallepedido(cPedID, cPlaID, iDepCantidad) VALUES(:cPedID, :cPlaID, :iDepCantidad)";
         $consulta = $this->db->prepare($sql);
         $consulta->bindParam(':cPedID', $id_venta, PDO::PARAM_INT);

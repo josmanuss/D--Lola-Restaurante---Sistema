@@ -2,64 +2,57 @@ $(document).ready(function () {
   $("#total").hide();
 
   function mostrarFilas(record_id) {
-      $.ajax({
-          url: "index.php?c=PedidoController&a=verDetallePedido",
-          method: "POST",
-          data: {
-              record_id: record_id,
-          },
-          async: true,
-          success: function (response) {
-              var respuesta = JSON.parse(response);
-              if (respuesta.success) {
-                  var detalleV = respuesta.detalle;
-                  var tbody = $("#tbl-DetallePlatos tbody");
-                  var totalSum = 0;
-                  $.each(detalleV, function (index, detalle) {
-                      var fila =
-                          "<tr>" +
-                          "<td>" +
-                          detalle["Categoria"] +
-                          "</td>" +
-                          "<td>" +
-                          detalle["Categoria"] +
-                          "</td>" +
-                          "<td>" +
-                          detalle["NombrePlato"] +
-                          "</td>" +
-                          "<td>" +
-                          detalle["Cantidad"] +
-                          "</td>" +
-                          "<td>" +
-                          detalle["Precio"] +
-                          "</td>" +
-                          "</tr>";
-                      tbody.append(fila);
-                      totalSum += parseFloat(detalle[5]) * parseFloat(detalle[4]);
-                  });
+    $.ajax({
+        url: "index.php?c=PedidoController&a=verDetallePedido",
+        method: "POST",
+        data: {
+            record_id: record_id,
+        },
+        async: true,
+        success: function (response) {
+            var respuesta = JSON.parse(response);
+            if (respuesta.success) {
+                var detalleV = respuesta.detalle;
+                console.log('Detalle:', detalleV); 
+                var tbody = $("#tbl-DetallePlatos tbody");
+                tbody.empty(); // Limpiar la tabla antes de agregar nuevas filas
+                var totalSum = 0;
 
-                  var filaTotal =
-                      "<tr>" +
-                      '<td colspan="4" style="text-align: center;">SUB-TOTAL:</td>' +
-                      '<td id="sub-total">S/.' +
-                      "</td>" +
-                      "</tr>";
-                  tbody.append(filaTotal);
-                  $("#op-gravadas").append((totalSum - totalSum * 0.18).toFixed(2));
-                  $("#igv").append((totalSum * 0.18).toFixed(2));
-                  $("#sub-total, #sub-total-pagar").append(totalSum.toFixed(2));
-                  $("#vuelto").append(0);
-                  
-              } 
-              else {
-                  alert("No existe ese detalle de venta según el id a buscar");
-              }
-          },
-          error: function (xhr, status, error) {
-              alert("Error en la solicitud AJAX: " + error);
-          },
-      });
+                $.each(detalleV, function (index, detalle) {
+                    console.log('Detalle item:', detalle); // Verifica cada item en el detalle
+                    var fila = '<tr>' +
+                    '<td>' + detalle.IDPlato + '</td>' +
+                    '<td>' + detalle.Categoria + '</td>' +
+                    '<td>' + detalle.NombrePlato + '</td>' +
+                    '<td>' + detalle.Cantidad + '</td>' +
+                    '<td>' + detalle.Precio + '</td>' +
+                    '</tr>';
+                    tbody.append(fila);
+                    totalSum += parseFloat(detalle.Precio) * parseFloat(detalle.Cantidad); // Calcular el total
+                });
+
+                var filaTotal =
+                "<tr>" +
+                '<td colspan="4" style="text-align: center;">SUB-TOTAL:</td>' +
+                '<td id="sub-total">S/.' +
+                "</td>" +
+                "</tr>";
+                tbody.append(filaTotal);
+                $("#op-gravadas").append((totalSum - totalSum * 0.18).toFixed(2));
+                $("#igv").append((totalSum * 0.18).toFixed(2));
+                $("#sub-total, #sub-total-pagar").append(totalSum.toFixed(2));
+                $("#vuelto").append(0);
+                
+            } else {
+                alert("No existe ese detalle de venta según el id a buscar");
+            }
+        },
+        error: function (xhr, status, error) {
+            alert("Error en la solicitud AJAX: " + error);
+        },
+    });
   }
+
 
   function pagarVenta(venta, detalleVenta, detallePagos) {
       $.ajax({

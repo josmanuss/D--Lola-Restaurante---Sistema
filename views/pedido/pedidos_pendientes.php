@@ -121,6 +121,7 @@
                                     <th>Categoria</th>
                                     <th>Nombre</th>
                                     <th>Cantidad</th>
+                                    <th>Precio</th>
                                 </tr>
                             </thead>
                             <tbody>

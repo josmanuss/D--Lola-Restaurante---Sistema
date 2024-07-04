@@ -1,51 +1,46 @@
 <?php
-
-class TipoDocumentoModel{
+class TipoDocumentoModel {
     protected $db;
     protected $tipoDocumento;
 
-    public function __construct(){
-        $this->db = Conexion::Conexion();
+    public function __construct() {
+        $this->db = Conexion::ConexionSQL();
         $this->tipoDocumento = array();
     }
 
-    public function getTipoDocumento(){
-        $conn  = Conexion::Conexion();
-        $prepTD = $conn->prepare("SELECT * FROM TipoDocumento");
-        $prepTD->execute();
-        $resultado = $prepTD->get_result();
-        if ( $resultado->num_rows > 0 ){
-            while ( $fila = $resultado->fetch_assoc()){
-                $this->tipoDocumento[] = $fila;        
-            }
+    public function getTipoDocumento() {
+        try {
+            $stmt = $this->db->prepare("SELECT * FROM TipoDocumento");
+            $stmt->execute();
+            $this->tipoDocumento = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
         }
-        $prepTD->close();
-        $conn->close();
         return $this->tipoDocumento;
     }
-    
-    public function save( $nombre ){
-        $conn  = Conexion::Conexion();
-        $stmt = $conn->prepare("INSERT INTO tipodocumento(tTipoDocNombre) VALUES (?);");
-        $stmt->bind_param("s",$nombre);
-        $stmt->execute();
-        $success = $stmt->affected_rows > 0;
-        $stmt->close();
-        $conn->close();
-        return $success;
+
+    public function save($nombre) {
+        try {
+            $stmt = $this->db->prepare("INSERT INTO tipodocumento(tTipoDocNombre) VALUES (:tTipoDocNombre)");
+            $stmt->bindParam(':tTipoDocNombre', $nombre, PDO::PARAM_STR);
+            $stmt->execute();
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
 
-
-    public function update( $id,$nombre ){
-        $conn  = Conexion::Conexion();
-        $stmt = $conn->prepare("UPDATE tipodocumento SET tTipoDocNombre = ? WHERE iTipoDocID = ?;");
-        $stmt->bind_param("si",$nombre,$id);
-        $stmt->execute();
-        $success = $stmt->affected_rows > 0;
-        $stmt->close();
-        $conn->close();
-        return $success;
+    public function update($id, $nombre) {
+        try {
+            $stmt = $this->db->prepare("UPDATE tipodocumento SET tTipoDocNombre = :nombre WHERE iTipoDocID = :iTipoDocID");
+            $stmt->bindParam(':tTipoDocNombre', $nombre, PDO::PARAM_STR);
+            $stmt->bindParam(':iTipoDocID', $id, PDO::PARAM_STR);
+            $stmt->execute();
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+            return false;
+        }
     }
-
-
 }

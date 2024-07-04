@@ -49,11 +49,11 @@ class LoginController{
     }
     
 
-    public function bloquearUsuario( $data ) : void {
-        $sql = $this->login->db->prepare("CALL BloquearUsuario(?,?)");
-        $sql->bind_param("ss",$data["correo"],$data["clave"]);
-        $sql->execute();
-    }
+    // public function bloquearUsuario( $data ) : void {
+    //     $sql = $this->login->db->prepare("CALL BloquearUsuario(?,?)");
+    //     $sql->bind_param("ss",$data["correo"],$data["clave"]);
+    //     $sql->execute();
+    // }
 
     public function salir(): void{
         session_start();

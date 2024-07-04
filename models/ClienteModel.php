@@ -110,7 +110,7 @@
                 $stmt->bindParam(':_correo', $data["correo"], PDO::PARAM_STR);
                 $stmt->bindParam(':_genero', $data["genero"], PDO::PARAM_STR);
                 $stmt->bindParam(':_pais', $data["pais"], PDO::PARAM_STR);
-                $stmt->bindParam(':_habilitado', $data["habilitado"], PDO::PARAM_INT);
+                $stmt->bindParam(':_habilitado', $data["habilitado"], PDO::PARAM_BOOL);
                 $stmt->execute();
                 $success = $stmt->rowCount() > 0;
                 $this->db->commit();

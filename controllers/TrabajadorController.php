@@ -126,15 +126,4 @@ class TrabajadorController{
 
     }
 
-    public function mostrarCantidadTrabajadorCargo(){
-        if($_SERVER["REQUEST_METHOD"] === "POST"){
-            $trabajadores = $this->trabajador->reportWorker();
-            if ( isset($trabajadores)){
-                echo json_encode(["success"=>true, "trabajadores"=>$trabajadores]);
-            }
-            else{
-                echo json_encode(["success"=>false]);
-            }
-        }
-    }
 }

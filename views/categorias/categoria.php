@@ -82,7 +82,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="#" method="POST" autocomplete="off" enctype="multipart/form-data">
+                    <form action="index.php?c=CategoriaController&a=registrar" method="POST" autocomplete="off" enctype="multipart/form-data">
                         <div class="mb-3 row">
                             <label class="col-sm-3 col-form-label">Nombres</label>
                             <div class="col-sm-9">

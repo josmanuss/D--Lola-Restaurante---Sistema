@@ -81,32 +81,32 @@ class ClienteController{
     public function actualizar()
     {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            $actualizar = array(
-                "idpersona" => $_POST["idPersona"],
-                "nombre" => $_POST["txtNombres"],
-                "apellido" => $_POST["txtApellido"],
-                "fecha_nac" => $_POST["fechaNacimiento"],
-                "tipodocumento" => $_POST["cbTipoDoc"],
-                "numerodoc" => $_POST["txtDNI"],
-                "correo" => $_POST["txtEmail"],
-                "genero" => $_POST["selectGenero"],
-                "pais" => $_POST["txtPais"],
-                "habilitado" => isset($_POST["chkHabilitado"]) ? $_POST["chkHabilitado"] : "0"
-            );           
-
-            $exitoso = $this->cliente->updateUser($actualizar);
-            if ($exitoso){
+            try {
+                $actualizar = array(
+                    "idpersona" => $_POST["idPersona"],
+                    "nombre" => $_POST["txtNombres"],
+                    "apellido" => $_POST["txtApellido"],
+                    "fecha_nac" => $_POST["fechaNacimiento"],
+                    "tipodocumento" => $_POST["cbTipoDoc"],
+                    "numerodoc" => $_POST["txtDNI"],
+                    "correo" => $_POST["txtEmail"],
+                    "genero" => $_POST["selectGenero"],
+                    "pais" => $_POST["txtPais"],
+                    "habilitado" => isset($_POST["chkHabilitado"]) ? $_POST["chkHabilitado"] : "0"
+                );
+                $this->cliente->updateUser($actualizar);
                 $_SESSION["mensaje"] = "CLIENTE ACTUALIZADO CON EXITO";
                 header("location: index.php?c=ClienteController");
-            }
-            else{
-                echo "Error de actualizacion de cliente"; exit();
+            } catch (Exception $e) {
+                error_log($e->getMessage());
+                exit();
             }
         } else {
             require_once ERROR404;
             exit();
         }
     }
+    
 
     public function validarTipoCliente(){
         if($_SERVER["REQUEST_METHOD"]==="POST"){

@@ -22,7 +22,7 @@
         public function registrar(): void
         {
             if ($_SERVER["REQUEST_METHOD"] === "POST"){
-                $nombre = $_POST["nombres"];
+                $nombre = $_POST["txtNombres"];
                 $imagen = file_get_contents($_FILES['imagen']['tmp_name']);
                 if ($this->categorias->save($imagen, $nombre)){
                     header("Location: index.php?c=CategoriaController");
@@ -38,8 +38,8 @@
             if ($_SERVER["REQUEST_METHOD"] === "POST"){
                 $id = $_POST["id-categoria"];
                 $nombre = $_POST["txtNombres"];
-                $nombreimagen = $_FILES['imagen']['name'];
-                $tipoimagen = $_FILES['imagen']['type'];
+                $nombreimagen = $_FILES['imagenCategoria']['name'];
+                $tipoimagen = $_FILES['imagenCategoria']['type'];
                 $imagen = file_get_contents($_FILES['imagenCategoria']['tmp_name']);
                 if ($this->categorias->update($id,$imagen, $nombre)){
                     header("Location: index.php?c=CategoriaController");

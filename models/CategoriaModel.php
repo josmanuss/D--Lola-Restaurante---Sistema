@@ -48,22 +48,26 @@ class CategoriaModel {
     public function save($imagen, $nombre): bool {
         $sql = "INSERT INTO categoria (cCatImagen, cCatNombre) VALUES (:cCatImagen, :cCatNombre)";
         $saveCat = $this->db->prepare($sql);
-        
         if ($imagen === null) {
             $saveCat->bindValue(':cCatImagen', null, PDO::PARAM_NULL);
         } else {
             $saveCat->bindParam(':cCatImagen', $imagen, PDO::PARAM_LOB);
         }
-        $saveCat->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+        $saveCat->bindParam(':cCatNombre', $nombre, PDO::PARAM_STR);
         $saveCat->execute();
         $filasAfectadas = $saveCat->rowCount() > 0;
         return $filasAfectadas;
     }
     
     public function update($id, $imagen, $nombre): bool {
-        $sql = "UPDATE categoria SET cCatImagen = :cCatImagen, cCatNombre = :nombre WHERE cCatID = :cCatID";
+        $sql = "UPDATE categoria SET cCatImagen = :cCatImagen, cCatNombre = :cCatNombre WHERE cCatID = :cCatID";
         $updateCat = $this->db->prepare($sql);
-        $updateCat->bindParam(':cCatImagen', $imagen, PDO::PARAM_LOB);
+        if ($imagen === null) {
+            $updateCat->bindValue(':cCatImagen', null, PDO::PARAM_NULL);
+        } 
+        else {
+            $updateCat->bindParam(':cCatImagen', $imagen, PDO::PARAM_LOB);
+        }
         $updateCat->bindParam(':cCatNombre', $nombre, PDO::PARAM_STR);
         $updateCat->bindParam(':cCatID', $id, PDO::PARAM_INT);
         $updateCat->execute();

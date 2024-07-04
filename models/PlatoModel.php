@@ -8,48 +8,35 @@ class PlatoModel{
     }
 
     public function getPlato(){
+        $this->db = Conexion::ConexionSQL();
         $consulta = $this->db->prepare("SELECT cPlaID, cCatID, cPlaNombre, cPlaPrecio, cPlaCantidad FROM platos");
         $consulta->execute();
-        $resultado = $consulta->get_result();
-        if ( $resultado->num_rows > 0){
-            while ( $row = $resultado->fetch_assoc()){
-                $this->platos[] = $row;
-            }
-        }
-        $consulta->close();
-        $resultado->close();
+        $this->platos = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        $consulta = null;
         return $this->platos;
     }
     public function getPlatoNombrePrecio(){
-        $platos = array();
+        $this->db = Conexion::ConexionSQL();
         $consulta = $this->db->prepare("SELECT cPlaNombre, cPlaPrecio FROM platos");
         $consulta->execute();
-        $resultado = $consulta->get_result();
-        if ( $resultado->num_rows > 0){
-            while ( $row = $resultado->fetch_array()){
-                $platos[] = $row;
-            }
-        }
-        $consulta->close();
-        $resultado->close();
+        $platos = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        $consulta = null;
         return $platos;
     }
     public function getPlatoPorNombrePrecio($data){
-        $platos = array();
-        $consulta = $this->db->prepare("SELECT cPlaID, cCatID, cPlaNombre, cPlaPrecio FROM platos WHERE cPlaNombre = ? AND cPlaPrecio = ?");
-        $consulta->bind_param("sd",$data["nombre"],$data["precio"]);
-        $consulta->execute();
-        $resultado = $consulta->get_result();
-        if ( $resultado->num_rows > 0){
-            while ( $row = $resultado->fetch_array(MYSQLI_NUM)){
-                $platos[] = $row;
-            }
+        $this->db = Conexion::ConexionSQL();
+        $consulta = $this->db->prepare("SELECT cPlaID, cCatID, cPlaNombre, cPlaPrecio FROM platos WHERE cPlaNombre = :cPlaNombre AND cPlaPrecio = :cPlaPrecio");
+        if(isset($data["nombre"]) && isset($data["precio"])) {
+            $consulta->bindParam(":cPlaNombre", $data["nombre"], PDO::PARAM_STR);
+            $consulta->bindParam(":cPlaPrecio", $data["precio"], PDO::PARAM_STR);
+            $consulta->execute();
+            $platos = $consulta->fetchAll(PDO::FETCH_ASSOC);  // Use fetchAll to get multiple rows
+            return $platos;
+        } else {
+            return null; 
         }
-        $consulta->close();
-        $resultado->close();
-        return $platos;
-    }
-
+    }    
+    
     public function save($datos){
 
     }
@@ -58,9 +45,9 @@ class PlatoModel{
 
     }
     public function delete($datos){
-        $conn = Conexion::Conexion();
-        $stmt = $conn->prepare("DELETE platos WHERE cPlaID = ?");
-        $stmt->bind_param("i", $datos["idEliminar"]);
+        $this->db = Conexion::ConexionSQL();
+        $stmt = $this->db->prepare("DELETE platos WHERE cPlaID = :cPlaID");
+        $stmt->bindParam(":cPlaID", $datos["idEliminar"],PDO::PARAM_INT);
         $stmt->execute();
     }
 }

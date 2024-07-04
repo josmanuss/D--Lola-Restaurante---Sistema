@@ -60,7 +60,10 @@
                     'precio'=> $_POST["precio"]
                 );
                 $array = $this->platos->getPlatoPorNombrePrecio($data);
-                if ( $array != null ){
+
+                //echo "<pre>";print_r($array);"</pre>"; exit();
+
+                if ($array != null ){
                     echo json_encode(["success" => true, "filas"=> $array]);
                 }
                 else{
@@ -68,6 +71,7 @@
                 }
             } 
         }
+
         
     }
 ?>

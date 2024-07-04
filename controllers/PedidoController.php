@@ -63,33 +63,8 @@ class PedidoController{
         $data["titulo"] = "Realizar pedido";
         $data["dni"] = $this->clientes->clientesDNI();
         $_SESSION["mesa"] = [$id];
-
-
-        //echo '<pre>';print_r($data["dni"]);'</pre>'; exit();
         $data["contenido"] = "views/pedido/realizar_pedido.php";
         require_once TEMPLATE;
-    }
-
-
-    public function agregarNuevaFila(){
-        if ($_SERVER["REQUEST_METHOD"] === "POST"){
-            try {
-                $data = array(
-                    'nombre' => $_POST["nombre"],
-                    'precio'=> $_POST["precio"]
-                );
-                $array = $this->platos->getPlatoPorNombrePrecio($data);
-                if ($array != null) {
-                    echo json_encode(["success" => true, "filas" => $array]);
-                } 
-                else {
-                    echo json_encode(["success" => false]);
-                }
-            } 
-            catch (Exception $e) {
-                echo json_encode(["success" => false, "error" => $e->getMessage()]);
-            }
-        }
     }
     
     public function pagarPedido() : void {

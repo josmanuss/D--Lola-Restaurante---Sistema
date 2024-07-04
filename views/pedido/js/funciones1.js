@@ -47,48 +47,65 @@ function validarCliente(id) {
     return id_encontrado;
 }
 
-function agregarFila(valor){
+function agregarFila(valor) {
     var valores = valor.split('  -  ');
+    console.log(valores);
     $.ajax({
         url: 'index.php?c=PlatoController&a=agregarTabla',
-        method : 'POST',
-        data : {nombre: valores[0], precio: valores[1]},
-        async : true,
-        success: function(response){
-            var respuesta = JSON.parse(response);
-            if (respuesta.success){
-                var platos = respuesta.filas;
-                var tbody = $('#tabla-productosvender tbody');
-                $.each(platos,function(index, plato){
-                    var fila = '<tr>' +
-                        '<td>' + plato[0] + '</td>' +
-                        '<td>' + plato[1] + '</td>' +
-                        '<td>' + plato[2] + '</td>' +
-                        '<td><input type="number" class="form-control" value="0"></td>' + 
-                        '<td>' + plato[3] + '</td>' +
-                        '<td>' +
-                            '<button class="btn btn-danger" id="eliminarPlatoTabla"><i class="fas fa-trash-alt mr-2"></i>Eliminar</button>'+ 
-                        '</td>' + 
-                    '</tr>';
-                    $('#buscarPlato').val('');
-                    tbody.append(fila);
-                });
+        method: 'POST',
+        data: {nombre: valores[0], precio: valores[1]},
+        async: true,
+        success: function(response) {
+            console.log('Respuesta del servidor:', response); 
+            try {
+                var respuesta = JSON.parse(response);
+                console.log('Respuesta parseada:', respuesta); 
+                if (respuesta.success) {
+                    var platos = respuesta.filas;
+                    console.log('Platos:', platos); 
+                    var tbody = $('#tabla-productosvender tbody');
+                    $.each(platos, function(index, plato) {
+                        console.log('Plato:', plato); 
+                        var fila = '<tr>' +
+                            '<td>' + (plato.cPlaID || '') + '</td>' +
+                            '<td>' + (plato.cCatID || '') + '</td>' +
+                            '<td>' + (plato.cPlaNombre || '') + '</td>' +
+                            '<td><input type="number" class="form-control" value="0"></td>' + 
+                            '<td>' + (plato.cPlaPrecio || '') + '</td>' +
+                            '<td>' +
+                                '<button class="btn btn-danger" id="eliminarPlatoTabla"><i class="fas fa-trash-alt mr-2"></i>Eliminar</button>'+ 
+                            '</td>' + 
+                        '</tr>';
+                        $('#buscarPlato').val('');
+                        tbody.append(fila);
+                    });
 
-                $('input[type="number"]', tbody).last().on('input', function() {
-                    var valor = parseFloat($(this).val());
-                    if (valor < 0 || isNaN(valor)) {
-                        $(this).val(0);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Alerta',
-                            text: 'No se puede indicar una cantidad menor a 0'
-                        });
-                    }
-                });
+                    $('input[type="number"]', tbody).last().on('input', function() {
+                        var valor = parseFloat($(this).val());
+                        if (valor < 0 || isNaN(valor)) {
+                            $(this).val(0);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Alerta',
+                                text: 'No se puede indicar una cantidad menor a 0'
+                            });
+                        }
+                    });
+                } else {
+                    console.log("No data returned");
+                }
+            } catch (e) {
+                console.log('Error parseando JSON:', e);
+                console.log('Respuesta recibida:', response); 
             }
+        },
+        error: function(xhr, status, error) {
+            console.log("AJAX error:", status, error);
         }
     });
 }
+
+
 
 function registrarPedido(pedido, detallepedido) {
     $.ajax({

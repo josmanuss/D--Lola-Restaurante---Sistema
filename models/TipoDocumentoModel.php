@@ -10,7 +10,8 @@ class TipoDocumentoModel {
 
     public function getTipoDocumento() {
         try {
-            $stmt = $this->db->prepare("SELECT * FROM TipoDocumento");
+            $this->db = Conexion::ConexionSQL();
+            $stmt = $this->db->prepare("SELECT * FROM tipodocumento");
             $stmt->execute();
             $this->tipoDocumento = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {

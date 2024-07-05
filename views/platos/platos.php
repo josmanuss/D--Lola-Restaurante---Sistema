@@ -59,7 +59,7 @@
                                             <td><?php echo $platos["cPlaCantidad"]; ?></td>
                                             <td><?php echo "S/.".$platos["cPlaPrecio"]; ?></td>
                                             <td>
-                                                <a href="#" class="btn btn-xs btn-warning"><i class="fas fa-user-edit"></i></a>
+                                                <a href="index.php?c=PlatoController&a=verPlatoEditar&id=<?php echo $platos["cPlaID"];?>" class="btn btn-xs btn-warning"><i class="fas fa-user-edit"></i></a>
                                                 <a href="#" class="btn btn-xs btn-danger deleteBtn" data-toggle="modal" data-target="#deleteModal" data-recordid="<?php echo $platos["cCatID"]; ?>"><i class="fas fa-trash"></i></a>
                                             </td>
                                         </tr>
@@ -92,11 +92,29 @@
                     <select class="form-control" name="categoriaPlato">
                         <option value="<?php echo $_REQUEST["categoriaPlato"] ?? ''; ?>">SELECCIONE UNA CATEGORIA</option>
                         <?php foreach ( $data["categorias"] as $categoria ): ?>
-                            <option value="<?=$categoria["cCatNombre"]?>"><?php echo $categoria["cCatNombre"] ?></option>
+                            <option value="<?=$categoria["cCatID"]?>"><?php echo $categoria["cCatNombre"] ?></option>
                         <?php endforeach; ?>
                     </select>    
                 </div>
             </div>
+
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">Subir Imagen de Plato</label>
+                <div class="col-sm-9">
+                    <input type="file" class="form-control" name="imagen" id="imagen">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <div class="col-sm-3 col-form-label"></div>
+                <div class="col-sm-9">
+                    <img id="imagePreview" 
+                        src="" 
+                        alt="Vista Previa de la Imagen" 
+                        class="img-fluid" 
+                        style="max-height: 300px; display: none;">
+                </div>
+            </div>   
+            
             <div class="mb-3 row">
                 <label class="col-sm-3 col-form-label">Nombres</label>
                 <div class="col-sm-9">
@@ -158,6 +176,20 @@
 
 <script>
     $(document).ready(function() {
+
+        $('#imagen').on('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader()
+                reader.onload = function(e) {
+                    const img = $('#imagePreview');
+                    img.attr('src', e.target.result);
+                    img.show();
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
         $('.deleteBtn').on('click', function() {
             var userId = $(this).data('recordid');
             var deleteUrl = 'index.php?c=CategoriaController&a=eliminar&id=' + userId;

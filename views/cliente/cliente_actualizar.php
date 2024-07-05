@@ -81,8 +81,6 @@
                                 }
                             }
                         </script>
-
-
                         <div class="mb-3 row">
                             <label class="col-sm-3 col-form-label">Numero de documento</label>
                             <div class="col-sm-9">
@@ -149,7 +147,7 @@
 
                         <script type="text/javascript">
                             const chkHabilitado = document.getElementById("chkHabilitado");
-                            //const habilitado = parseInt("<?php echo $data["consulta"]["cCliHabilitado"];?>");
+                            const habilitado = parseInt("<?php echo $data["consulta"]["cCliHabilitado"];?>");
                             if ( chkHabilitado.value == parseInt(1) ){
                                 chkHabilitado.checked = true;
                             }

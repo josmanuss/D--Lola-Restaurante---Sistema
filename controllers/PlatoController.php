@@ -31,14 +31,72 @@
             require_once TEMPLATE;
         }
 
-        public function envioRegistrar(){
+        public function guardar() {
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                $txtNombrePlato = $_POST["txtNombrePlato"] ?? '';
-                $categoriaPlato = $_POST["categoriaPlato"] ?? '';
-                $spinCantidadPlato = $_POST["spinCantidadPlato"] ?? '';
-                $spinPrecioPlato = $_POST["spinPrecioPlato"] ?? '';
-                $txtDescripcion = $_POST["txtDescripcion"] ?? '';
+                $categoriaPlato = $_POST['categoriaPlato'] ?? '';
+                $txtNombres = $_POST['txtNombres'] ?? '';
+                $spinnerPrecio = $_POST['spinnerPrecio'] ?? '';
+                $imagen = file_get_contents($_FILES['imagen']["tmp_name"]);
+                $spinnerCantidad = $_POST['spinnerCantidad'] ?? '';
+                $txtDescripcion = $_POST['txtDescripcion'] ?? '';
+                $plato = array(
+                    "categoriaPlato" => $categoriaPlato,
+                    "txtNombres" => $txtNombres,
+                    "spinnerPrecio" => $spinnerPrecio,
+                    "imagen" => $imagen,
+                    "spinnerCantidad" => $spinnerCantidad,
+                    "txtDescripcion" => $txtDescripcion
+                );
+                if ( $this->platos->save($plato)){
+                    header("location: index.php?c=PlatoController");
+                }
+                else{
+                    exit("No se registro el plato");
+                }
             }
+        }
+
+        public function actualizar() {
+            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+
+
+                $idPlato = $_POST['idPlato'] ?? '';
+                $categoriaPlato = $_POST['categoriaPlato'] ?? '';
+                $txtNombres = $_POST['txtNombres'] ?? '';
+                if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+                    $imagen = file_get_contents($_FILES['imagen']["tmp_name"]);
+                } else {
+                    $imagen = null; 
+                }
+                $spinnerPrecio = $_POST['spinnerPrecio'] ?? '';
+                $spinnerCantidad = $_POST['spinnerCantidad'] ?? '';
+                $txtDescripcion = $_POST['txtDescripcion'] ?? '';
+                $plato = array(
+                    "idPlato" => $idPlato,
+                    "categoriaPlato" => $categoriaPlato,
+                    "txtNombres" => $txtNombres,
+                    "imagen" => $imagen,
+                    "spinnerPrecio" => $spinnerPrecio,
+                    "spinnerCantidad" => $spinnerCantidad,
+                    "txtDescripcion" => $txtDescripcion
+                );
+                if ($this->platos->updateProduct($plato)) {
+                    header("location: index.php?c=PlatoController");
+                } else {
+                    exit("No se registró el plato");
+                }
+            }
+        }
+        
+
+
+        public function verPlatoEditar($id){
+            $data["titulo"] = "ACTUALIZAR PLATO";
+            $data["categorias"] = $this->categorias->getCategoria();
+            $data["consulta"] = $this->platos->getPlatoID($id);
+            $data["contenido"] = "views/platos/plato_actualizar.php";
+            require_once TEMPLATE;
         }
 
         public function todos(){
@@ -60,9 +118,6 @@
                     'precio'=> $_POST["precio"]
                 );
                 $array = $this->platos->getPlatoPorNombrePrecio($data);
-
-                //echo "<pre>";print_r($array);"</pre>"; exit();
-
                 if ($array != null ){
                     echo json_encode(["success" => true, "filas"=> $array]);
                 }

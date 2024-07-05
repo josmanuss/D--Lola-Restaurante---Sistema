@@ -44,6 +44,7 @@ class VentaController {
 
     public function verVentasAdministrador() : void {
         $data["titulo"] = "Reportes de ventas - Administrador";
+        $data["resultado"] = $this->venta->getVentas();
         $data["contenido"] = "views/venta/venta_administrador.php";
         require_once TEMPLATE;
     }
@@ -188,6 +189,80 @@ class VentaController {
         $this->pdf->Output("I", "Venta_Nro_" . $id . ".pdf", true);
     }
     
+
+    public function generarReporteVenta($id) {
+        // Obtención de datos de la venta y detalles
+        $datos_venta = $this->venta->getVentaID($id);
+        $datosDetalleventa = $this->venta->getDetalleVenta($id);
+        $nombreEmpresa = "D' LOLA RESTAURANTE CIX ©";
+        $numeroventa = $id;
+        $cliente = empty($datos_venta["NombreApellidoCliente"]) ? $datos_venta["TIPOCLIENTE"] : $datos_venta["NombreApellidoCliente"];
+        $igv = 0.18;
+        $total = 0;
+    
+        // Configuración del PDF
+        $this->pdf->SetMargins(10, 10, 10);
+        $this->pdf->AddPage('L', 'A4');
+        $this->pdf->SetFont('Arial', 'B', 12);
+        $this->pdf->SetTextColor(0, 0, 0);
+    
+        // Encabezado del comprobante
+        $this->pdf->SetFillColor(240, 240, 240);
+        $this->pdf->Cell(0, 10, iconv("UTF-8", "ISO-8859-1", strtoupper($nombreEmpresa)), 0, 1, 'C', true);
+        $this->pdf->SetFont('Arial', 'B', 10);
+        $this->pdf->Cell(0, 8, iconv("UTF-8", "ISO-8859-1", "RUC: 1729278258"), 0, 1, 'C', true);
+        $this->pdf->Cell(0, 8, iconv("UTF-8", "ISO-8859-1", "Dirección: C. Teodoro Cárdenas 133, Lima 15046"), 0, 1, 'C', true);
+        $this->pdf->Cell(0, 8, iconv("UTF-8", "ISO-8859-1", "Teléfono: 955222600"), 0, 1, 'C', true);
+        $this->pdf->Cell(0, 8, iconv("UTF-8", "ISO-8859-1", "Email: DLOLARESTAURANTE@DLOLA.COM"), 0, 1, 'C', true);
+        $this->pdf->Ln(5);
+    
+        $this->pdf->MultiCell(0, 8, iconv("UTF-8", "ISO-8859-1", "VENTA N°: " . $numeroventa . "             Cliente: " . $cliente . "             Fecha: " . $datos_venta["Fecha"] . "             Venta Nro: " . $id . "             Cajero: " . $datos_venta["NOMBRE_APELLIDO_CAJERO"]), 0, 'L');
+
+        // Detalle de la venta en tabla
+        $this->pdf->SetFont('Arial', 'B', 10);
+        $this->pdf->SetFillColor(220, 220, 220);
+        $this->pdf->Cell(30, 8, iconv("UTF-8", "ISO-8859-1", "Cant."), 0, 0, 'C', true);
+        $this->pdf->Cell(40, 8, iconv("UTF-8", "ISO-8859-1", "Precio"), 0, 0, 'C', true);
+        $this->pdf->Cell(80, 8, iconv("UTF-8", "ISO-8859-1", "Nombre"), 0, 0, 'C', true);
+        $this->pdf->Cell(40, 8, iconv("UTF-8", "ISO-8859-1", "Precio Final"), 0, 1, 'C', true);
+    
+        $this->pdf->SetFont('Arial', '', 10);
+        foreach ($datosDetalleventa as $detalleventa) {
+            $this->pdf->Cell(30, 8, iconv("UTF-8", "ISO-8859-1", $detalleventa["iDetCantidad"]), 0, 0, 'C');
+            $this->pdf->Cell(40, 8, iconv("UTF-8", "ISO-8859-1", $detalleventa["cPlaPrecio"]), 0, 0, 'C');
+            $this->pdf->Cell(80, 8, iconv("UTF-8", "ISO-8859-1", $detalleventa["cPlaNombre"]), 0, 0, 'C');
+            $this->pdf->Cell(40, 8, iconv("UTF-8", "ISO-8859-1", $detalleventa["PrecioFinal"]), 0, 1, 'C');
+            $total += $detalleventa["PrecioFinal"];
+        }
+        $this->pdf->Ln(5);
+    
+        // Resumen de la venta
+        $this->pdf->SetFillColor(240, 240, 240);
+        $this->pdf->Cell(190, 8, iconv("UTF-8", "ISO-8859-1", "OP. GRAVADAS"), 0, 0, 'R', true);
+        $this->pdf->Cell(40, 8, iconv("UTF-8", "ISO-8859-1", "S/ " . number_format($total - ($total * $igv), 2, '.', '') . " PEN"), 0, 1, 'R', true);
+    
+        $this->pdf->Cell(190, 8, iconv("UTF-8", "ISO-8859-1", "IGV (18%)"), 0, 0, 'R', true);
+        $this->pdf->Cell(40, 8, iconv("UTF-8", "ISO-8859-1", "S/ " . number_format($total * $igv, 2, '.', '') . " PEN"), 0, 1, 'R', true);
+    
+        $this->pdf->Cell(190, 8, iconv("UTF-8", "ISO-8859-1", "SUBTOTAL"), 0, 0, 'R', true);
+        $this->pdf->Cell(40, 8, iconv("UTF-8", "ISO-8859-1", "S/ " . number_format($total, 2, '.', '') . " PEN"), 0, 1, 'R', true);
+    
+        $this->pdf->Cell(190, 8, iconv("UTF-8", "ISO-8859-1", "TOTAL A PAGAR"), 0, 0, 'R', true);
+        $this->pdf->Cell(40, 8, iconv("UTF-8", "ISO-8859-1", "S/ " . number_format($total, 2, '.', '') . " PEN"), 0, 1, 'R', true);
+    
+        $this->pdf->Cell(190, 8, iconv("UTF-8", "ISO-8859-1", "TOTAL PAGADO"), 0, 0, 'R', true);
+        $this->pdf->Cell(40, 8, iconv("UTF-8", "ISO-8859-1", "S/ " . number_format($datos_venta["Total"], 2, '.', '') . " PEN"), 0, 1, 'R', true);
+    
+        $this->pdf->Cell(190, 8, iconv("UTF-8", "ISO-8859-1", "CAMBIO"), 0, 0, 'R', true);
+        $this->pdf->Cell(40, 8, iconv("UTF-8", "ISO-8859-1", "S/ " . number_format($datos_venta["Total"] - $total, 2, '.', '') . " PEN"), 0, 1, 'R', true);
+        $this->pdf->Ln(10);
+    
+
+        $this->pdf->Output("I", "ReporteVenta_Nro_" . $id . ".pdf", true);
+    }
+    
+
+
     private function showError404() : void {
         if (defined('ERROR404')) {
             require_once ERROR404;

@@ -72,6 +72,9 @@
                                         <td>
                                             <a href="index.php?c=TrabajadorController&a=verTrabajador&id=<?php echo $trabajador["cUserID"];?>" class="btn btn-xs btn-warning updateBtn"><i class="fas fa-user-edit"></i></a>
                                             <a href="" class="btn btn-xs btn-danger deleteBtn" data-toggle="modal" data-target="#deleteModal" data-recordid="<?php echo $trabajador["cPerID"]; ?>"><i class="fas fa-trash"></i></a>
+                                            <?php if (isset($trabajador["cUserRol"]) && $trabajador["cUserRol"] === 'Cajero') : ?>
+                                                <a href="" class="btn btn-xs btn-primary assign-btn" data-toggle="modal" data-target="#modalCaja"><i class="fas fa-user"></i></a>
+                                            <?php endif;?>
                                         </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -81,6 +84,29 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalCaja" tabindex="-1" aria-labelledby="modalCajaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCajaLabel">Asignar cajero a caja</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="#" method="POST" autocomplete="off" enctype="multipart/form-data" id="asignarUsuarioTrabajadorCaja">
+                <div class="mb-3 row">
+                    <label for="caja" class="col-sm-3 col-form-label">Caja: </label>
+                    <div class="col-sm-9">
+                        <select name="caja" id="caja" class="form-control"></select>
+                    </div>
+                </div>
+                </form>
             </div>
         </div>
     </div>

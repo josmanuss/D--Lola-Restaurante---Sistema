@@ -1,10 +1,11 @@
 <?php 
     require "models/TipoDocumentoModel.php";
     class ClienteModel extends TipoDocumentoModel{
-        protected $db;
-        protected $Cliente;
-        protected $ClienteID;
+        public $db;
+        public $Cliente;
+        public $ClienteID;
 
+        
         public function __construct()
         {
             $this->db = Conexion::ConexionSQL();

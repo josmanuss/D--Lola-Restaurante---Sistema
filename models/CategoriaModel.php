@@ -1,7 +1,7 @@
 <?php
 class CategoriaModel {
-    protected $db;
-    protected $categorias;
+    public $db;
+    public $categorias;
 
     public function __construct() {
         $this->db = Conexion::ConexionSQL();
